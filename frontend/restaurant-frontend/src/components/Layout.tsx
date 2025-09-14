@@ -5,7 +5,7 @@ import Content from "./Content";
 
 
 
-
+// in here, to children get any jsx element(anj html element or jsx files.children is just a react node)
 const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
 
     return(
@@ -15,22 +15,11 @@ const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
                 <Navbar/>
                <Content>
                    {children}
-
                </Content>
             </div>
         </div>
     )
 }
 
-// function Layout (){
-//
-//     return(
-//         <>
-//             <Navbar/>
-//             <Sidebar/>
-//         </>
-//
-//     )
-// }
 
 export default Layout;

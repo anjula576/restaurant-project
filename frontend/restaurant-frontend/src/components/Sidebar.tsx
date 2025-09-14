@@ -19,9 +19,9 @@ const Sidebar: React.FC = () => {
                 {expanded ? "<" : ">"}
             </button>
 
-            {/*<SidebarMenuItem icon={<House />} label="Dashboard" path="/" expanded={expanded} />*/}
-            {/*<SidebarMenuItem icon={<ShoppingCart />} label="Orders" path="/orders" expanded={expanded} />*/}
-            {/*<SidebarMenuItem icon={<Users />} label="Customers" path="/customers" expanded={expanded} />*/}
+            <SidebarMenuItem icon={<House />} label="Dashboard" path="/" expanded={expanded} />
+            <SidebarMenuItem icon={<ShoppingCart />} label="Orders" path="/orders" expanded={expanded} />
+            <SidebarMenuItem icon={<Users />} label="Customers" path="/customers" expanded={expanded} />
         </div>
     );
 };
