@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 function Users() {
-    // Declare a state variable `users` and a function `setUsers` to update it
     const [users, setUsers] = useState<string[]>([]);
 
     useEffect(() => {
         fetch("http://localhost:8080/api/users")
             .then((res) => res.json())
-            .then((data) => {
-                console.log("✅ Backend Response:", data);
-                setUsers(data); // <-- now this works fine
-            })
-            .catch((err) => console.error("❌ Error:", err));
+            .then((data) => setUsers(data))
+            .catch((err) => console.error(err));
     }, []);
 
     return (
