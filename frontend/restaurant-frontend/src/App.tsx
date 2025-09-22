@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from "react";
 
-function Users() {
-    // Declare a state variable `users` and a function `setUsers` to update it
-    const [users, setUsers] = useState<string[]>([]);
 
-    useEffect(() => {
-        fetch("http://localhost:8080/api/users")
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("✅ Backend Response:", data);
-                setUsers(data); // <-- now this works fine
-            })
-            .catch((err) => console.error("❌ Error:", err));
-    }, []);
+import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users.tsx";
+
+function App() {
 
     return (
         <div>
-            <h2>User List</h2>
-            <ul>
-                {users.map((u, i) => (
-                    <li key={i}>{u}</li>
-                ))}
-            </ul>
+            <Users/>
         </div>
+
+
+
+        // <div>
+        //    <Users></Users>
+        //
+        // </div>
+
     );
 }
 
-export default Users;
+export default App;
