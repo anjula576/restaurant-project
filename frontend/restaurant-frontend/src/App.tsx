@@ -1,13 +1,13 @@
 
 
 import Dashboard from "./pages/Dashboard";
-import Users from "./pages/Users.tsx";
+import Customer from "./pages/Customer.tsx";
 
 function App() {
 
     return (
         <div>
-            <Users/>
+            <Customer/>
         </div>
 
 
