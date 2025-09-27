@@ -2,10 +2,38 @@
 import Layout from '../components/Layout.tsx'
 import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable";
+import axios from "axios";
 
 function Customer() {
 
     const [customers,setCustomers]=useState([]);
+
+    const [customer,setCustomer]=useState({
+        firstname:"",
+        lastname:"",
+        email:"",
+        mobileno:"",
+        status:"",
+    })
+
+    const customerHandle =(e)=>{
+        setCustomer({...customer,[e.target.name]:e.target.value})
+    }
+
+    const onSubmit =async (e)=>{
+
+        // from here,disable the page refresh when submitting the form.
+        e.preventDefault();
+
+        try {
+            const res = await axios.post("http://localhost:8080/api/customer", customer);
+            console.log("response",res.data);
+            window.alert("Successfully saved the customer");
+        }catch (error){
+            console.error("Error",error)
+
+        }
+    }
 
     const columns =[
         {title:"ID",property:"id"},
@@ -26,6 +54,8 @@ function Customer() {
                 console.log("Customers",data);
             })
     },[])
+
+
     console.log("columns",columns);
     console.log("Customers1",customers);
 
@@ -48,18 +78,86 @@ function Customer() {
                                 </h2>
                                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show">
                                     <div className="accordion-body">
-                                        <strong>This is the first item’s accordion body.</strong> It is shown by
-                                        default,
-                                        until the
-                                        collapse plugin adds the appropriate classes that we use to style each element.
-                                        These
-                                        classes control the overall appearance, as well as the showing and hiding via
-                                        CSS
-                                        transitions. You can modify any of this with custom CSS or overriding our
-                                        default
-                                        variables.
-                                        It’s also worth noting that just about any HTML can go within
-                                        the <code>.accordion-body</code>, though the transition does limit overflow.
+                                        <form onSubmit={onSubmit}>
+                                            <div className="row">
+                                                {/*first name*/}
+                                                <div className="col-lg-4 col-12">
+                                                    <label htmlFor="txtFirstName" className="form-label">
+                                                        First Name</label>
+                                                    <input type="text" name="firstname" onChange={customerHandle} className="form-control" id="txtFirstName"
+                                                           aria-describedby="emailHelp"/>
+                                                </div>
+
+                                                {/*last name*/}
+                                                <div className="col-lg-4 col-12">
+                                                    <label htmlFor="txtLastName" className="form-label">Last Name</label>
+                                                    <input type="text" name="lastname" onChange={customerHandle} className="form-control" id="txtLastName"
+                                                           aria-describedby="emailHelp"/>
+                                                </div>
+
+                                                {/*mobile no*/}
+                                                <div className="col-lg-4 col-12">
+                                                    <label htmlFor="txtMobileNo" className="form-label">Mobile No</label>
+                                                    <input type="text" name="mobileno" onChange={customerHandle} className="form-control" id="txtMobileNo"
+                                                           aria-describedby="emailHelp"/>
+                                                </div>
+
+
+
+                                            </div>
+
+                                            <br/>
+                                            <div className="row">
+                                                <div className="col-lg-4 col-12">
+
+                                                    {/*email*/}
+
+                                                        <label htmlFor="txtEmail" className="form-label">Email</label>
+                                                        <input type="email" name="email" onChange={customerHandle} className="form-control" id="txtEmail"
+
+                                                               aria-describedby="emailHelp"/>
+
+
+                                                </div>
+                                                    {/*active status*/}
+
+                                                <br/>
+
+                                                <div className="col-1 mt-4">
+
+                                                    <div className="form-check">
+                                                        <input className="form-check-input" type="radio"
+                                                               name="status" onChange={customerHandle} id="activeSts" value="true"/>
+                                                        <label className="form-check-label" htmlFor="activeSts">
+                                                            Active
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div className="col-2 mt-4">
+
+                                                    {/*inactive status*/}
+                                                    <div className="form-check">
+                                                            <input className="form-check-input" type="radio"
+                                                                   name="status" onChange={customerHandle} id="inactiveSts" value="false"/>
+                                                            <label className="form-check-label" htmlFor="inactiveSts">
+                                                                In-Active
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                <div className="col-4">
+                                                    <label htmlFor="txtNotes" className="form-label">Notes</label>
+                                                    <textarea className="form-control" id="txtNotes"
+                                                              rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <br/>
+                                            <button type="submit" className="btn btn-primary">Add New Customer</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

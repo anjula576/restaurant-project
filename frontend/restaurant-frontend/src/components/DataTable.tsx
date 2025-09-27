@@ -45,7 +45,6 @@ function DataTable( {columns=[],data=[]}){
                  </tr>
              )}
 
-
              </tbody>
 
 </table>
