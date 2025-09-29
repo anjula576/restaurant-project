@@ -17,6 +17,8 @@ function DataTable( {columns=[],data=[],onEdit}){
                  >
                      {col.title} </th>
              ))}
+
+         <th>Actions</th>
          </tr>
          </thead>
     <tbody>

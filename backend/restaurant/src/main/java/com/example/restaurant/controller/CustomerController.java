@@ -27,5 +27,13 @@ public class CustomerController {
         customerDao.save(customer);
     }
 
+//    mapping for update
+    @PutMapping("/{id}")
+    public void updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+        customer.setId(id);
+        customerDao.save(customer);
+    }
+
+
 
 }
