@@ -34,6 +34,14 @@ public class CustomerController {
         customerDao.save(customer);
     }
 
+//     mapping for delete
+
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable Integer id){
+
+        customerDao.deleteById(id);
+    }
+
 
 
 }

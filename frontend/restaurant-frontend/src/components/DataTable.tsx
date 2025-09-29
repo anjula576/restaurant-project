@@ -4,7 +4,7 @@ import React from "react";
 // this is common file to generate the table module
 //  should pass the columns and data when add this component
 
-function DataTable( {columns=[],data=[],onEdit}){
+function DataTable( {columns=[],data=[],onEdit,onDelete}){
 
     return(
 <table className="table table-active">
@@ -40,6 +40,7 @@ function DataTable( {columns=[],data=[],onEdit}){
                              {/*when use call back functions like that in the react should call like that
                              without that react restrict the function calling*/}
                              <button className="btn btn-primary" onClick={()=>onEdit(row)}>Edit</button>
+                             <button className="btn btn-danger" onClick={()=>onDelete(row.id)}>Delete</button>
                          </td>
                      </tr>
                  ))

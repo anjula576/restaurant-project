@@ -20,6 +20,8 @@ function Customer() {
         status: "",
     })
 
+
+
     // this is used to refill the form
     // const [selectCustomer, setSelectedCustomer] = useState(null);
 
@@ -34,16 +36,36 @@ function Customer() {
             })
     }
     const customerHandle = (e) => {
+
+
+        // this is same to
+        // let name = e.target.name;
+        // let value = e.target.value;
+        //below way is the shortest way to do that
+
         // eslint-disable-next-line prefer-const
         let { name, value } = e.target;
+
+        // If value is the string "true" → it becomes true
+        // If value is anything else ("false", "abc", empty, etc.) → it becomes false
+       // So no need for a separate "false" condition — one line handles both.
+
         if (name === "status") {
-            value = value === "true";   // Convert string to boolean ✅
+            value = value === "true";   // Convert string to boolean
         }
         setCustomer({ ...customer, [name]: value });
 
        // setCustomer({...customer, [e.target.name]: e.target.value})
     }
 
+    const emptyCustomer = {
+        id:null,
+        firstname: "",
+        lastname: "",
+        email: "",
+        mobileno: "",
+        status: "",
+    };
 
 
     const onUpdate = async () => {
@@ -57,14 +79,13 @@ function Customer() {
             //  set status false to isediting variable
             setIsEditing(false);
 
+            //  clear the forms
+            setCustomer(emptyCustomer);
             //  empty the select customer object array
             //setSelectedCustomer(null);
 
-
-
             // get updated customer list
             getCustomers();
-
 
         } catch (error) {
             console.error("Error", error)
@@ -84,6 +105,9 @@ function Customer() {
 
                 getCustomers();
 
+                //  clear the forms
+                setCustomer(emptyCustomer);
+
             } catch (error) {
                 console.error("Error", error)
 
@@ -98,6 +122,25 @@ function Customer() {
           //  setSelectedCustomer(row);
             setCustomer(row);
         }
+
+        const deleteCustomer =async (id)=>{
+
+        const confirmDlt =window.confirm("Are you sure to delete?")
+            if (confirmDlt){
+                try {
+                 await axios.delete(`http://localhost:8080/api/customer/${id}`);
+
+                 window.alert("customer deleted successfully")
+
+                   // setCustomers(customers.filter((c)=>c.id !==id))
+                    getCustomers();
+                }catch (e) {
+                    console.error("Delete error",e)
+                }
+            }
+
+        }
+
 
         const columns = [
             {title: "ID", property: "id"},
@@ -261,7 +304,7 @@ function Customer() {
                                             {/* in here when change the customer count automatically unmount the datatable component
                                         and remount.this is an easier way to update component when list an list updates*/}
                                             <DataTable key={customers.length} columns={columns} data={customers}
-                                                       onEdit={(row) => handleEdit(row)}/>
+                                                       onEdit={(row) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>
 
 
                                         </div>
