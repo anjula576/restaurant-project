@@ -16,6 +16,9 @@ function Customer() {
         status:"",
     })
 
+    // this is used to refill the form
+    const [selectCustomer,setSelectedCustomer]=useState(null);
+
     const customerHandle =(e)=>{
         setCustomer({...customer,[e.target.name]:e.target.value})
     }
@@ -29,6 +32,9 @@ function Customer() {
             const res = await axios.post("http://localhost:8080/api/customer", customer);
             console.log("response",res.data);
             window.alert("Successfully saved the customer");
+
+            getCustomers();
+
         }catch (error){
             console.error("Error",error)
 
@@ -44,7 +50,7 @@ function Customer() {
         {title:"Status",property:"status"}
     ];
 
-    useEffect(()=>{
+    const getCustomers =()=>{
         fetch("http://localhost:8080/api/customer")
             .then((res)=>res.json())
             .then((data)=>{
@@ -53,6 +59,9 @@ function Customer() {
 
                 console.log("Customers",data);
             })
+    }
+    useEffect(()=>{
+        getCustomers();
     },[])
 
 
@@ -84,21 +93,21 @@ function Customer() {
                                                 <div className="col-lg-4 col-12">
                                                     <label htmlFor="txtFirstName" className="form-label">
                                                         First Name</label>
-                                                    <input type="text" name="firstname" onChange={customerHandle} className="form-control" id="txtFirstName"
+                                                    <input type="text" value={selectCustomer? selectCustomer.firstname:customer.firstname} name="firstname" onChange={customerHandle} className="form-control" id="txtFirstName"
                                                            aria-describedby="emailHelp"/>
                                                 </div>
 
                                                 {/*last name*/}
                                                 <div className="col-lg-4 col-12">
                                                     <label htmlFor="txtLastName" className="form-label">Last Name</label>
-                                                    <input type="text" name="lastname" onChange={customerHandle} className="form-control" id="txtLastName"
+                                                    <input type="text" value={selectCustomer? selectCustomer.lastname:customer.lastname} name="lastname" onChange={customerHandle} className="form-control" id="txtLastName"
                                                            aria-describedby="emailHelp"/>
                                                 </div>
 
                                                 {/*mobile no*/}
                                                 <div className="col-lg-4 col-12">
                                                     <label htmlFor="txtMobileNo" className="form-label">Mobile No</label>
-                                                    <input type="text" name="mobileno" onChange={customerHandle} className="form-control" id="txtMobileNo"
+                                                    <input type="text" value={selectCustomer? selectCustomer.mobileno:customer.mobileno} name="mobileno" onChange={customerHandle} className="form-control" id="txtMobileNo"
                                                            aria-describedby="emailHelp"/>
                                                 </div>
 
@@ -113,7 +122,7 @@ function Customer() {
                                                     {/*email*/}
 
                                                         <label htmlFor="txtEmail" className="form-label">Email</label>
-                                                        <input type="email" name="email" onChange={customerHandle} className="form-control" id="txtEmail"
+                                                        <input type="email" value={selectCustomer? selectCustomer.email:customer.email} name="email" onChange={customerHandle} className="form-control" id="txtEmail"
 
                                                                aria-describedby="emailHelp"/>
 
@@ -127,7 +136,7 @@ function Customer() {
 
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="radio"
-                                                               name="status" onChange={customerHandle} id="activeSts" value="true"/>
+                                                               name="status" onChange={customerHandle} id="activeSts"  checked={selectCustomer?.status === true || customer.status === "true"} value="true"/>
                                                         <label className="form-check-label" htmlFor="activeSts">
                                                             Active
                                                         </label>
@@ -141,7 +150,7 @@ function Customer() {
                                                     {/*inactive status*/}
                                                     <div className="form-check">
                                                             <input className="form-check-input" type="radio"
-                                                                   name="status" onChange={customerHandle} id="inactiveSts" value="false"/>
+                                                                   name="status" onChange={customerHandle} checked={selectCustomer?.status === false || customer.status === "false"} id="inactiveSts" value="false"/>
                                                             <label className="form-check-label" htmlFor="inactiveSts">
                                                                 In-Active
                                                             </label>
@@ -173,7 +182,10 @@ function Customer() {
                                 <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse show">
                                     <div className="accordion-body">
 
-                                        <DataTable columns={columns} data={customers}/>
+                                        {/*use key when need to update a component when change the count*/}
+                                        {/* in here when change the customer count automatically unmount the datatable component
+                                        and remount.this is an easier way to update component when list an list updates*/}
+                                        <DataTable key={customers.length} columns={columns} data={customers} onEdit={(row)=>setSelectedCustomer(row)}/>
 
 
 
