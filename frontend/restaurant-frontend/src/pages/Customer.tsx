@@ -3,13 +3,29 @@ import Layout from '../components/Layout.tsx'
 import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable";
 import axios from "axios";
+import {Alert} from "@mui/material";
+import AlertTitle from '@mui/material/AlertTitle';
 
-function Customer() {
+
+
+
+function Customer()  {
 
     const [customers, setCustomers] = useState([]);
 
     // this is changed when edit button pressed.
     const [isEditing, setIsEditing] = useState(false);
+
+    // should pass the alertcolor to alert (can't pass the string type,becuase alert type expect a colour among 4 colours
+    // like(success,info,warning,error).any string not valid in here.)
+    // when import alert  as import ,some times it doesn't work
+    //  this tells initially type can be those 4 types and messege contain string or sometimes can be set null(because use ir fate to mention them)
+    // but now set null as  the initial value.
+    const [alert, setAlert] = useState<{
+        type: "success" | "error" | "warning" | "info";
+        message: string
+    } | null>(null);
+
 
     const [customer, setCustomer] = useState({
         id:null,
@@ -32,9 +48,31 @@ function Customer() {
 
                 setCustomers(data);
 
-                console.log("Customers", data);
             })
     }
+
+
+    //  form field validations -----------------------------------------
+
+    const [firstNameValid, setFirstNameValid] = useState<boolean | null>(null);
+    const [lastNameValid, setLastNameValid] = useState<boolean | null>(null);
+    const [emailValid, setEmailValid] = useState<boolean | null>(null);
+    const [mobileValid, setMobileValid] = useState<boolean | null>(null);
+
+
+    // The first / means start of regex literal.
+    // The last / means end of regex literal.
+    //  + means “one or more times”. (This is a quantifier in regex.)
+
+    const namePatrn = /^[A-Za-z\s]{3,15}$/;
+    const mobilePatrn = /^[0-9]{10}$/;
+
+    // w - means Shorthand for word characters → [A-Za-z0-9_] (letters, digits, underscore).
+
+    const emailPatrn = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    //  end of form validation----------------------------------------------
+
     const customerHandle = (e) => {
 
 
@@ -56,6 +94,50 @@ function Customer() {
         setCustomer({ ...customer, [name]: value });
 
        // setCustomer({...customer, [e.target.name]: e.target.value})
+
+
+
+        setMobileValid(customer.mobileno ==""? false:mobilePatrn.test(customer.mobileno))
+        setEmailValid(customer.email ==""? false:emailPatrn.test(customer.email))
+
+    }
+
+    const firstNamehandle = (e)=>{
+
+        // eslint-disable-next-line prefer-const
+        let { name, value } = e.target;
+        setCustomer({ ...customer, [name]: value });
+
+        setFirstNameValid(customer.firstname ==""? false:namePatrn.test(customer.firstname));
+
+    }
+
+    const lastNamehandle = (e)=>{
+
+        // eslint-disable-next-line prefer-const
+        let { name, value } = e.target;
+        setCustomer({ ...customer, [name]: value });
+
+        setLastNameValid(customer.lastname ==""? false:namePatrn.test(customer.lastname))
+
+    }
+    const checkFormErrors=()=>{
+
+        let errors = "";
+        if (customer.firstname==""){
+            errors = errors + "Please Fill the First name <br/>";
+        }
+        if (customer.lastname==""){
+            errors = errors + "Please Fill the Last name <br/>";
+        }if (customer.mobileno==""){
+            errors = errors + "Please Fill the Mobile No <br/>";
+        }if (customer.email==""){
+            errors = errors + "Please Fill the Email <br/>";
+        }if (customer.status==""){
+            errors = errors + "Please select a status <br/>";
+        }
+
+        return errors;
     }
 
     const emptyCustomer = {
@@ -68,30 +150,51 @@ function Customer() {
     };
 
 
+    //  update function
     const onUpdate = async () => {
 
-        try {
+        const formErrors = checkFormErrors();
 
-            const res = await axios.put(`http://localhost:8080/api/customer/${customer.id}`, customer);
-            console.log("response", res.data);
-            window.alert("Successfully updated the customer");
+        if (formErrors ==""){
 
-            //  set status false to isediting variable
-            setIsEditing(false);
+            try {
 
-            //  clear the forms
-            setCustomer(emptyCustomer);
-            //  empty the select customer object array
-            //setSelectedCustomer(null);
 
-            // get updated customer list
-            getCustomers();
 
-        } catch (error) {
-            console.error("Error", error)
+                const res = await axios.put(`http://localhost:8080/api/customer/${customer.id}`, customer);console.log("response", res.data);
+
+                // window.alert("customer deleted successfully")
+                setAlert({type: "success", message: "Customer updated successfully" });
+
+                //  set status false to isediting variable
+                setIsEditing(false);
+
+                //  clear the forms
+                setCustomer(emptyCustomer);
+                //  empty the select customer object array
+                //setSelectedCustomer(null);
+
+                // get updated customer list
+                getCustomers();
+
+                //  this is the timeout function to use to set null to already opened alert
+                //  after that automatically close the alert
+                setTimeout(()=>{setAlert(null)},3000)
+
+            } catch (error) {
+                console.error("Error", error)
+
+            }
+
+
+        }else {
+            window.alert(formErrors);
 
         }
+
     }
+
+        //  submit function
 
         const onSubmit = async (e) => {
 
@@ -99,14 +202,19 @@ function Customer() {
             e.preventDefault();
 
             try {
-                const res = await axios.post("http://localhost:8080/api/customer", customer);
-                console.log("response", res.data);
-                window.alert("Successfully saved the customer");
+                await axios.post("http://localhost:8080/api/customer", customer);
+// window.alert("customer deleted successfully")
+                setAlert({type: "success", message: "Customer added successfully" });
+
 
                 getCustomers();
 
                 //  clear the forms
                 setCustomer(emptyCustomer);
+
+                //  this is the timeout function to use to set null to already opened alert
+                //  after that automatically close the alert
+                setTimeout(()=>{setAlert(null)},3000)
 
             } catch (error) {
                 console.error("Error", error)
@@ -123,6 +231,10 @@ function Customer() {
             setCustomer(row);
         }
 
+
+
+
+        //  delete function
         const deleteCustomer =async (id)=>{
 
         const confirmDlt =window.confirm("Are you sure to delete?")
@@ -130,10 +242,16 @@ function Customer() {
                 try {
                  await axios.delete(`http://localhost:8080/api/customer/${id}`);
 
-                 window.alert("customer deleted successfully")
+                // window.alert("customer deleted successfully")
+                    setAlert({type: "success", message: "Customer deleted successfully" });
 
-                   // setCustomers(customers.filter((c)=>c.id !==id))
+                    // setCustomers(customers.filter((c)=>c.id !==id))
                     getCustomers();
+
+                    //  this is the timeout function to use to set null to already opened alert
+                    //  after that automatically close the alert
+                    setTimeout(()=>{setAlert(null)},3000)
+
                 }catch (e) {
                     console.error("Delete error",e)
                 }
@@ -187,8 +305,20 @@ function Customer() {
                                                             First Name</label>
                                                         <input type="text"
                                                                value={customer.firstname}
-                                                               name="firstname" onChange={customerHandle}
-                                                               className="form-control" id="txtFirstName"
+                                                               name="firstname" onChange={firstNamehandle}
+
+                                                               //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
+                                                               // Backticks are used for template literals.
+                                                            //to use template literals in JavaScript for embedding variables, expressions, or writing multi-line strings.
+                                                            // and in here uses the nested if
+
+                                                               className={`form-control ${
+                                                                   firstNameValid === null
+                                                                       ? ""
+                                                                       : firstNameValid
+                                                                           ? "is-valid"
+                                                                           : "is-invalid"
+                                                               }`} id="txtFirstName"
                                                                aria-describedby="emailHelp"/>
                                                     </div>
 
@@ -198,9 +328,15 @@ function Customer() {
                                                             Name</label>
                                                         <input type="text"
                                                                value={customer.lastname}
-                                                               name="lastname" onChange={customerHandle}
-                                                               className="form-control" id="txtLastName"
-                                                               aria-describedby="emailHelp"/>
+                                                               name="lastname" onChange={lastNamehandle}
+                                                               className={`form-control ${
+                                                                   lastNameValid === null
+                                                                       ? ""
+                                                                       : lastNameValid
+                                                                           ? "is-valid"
+                                                                           : "is-invalid"
+                                                               }`} id="txtLastName"
+                                                               />
                                                     </div>
 
                                                     {/*mobile no*/}
@@ -210,7 +346,13 @@ function Customer() {
                                                         <input type="text"
                                                                value={customer.mobileno}
                                                                name="mobileno" onChange={customerHandle}
-                                                               className="form-control" id="txtMobileNo"
+                                                               className={`form-control ${
+                                                                   mobileValid === null
+                                                                       ? ""
+                                                                       : mobileValid
+                                                                           ? "is-valid"
+                                                                           : "is-invalid"
+                                                               }`} id="txtMobileNo"
                                                                aria-describedby="emailHelp"/>
                                                     </div>
 
@@ -227,7 +369,13 @@ function Customer() {
                                                         <input type="email"
                                                                value={customer.email}
                                                                name="email" onChange={customerHandle}
-                                                               className="form-control" id="txtEmail"
+                                                               className={`form-control ${
+                                                                   emailValid === null
+                                                                       ? ""
+                                                                       : emailValid
+                                                                           ? "is-valid"
+                                                                           : "is-invalid"
+                                                               }`} id="txtEmail"
 
                                                                aria-describedby="emailHelp"/>
 
@@ -276,12 +424,30 @@ function Customer() {
 
                                                 <br/>
                                                 <div className="row">
+
+                                                    {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
                                                     {isEditing ? (<button type="button" onClick={() => {
                                                         onUpdate();
                                                     }} className="btn btn-primary">Update</button>) : (
                                                         <button type="submit" className="btn btn-primary">Add New
                                                             Customer</button>)}
 
+                                                    {/*this is conditional reading.div show only if alert is not null*/}
+                                                    {alert && (
+                                                        //  this div style is used to change the position of the alert
+                                                        <div className="col-4" style={{
+                                                            position: "fixed",
+                                                            top: "20px",
+                                                            right: "20px",
+                                                            zIndex: 9999,
+                                                            minWidth: "300px"
+                                                        }}>
+                                                            <Alert variant="filled" severity={alert.type} onClose={() => setAlert(null)}>
+                                                                <AlertTitle>Success</AlertTitle>
+                                                                {alert.message}
+                                                            </Alert>
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                             </form>
