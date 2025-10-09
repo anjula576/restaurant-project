@@ -1,6 +1,6 @@
 
 import Layout from '../components/Layout.tsx'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import DataTable from "../components/DataTable";
 import axios from "axios";
 import {Alert} from "@mui/material";
@@ -9,7 +9,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 
 
-function Customer()  {
+function Customer() {
 
     const [customers, setCustomers] = useState([]);
 
@@ -121,6 +121,27 @@ function Customer()  {
         setLastNameValid(customer.lastname ==""? false:namePatrn.test(customer.lastname))
 
     }
+
+    const mobileNohandle = (e)=>{
+
+        // eslint-disable-next-line prefer-const
+        let { name, value } = e.target;
+        setCustomer({ ...customer, [name]: value });
+
+        setMobileValid(customer.mobileno ==""? false:mobilePatrn.test(customer.mobileno))
+
+    }
+
+    const emailhandle = (e)=>{
+
+        // eslint-disable-next-line prefer-const
+        let { name, value } = e.target;
+        setCustomer({ ...customer, [name]: value });
+
+        setEmailValid(customer.email ==""? false:emailPatrn.test(customer.email))
+
+    }
+
     const checkFormErrors=()=>{
 
         let errors = "";
@@ -149,7 +170,6 @@ function Customer()  {
         status: "",
     };
 
-
     //  update function
     const onUpdate = async () => {
 
@@ -177,6 +197,14 @@ function Customer()  {
                 // get updated customer list
                 getCustomers();
 
+                // remove validations
+
+                document.getElementById("txtFirstName").classList.remove("is-valid","is-invalid");
+                document.getElementById("txtLastName").classList.remove("is-valid","is-invalid");
+                document.getElementById("txtMobileNo").classList.remove("is-valid","is-invalid");
+                document.getElementById("txtEmail").classList.remove("is-valid","is-invalid");
+                document.getElementById("txtNotes").classList.remove("is-valid","is-invalid");
+
                 //  this is the timeout function to use to set null to already opened alert
                 //  after that automatically close the alert
                 setTimeout(()=>{setAlert(null)},3000)
@@ -201,25 +229,44 @@ function Customer()  {
             // from here,disable the page refresh when submitting the form.
             e.preventDefault();
 
-            try {
-                await axios.post("http://localhost:8080/api/customer", customer);
+        const formErrors = checkFormErrors()
+
+            if (formErrors==""){
+                try {
+                    await axios.post("http://localhost:8080/api/customer", customer);
 // window.alert("customer deleted successfully")
-                setAlert({type: "success", message: "Customer added successfully" });
+                    setAlert({type: "success", message: "Customer added successfully" });
 
 
-                getCustomers();
+                    getCustomers();
 
-                //  clear the forms
-                setCustomer(emptyCustomer);
+                    //  clear the forms
+                    setCustomer(emptyCustomer);
 
-                //  this is the timeout function to use to set null to already opened alert
-                //  after that automatically close the alert
-                setTimeout(()=>{setAlert(null)},3000)
+                    // remove validations
 
-            } catch (error) {
-                console.error("Error", error)
+                    document.getElementById("txtFirstName").classList.remove("is-valid","is-invalid");
+                    document.getElementById("txtLastName").classList.remove("is-valid","is-invalid");
+                    document.getElementById("txtMobileNo").classList.remove("is-valid","is-invalid");
+                    document.getElementById("txtEmail").classList.remove("is-valid","is-invalid");
+                    document.getElementById("txtNotes").classList.remove("is-valid","is-invalid");
+
+
+                    //  this is the timeout function to use to set null to already opened alert
+                    //  after that automatically close the alert
+                    setTimeout(()=>{setAlert(null)},3000)
+
+                } catch (error) {
+                    console.error("Error", error)
+
+                }
+            }else{
+                window.alert("Please fill the required fields"+ formErrors)
 
             }
+
+
+
         }
 
         //  this call when editing the form
@@ -283,7 +330,7 @@ function Customer()  {
             <>
 
 
-                <Layout>
+
                     <div className="row">
                         <div className="col-12 col-md-12 col-lg-12">
                             <div className="accordion ms-2 me-2" id="accordionPanelsStayOpenExample">
@@ -295,7 +342,7 @@ function Customer()  {
                                             Customer Form
                                         </button>
                                     </h2>
-                                    <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show">
+                                    <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
                                         <div className="accordion-body">
                                             <form onSubmit={onSubmit}>
                                                 <div className="row">
@@ -319,7 +366,7 @@ function Customer()  {
                                                                            ? "is-valid"
                                                                            : "is-invalid"
                                                                }`} id="txtFirstName"
-                                                               aria-describedby="emailHelp"/>
+                                                              />
                                                     </div>
 
                                                     {/*last name*/}
@@ -345,7 +392,17 @@ function Customer()  {
                                                             No</label>
                                                         <input type="text"
                                                                value={customer.mobileno}
-                                                               name="mobileno" onChange={customerHandle}
+
+                                                               /* in here use onblur*/
+                                                               /*When you type the 10th digit, your state may still not have
+                                                               updated in time (React state updates are async), so the regex test happens with 9 digits.
+                                                                Then when you type the 11th, it finally has the full 10 digits.*/
+                                                                /*Validate on blur (when user leaves the field)*/
+
+
+                                                               name="mobileno"
+                                                               onChange={mobileNohandle}
+                                                               onBlur={() => setMobileValid(/^[0-9]{10}$/.test(customer.mobileno))}
                                                                className={`form-control ${
                                                                    mobileValid === null
                                                                        ? ""
@@ -353,7 +410,7 @@ function Customer()  {
                                                                            ? "is-valid"
                                                                            : "is-invalid"
                                                                }`} id="txtMobileNo"
-                                                               aria-describedby="emailHelp"/>
+                                                              />
                                                     </div>
 
 
@@ -368,7 +425,7 @@ function Customer()  {
                                                         <label htmlFor="txtEmail" className="form-label">Email</label>
                                                         <input type="email"
                                                                value={customer.email}
-                                                               name="email" onChange={customerHandle}
+                                                               name="email" onChange={emailhandle}
                                                                className={`form-control ${
                                                                    emailValid === null
                                                                        ? ""
@@ -482,7 +539,6 @@ function Customer()  {
 
                     </div>
 
-                </Layout>
 
 
             </>

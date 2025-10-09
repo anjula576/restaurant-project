@@ -1,23 +1,40 @@
 
 
-import Dashboard from "./pages/Dashboard";
 import Customer from "./pages/Customer.tsx";
+import Sidebar from "./components/Sidebar.tsx";
+import Navbar from "./components/Navbar.tsx";
+import Content from "./components/Content.tsx";
+import React from "react";
+// import {Route, Routes} from "react-router-dom";
+import Dashboard from "./pages/Dashboard.tsx";
+import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
+
 
 function App() {
 
     return (
-        <div>
-            <Customer/>
+
+        <Router>
+        <div className="d-flex">
+            <Sidebar/>
+            <div className="flex-grow-1">
+                <Navbar/>
+                <Content>
+                    <Routes>
+                        <Route path={"/"} element={<Dashboard/>}></Route>
+                        <Route path={"/customer"} element={<Customer/>}></Route>
+                    </Routes>
+                </Content>
+            </div>
         </div>
 
 
+        </Router>
 
-        // <div>
-        //    <Users></Users>
-        //
-        // </div>
+
 
     );
 }
+
 
 export default App;
