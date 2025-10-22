@@ -8,6 +8,7 @@ import React from "react";
 // import {Route, Routes} from "react-router-dom";
 import Dashboard from "./pages/Dashboard.tsx";
 import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
+import Order from "./pages/Order.tsx";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                     <Routes>
                         <Route path={"/"} element={<Dashboard/>}></Route>
                         <Route path={"/customer"} element={<Customer/>}></Route>
+                        <Route path={"/order"} element={<Order/>}></Route>
                     </Routes>
                 </Content>
             </div>

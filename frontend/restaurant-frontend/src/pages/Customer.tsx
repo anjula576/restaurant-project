@@ -16,7 +16,7 @@ function Customer() {
     // this is changed when edit button pressed.
     const [isEditing, setIsEditing] = useState(false);
 
-    // should pass the alertcolor to alert (can't pass the string type,becuase alert type expect a colour among 4 colours
+    // should pass the alert color to alert (can't pass the string type,becuase alert type expect a colour among 4 colours
     // like(success,info,warning,error).any string not valid in here.)
     // when import alert  as import ,some times it doesn't work
     //  this tells initially type can be those 4 types and messege contain string or sometimes can be set null(because use ir fate to mention them)

@@ -26,7 +26,8 @@ const Sidebar: React.FC = () => {
                 </button>
 
                 <SidebarMenuItem icon={<House/>} label="Dashboard" path="/" expanded={expanded}/>
-                <SidebarMenuItem icon={<ShoppingCart/>} label="Orders" path="/orders" expanded={expanded}/>
+                <SidebarMenuItem icon={<ShoppingCart/>} label="Orders" path="/order" expanded={expanded}/>
+                <SidebarMenuItem icon={<Users/>} label="Customers" path="/customer" expanded={expanded}/>
                 <SidebarMenuItem icon={<Users/>} label="Customers" path="/customer" expanded={expanded}/>
             </div>
 
