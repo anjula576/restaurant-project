@@ -65,26 +65,66 @@ function Order(){
                             <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
                                 <div className="accordion-body">
                                     <form >
+
+
                                         <div className="row d-flex">
 
 
-                                                <div className="col-6 ">
-                                                    <form>
+                                                {/* first column*/}
+                                                <div className="col-12 col-md-6 col-lg-6 ">
+
+                                                        {/*customer*/}
                                                         <div className="row">
                                                             <label className="form-label" htmlFor="selectCustomer">Customer</label>
                                                             <select className="form-select" id="selectCustomer">
                                                                 <option>Option 1</option>
+                                                                <option>Option 1</option>
                                                             </select>
                                                         </div>
-                                                    </form>
+
+                                                    {/*total amount*/}
+                                                    <div className="row d-flex">
+                                                        <label htmlFor="totalAmount" className="form-label">Total Amount</label>
+                                                       <div className="input-group">
+                                                           <span className="input-group-text">LKR</span>
+                                                           <input type="text" className="form-control" id="totalAmount"/>
+                                                           <span className="input-group-text">.00</span>
+                                                       </div>
+
+                                                    {/*    order date*/}
+                                                        <div className="row d-flex">
+                                                            <label>Order Date</label>
+                                                            <input type="date" className="form-control" id="selectDate"/>
+                                                        </div>
+
+                                                    {/*    order type*/}
+                                                        <div className="row d-flex">
+                                                            <label className="form-label">Order Type</label>
+                                                            <select className="form-select" id="selectOrderType">
+                                                                <option>Dine In</option>
+                                                                <option>Take Away</option>
+                                                            </select>
+                                                        </div>
+
+                                                    {/*    order status*/}
+                                                        <div className="row d-flex">
+                                                            <label className="form-label" htmlFor="selectOrderSts">Order status</label>
+                                                            <input className="form-control" id="selectOrderSts"/>
+                                                        </div>
+
+
+                                                    </div>
+
                                                 </div>
 
+                                                {/*second column*/}
 
-                                                <div className="col-6 bg-success">
+                                                <div className="col-12 col-md-6 col-lg-6 bg-success">
                                                     <h2>colimn 1</h2>
                                                 </div>
 
                                         </div>
+
 
                                     </form>
                                 </div>
