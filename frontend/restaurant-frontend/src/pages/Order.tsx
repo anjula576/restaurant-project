@@ -84,32 +84,47 @@ function Order(){
 
                                                     {/*total amount*/}
                                                     <div className="row d-flex">
-                                                        <label htmlFor="totalAmount" className="form-label">Total Amount</label>
-                                                       <div className="input-group">
-                                                           <span className="input-group-text">LKR</span>
-                                                           <input type="text" className="form-control" id="totalAmount"/>
-                                                           <span className="input-group-text">.00</span>
-                                                       </div>
+                                                        <div className="col-12 col-md-6 col-lg-6">
+                                                            <label htmlFor="totalAmount" className="form-label">Total
+                                                                Amount</label>
+                                                            <div className="input-group">
+                                                                <span className="input-group-text">LKR</span>
+                                                                <input type="text" className="form-control"
+                                                                       id="totalAmount"/>
+                                                                <span className="input-group-text">.00</span>
+                                                            </div>
 
-                                                    {/*    order date*/}
-                                                        <div className="row d-flex">
-                                                            <label>Order Date</label>
-                                                            <input type="date" className="form-control" id="selectDate"/>
+
+                                                        </div>
+                                                        {/*    order date*/}
+                                                        <div className="col-12 col-md-6 col-lg-6">
+                                                            <label className="pt-2">Order Date</label>
+                                                            <input type="date" className="form-control"
+                                                                   id="selectDate"/>
                                                         </div>
 
-                                                    {/*    order type*/}
-                                                        <div className="row d-flex">
-                                                            <label className="form-label">Order Type</label>
-                                                            <select className="form-select" id="selectOrderType">
-                                                                <option>Dine In</option>
-                                                                <option>Take Away</option>
-                                                            </select>
-                                                        </div>
 
-                                                    {/*    order status*/}
+
+
                                                         <div className="row d-flex">
-                                                            <label className="form-label" htmlFor="selectOrderSts">Order status</label>
-                                                            <input className="form-control" id="selectOrderSts"/>
+
+                                                            {/*    order type*/}
+                                                            <div className="col-6">
+                                                                <label className="form-label">Order Type</label>
+                                                                <select className="form-select" id="selectOrderType">
+                                                                    <option>Dine In</option>
+                                                                    <option>Take Away</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div className="col-6">
+
+                                                                {/*    order status*/}
+                                                                <label className="form-label" htmlFor="selectOrderSts">Order
+                                                                    status</label>
+                                                                <input className="form-control" id="selectOrderSts"/>
+                                                            </div>
+
                                                         </div>
 
 
@@ -120,7 +135,7 @@ function Order(){
                                                 {/*second column*/}
 
                                                 <div className="col-12 col-md-6 col-lg-6 bg-success">
-                                                    <h2>colimn 1</h2>
+                                                    <h2>column</h2>
                                                 </div>
 
                                         </div>
