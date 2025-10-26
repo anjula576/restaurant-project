@@ -2,6 +2,7 @@ import {Alert} from "@mui/material";
 import AlertTitle from "@mui/material/AlertTitle";
 import DataTable from "../components/DataTable.tsx";
 import React, {useState} from "react";
+import '../assets/css/Order.scss'
 
 
 function Order(){
@@ -10,6 +11,14 @@ function Order(){
 
     // this is changed when edit button pressed.
     const [isEditing, setIsEditing] = useState(false);
+
+    const [menuItems, setMenuItems] = useState([]);
+
+    //  this function contain the logics about add to cart
+    const addToCart = (item) => {
+        console.log("Add to cart:", item);
+        // TODO: Add to cart state logic
+    };
 
     // should pass the alert color to alert (can't pass the string type,becuase alert type expect a colour among 4 colours
     // like(success,info,warning,error).any string not valid in here.)
@@ -31,14 +40,14 @@ function Order(){
         ordertype:"",
     })
 
-    // this is used to refill the form
+    // this is used to get menu items
 
-    const getOrders = () => {
-        fetch("http://localhost:8080/api/order")
+    const getMenuItems = () => {
+        fetch("http://localhost:8080/api/menuitems")
             .then((res) => res.json())
             .then((data) => {
 
-                setOrders(data);
+                setMenuItems(data);
 
             })
     }
@@ -48,132 +57,34 @@ function Order(){
 
     return(
         <>
+            <div className="container-fluid">
+                <h2>Order Form</h2>
+                <div className="row">
+                    {/*    first column*/}
+                    <div className="col-8 bg-success">
+                        <h2>asad</h2>
+                        <div className="menu-column">
+                            <div className="food-card">as</div>
 
-
-
-            <div className="row">
-                <div className="col-12 col-md-12 col-lg-12">
-                    <div className="accordion ms-2 me-2" id="accordionPanelsStayOpenExample">
-                        <div className="accordion-item">
-                            <h2 className="accordion-header">
-                                <button className="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                        aria-controls="panelsStayOpen-collapseOne">
-                                    Order Form
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
-                                <div className="accordion-body">
-                                    <form >
-
-
-                                        <div className="row d-flex">
-
-
-                                                {/* first column*/}
-                                                <div className="col-12 col-md-6 col-lg-6 ">
-
-                                                        {/*customer*/}
-                                                        <div className="row">
-                                                            <label className="form-label" htmlFor="selectCustomer">Customer</label>
-                                                            <select className="form-select" id="selectCustomer">
-                                                                <option>Option 1</option>
-                                                                <option>Option 1</option>
-                                                            </select>
-                                                        </div>
-
-                                                    {/*total amount*/}
-                                                    <div className="row d-flex">
-                                                        <div className="col-12 col-md-6 col-lg-6">
-                                                            <label htmlFor="totalAmount" className="form-label">Total
-                                                                Amount</label>
-                                                            <div className="input-group">
-                                                                <span className="input-group-text">LKR</span>
-                                                                <input type="text" className="form-control"
-                                                                       id="totalAmount"/>
-                                                                <span className="input-group-text">.00</span>
-                                                            </div>
-
-
-                                                        </div>
-                                                        {/*    order date*/}
-                                                        <div className="col-12 col-md-6 col-lg-6">
-                                                            <label className="pt-2">Order Date</label>
-                                                            <input type="date" className="form-control"
-                                                                   id="selectDate"/>
-                                                        </div>
-
-
-
-
-                                                        <div className="row d-flex">
-
-                                                            {/*    order type*/}
-                                                            <div className="col-6">
-                                                                <label className="form-label">Order Type</label>
-                                                                <select className="form-select" id="selectOrderType">
-                                                                    <option>Dine In</option>
-                                                                    <option>Take Away</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div className="col-6">
-
-                                                                {/*    order status*/}
-                                                                <label className="form-label" htmlFor="selectOrderSts">Order
-                                                                    status</label>
-                                                                <input className="form-control" id="selectOrderSts"/>
-                                                            </div>
-
-                                                        </div>
-
-
-                                                    </div>
-
-                                                </div>
-
-                                                {/*second column*/}
-
-                                                <div className="col-12 col-md-6 col-lg-6 bg-success">
-                                                    <h2>column</h2>
-                                                </div>
-
-                                        </div>
-
-
-                                    </form>
-                                </div>
-                            </div>
+                            {/*{menuItems.map(item => (*/}
+                            {/*    <div className="food-card" key={item.id}>*/}
+                            {/*        <img src={item.imageUrl} alt={item.name} className="food-image"/>*/}
+                            {/*        <div className="food-details">*/}
+                            {/*            <h4>{item.name}</h4>*/}
+                            {/*            <p>Portion: {item.portion}</p>*/}
+                            {/*            <p>Rs. {item.price}</p>*/}
+                            {/*            <button onClick={() => addToCart(item)}>Add to Cart</button>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*))}*/}
                         </div>
-                        <div className="accordion-item">
-                            <h2 className="accordion-header">
-                                <button className="accordion-button collapsed" type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                                        aria-controls="panelsStayOpen-collapseTwo">
-                                    Order List
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse show">
-                                <div className="accordion-body">
-                                    <h1>asd</h1>
-
-                                    {/*use key when need to update a component when change the count*/}
-                                    {/* in here when change the customer count automatically unmount the datatable component
-                                        and remount.this is an easier way to update component when list an list updates*/}
-                                    {/*<DataTable key={orders.length} columns={columns} data={orders}*/}
-                                    {/*           onEdit={(row) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>*/}
-
-
-                                </div>
-                            </div>
-                        </div>
-
+                    </div>
+                    {/*     second column*/}
+                    <div className="col-4 bg-primary">
+                        <h2>sdsd</h2>
                     </div>
                 </div>
-
             </div>
-
 
 
         </>

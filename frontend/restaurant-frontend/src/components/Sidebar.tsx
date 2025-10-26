@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { House, ShoppingCart, Users } from "lucide-react"; // example icons
+import {
+    BookUser,
+    House,
+    PackageSearch,
+    ShoppingCart,
+    SquareMenu,
+    TicketPercent,
+    Users,
+    UtensilsCrossed
+} from "lucide-react"; // example icons
 import SidebarMenuItem from "./SidebarMenuItem";
 
 
@@ -26,9 +35,14 @@ const Sidebar: React.FC = () => {
                 </button>
 
                 <SidebarMenuItem icon={<House/>} label="Dashboard" path="/" expanded={expanded}/>
+                <SidebarMenuItem icon={<Users/>} label="Customers" path="/customer" expanded={expanded}/>
+                <SidebarMenuItem icon={<TicketPercent />} label="Reservation" path="/reservation" expanded={expanded}/>
                 <SidebarMenuItem icon={<ShoppingCart/>} label="Orders" path="/order" expanded={expanded}/>
-                <SidebarMenuItem icon={<Users/>} label="Customers" path="/customer" expanded={expanded}/>
-                <SidebarMenuItem icon={<Users/>} label="Customers" path="/customer" expanded={expanded}/>
+                <SidebarMenuItem icon={<UtensilsCrossed />} label="Menu" path="/menu" expanded={expanded}/>
+                <SidebarMenuItem icon={<PackageSearch />} label="Item" path="/item" expanded={expanded}/>
+                <SidebarMenuItem icon={<BookUser />} label="Suppliers" path="/supplier" expanded={expanded}/>
+
+
             </div>
 
 
