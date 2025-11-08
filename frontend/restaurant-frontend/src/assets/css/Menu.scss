@@ -1,0 +1,21 @@
+.menu-first-row{
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+  overflow: auto;
+  background-color: beige;
+
+}
+.singleFood{
+background-color: azure
+
+
+}
+.singleFood:hover{
+
+  border: 1px solid lightgreen;
+}
+
+.menu-scnd-row{
+  height: 100vh;
+}
