@@ -2,6 +2,7 @@
 import '../assets/css/Menu.scss'
 import {useEffect, useState} from "react";
 import {PersonStanding} from "lucide-react";
+import item from "./Item.tsx";
 
 
 //  this interface is used to mention the type of "menuItems" array
@@ -23,7 +24,7 @@ function Order(){
     const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
 
     //to store cart items
-    const [cartItems,setCartItems]=useState<MenuItem[]|null>([])
+    const [cartItems,setCartItems]=useState<MenuItem[]>([])
     useEffect(() => {
 
         fetch("http://localhost:8080/api/menuitems")
@@ -39,6 +40,11 @@ function Order(){
                 }
             )
     }, []);
+
+    //  function to delete the the item
+    const handleDlt =(dltItemId:number)=>{
+        setCartItems(prevItems =>prevItems?.filter(prevItem =>prevItem.id !==dltItemId));
+    };
 
     return <>
         <h2>Order </h2>
@@ -125,7 +131,7 @@ function Order(){
                 <div className="cart-prooduct-list">
                     {/* get cart  items one by one and create cards*/}
                     {cartItems?.map((cartItem) => (
-                        <div className="row single-cart-item" style={{
+                        <div key={cartItem.id} className="row single-cart-item" style={{
                             width: "250px",
                             height: "100px",
                             backgroundColor: "red",
@@ -155,6 +161,9 @@ function Order(){
                                 </div>
 
 
+                            </div>
+                            <div className="btn btn-sm btn-warning">
+                                <button className="btn btn-sm btn-success" onClick={()=>handleDlt(cartItem.id)}>Delete</button>
                             </div>
 
                         </div>
