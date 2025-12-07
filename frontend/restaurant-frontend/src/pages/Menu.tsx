@@ -16,9 +16,7 @@ interface MenuItem {
     // imageUrl: string;
 }
 
-function PershonStanding() {
-    return null;
-}
+
 
 function Menu(){
 

@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body{
+  font-family: "Montserrat", sans-serif;
+}
+
+:root {
+  --bs-body-font-family: Montserrat, sans-serif;
+  --bs-font-sans-serif: Montserrat, sans-serif;  /* For sans-serif elements */
+}
+
 .container-fluid{
   margin: 0;
   padding: 0;
@@ -23,3 +34,22 @@
     margin-top: 10px;
   }
 }
+
+.menu-scnd-row{
+  overflow: hidden;
+}
+.cart-prooduct-list{
+  background-color: red;
+  display:flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 12px;
+  padding: 20px;
+  height: 45%;
+}
+
+.single-cart-item{
+
+}
+
