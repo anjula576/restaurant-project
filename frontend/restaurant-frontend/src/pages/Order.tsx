@@ -16,6 +16,14 @@ interface MenuItem {
     // imageUrl: string;
 }
 
+interface CartItem {
+    id: number;
+    name: string;
+    qty:number;
+    price: number;
+    // imageUrl: string;
+}
+
 
 
 function Order(){
@@ -24,7 +32,7 @@ function Order(){
     const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
 
     //to store cart items
-    const [cartItems,setCartItems]=useState<MenuItem[]>([])
+    const [cartItems,setCartItems]=useState<CartItem[]>([])
     useEffect(() => {
 
         fetch("http://localhost:8080/api/menuitems")
@@ -72,55 +80,50 @@ function Order(){
 
                         <div className="row mt-2">
 
-                            <div className="col-6 d-flex align-content-center justify-content-start">
+                            <div className="col-12 ms-2 d-flex align-content-center justify-content-start">
 
                                 <h4 className="d-flex justify-content-center"
                                     style={{fontSize: "17px"}}>{item.name}</h4>
                             </div>
 
-                            <div className="col-6 d-flex justify-content-end">
-                                <h5 style={{color: "#2c3e50", fontSize: "17px"}}
-                                    className="d-flex justify-content-end">Rs. {item.price}</h5>
+
+
+                        </div>
+                        <div className="row ms-1">
+                            <div className="col-6 d-flex justify-content-start">
+                                <h4 style={{color: "#2c3e50", fontSize: "17px"}}
+                                    className="d-flex">Rs. {item.price}</h4>
 
                             </div>
+
+                            <div className="col-6">Soups</div>
 
                         </div>
 
                         <div className="row">
-                            <div className="col-8 d-flex justify-content-end m-0 p-0">
-                                <p style={{
-                                    fontSize: "12px",
-                                    padding: "0px",
-                                    margin: "5px 0px",
-                                    color: "#555"
-                                }}>{item.description}</p>
 
+                                <input className="col-6" type="text" placeholder="ehkejkhkjdf dkjdfdf djkfhjdhfdljdjfhdl"/>
+
+
+
+                            <div className="col-6">
+                                <button
+                                    className="btn btn-sm btn-primary d-flex"
+                                    style={{width: "60%", marginBottm: "20px"}}
+
+                                    onClick={() => setCartItems(prev => [...(prev || []), item])
+
+                                    }
+                                >Order
+                                </button>
                             </div>
-                            <div className="col-6 d-flex align-content-center justify-content-end">
-                                {/*<span className="d-flex justify-content-center align-content-center p-1" style={{*/}
-                                {/*    width: "55px",*/}
-                                {/*    backgroundColor: "red",*/}
-                                {/*    borderRadius: "50px"*/}
-                                {/*}}><PersonStanding/>10</span>*/}
-                                <span className="bg-succss"></span>
-                            </div>
-                            <div className="row d-flex justify-content-center align-content-center">
-                                <div className="col-9">
-                                    <button
-                                        className="btn btn-sm btn-primary d-flex justify-content-center align-content-center"
-                                        style={{width: "60%", marginBottm: "20px"}}
 
-                                        onClick={() => setCartItems(prev => [...(prev || []), item])
 
-                                        }
-                                    >Order
-                                    </button>
-                                </div>
-                                {/*<div className="col-4">*/}
-                                {/*    <input type="text" className="form-control"/>*/}
-                                {/*</div>*/}
+                            {/*<div className="col-4">*/}
+                            {/*    <input type="text" className="form-control"/>*/}
+                            {/*</div>*/}
 
-                            </div>
+
                         </div>
                     </div>
                 ))}
@@ -129,7 +132,7 @@ function Order(){
             <div className="col-4 d-flex justify-content-center bg-white menu-scnd-row">
 
                 <div className="cart-prooduct-list">
-                    {/* get cart  items one by one and create cards*/}
+                {/* get cart  items one by one and create cards*/}
                     {cartItems?.map((cartItem) => (
                         <div key={cartItem.id} className="row single-cart-item" style={{
                             width: "250px",
