@@ -2,6 +2,7 @@
 import '../assets/css/Menu.scss'
 import {useEffect, useState} from "react";
 import {PersonStanding} from "lucide-react";
+import {CircleX} from "lucide-react";
 import item from "./Item.tsx";
 
 
@@ -100,9 +101,9 @@ function Order(){
 
                         </div>
 
-                        <div className="row">
+                        <div className="row ms-2">
 
-                                <input className="col-6" type="text" placeholder="ehkejkhkjdf dkjdfdf djkfhjdhfdljdjfhdl"/>
+                                <input className="col-6" type="text" placeholder=""/>
 
 
 
@@ -134,13 +135,15 @@ function Order(){
                 <div className="cart-prooduct-list">
                 {/* get cart  items one by one and create cards*/}
                     {cartItems?.map((cartItem) => (
-                        <div key={cartItem.id} className="row single-cart-item" style={{
+                        <div key={cartItem.id} className="row mb-4 single-cart-item" style={{
                             width: "250px",
                             height: "100px",
                             backgroundColor: "red",
                             marginBottom: "10px",
-                            borderRadius: "20px"
+                            borderRadius: "30px"
                         }}>
+                            {/* close button */}
+                            <div className=''style={{}} ><CircleX  onClick={()=>handleDlt(cartItem.id)} /></div>
                             <div className="col-6"
                                  style={{
                                      display: "flex",
@@ -165,7 +168,7 @@ function Order(){
 
 
                             </div>
-                            <div className="btn btn-sm btn-warning">
+                            <div className="btn btn-sm">
                                 <button className="btn btn-sm btn-success" onClick={()=>handleDlt(cartItem.id)}>Delete</button>
                             </div>
 
