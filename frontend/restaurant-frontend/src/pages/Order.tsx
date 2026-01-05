@@ -112,7 +112,14 @@ function Order(){
                                     className="btn btn-sm btn-primary d-flex"
                                     style={{width: "60%", marginBottm: "20px"}}
 
-                                    onClick={() => setCartItems(prev => [...(prev || []), item])
+                                    // onClick={() => setCartItems(prev => [...(prev || []), item])
+                                    onClick={
+                                        ()=>setCartItems( prev=>{
+                                            // check if item already exists in cart
+                                           
+                                        }
+                                      )
+                                    }
 
                                     }
                                 >Order
@@ -137,13 +144,13 @@ function Order(){
                     {cartItems?.map((cartItem) => (
                         <div key={cartItem.id} className="row mb-4 single-cart-item" style={{
                             width: "250px",
-                            height: "100px",
+                            height: "120px",
                             backgroundColor: "red",
                             marginBottom: "10px",
                             borderRadius: "30px"
                         }}>
                             {/* close button */}
-                            <div className=''style={{}} ><CircleX  onClick={()=>handleDlt(cartItem.id)} /></div>
+                            <div className='d-flex pt-2'style={{height:28}} ><CircleX  onClick={()=>handleDlt(cartItem.id)} /></div>
                             <div className="col-6"
                                  style={{
                                      display: "flex",
@@ -168,9 +175,7 @@ function Order(){
 
 
                             </div>
-                            <div className="btn btn-sm">
-                                <button className="btn btn-sm btn-success" onClick={()=>handleDlt(cartItem.id)}>Delete</button>
-                            </div>
+                    
 
                         </div>
 
