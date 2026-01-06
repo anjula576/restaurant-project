@@ -29,6 +29,9 @@ interface CartItem {
 
 function Order(){
 
+    //  state to store quantity(from the menu item to cart item)
+    const [itemQty,setQty]=useState<number>(1);
+
     // store the menu items
     const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
 
@@ -103,7 +106,12 @@ function Order(){
 
                         <div className="row ms-2">
 
-                                <input className="col-6" type="text" placeholder=""/>
+                                <input className="col-6" type="text" placeholder=""
+                                value={itemQty}
+                                // quantity state update
+                                // should convert string to number (must)
+                                onChange={(e)=>setQty(Number(e.target.value))}
+                                />
 
 
 
@@ -116,12 +124,18 @@ function Order(){
                                     onClick={
                                         ()=>setCartItems( prev=>{
                                             // check if item already exists in cart
+                                            //  if exists then return previous state
                                             const exists =prev?.some(cartItem =>cartItem.id ===item.id);
                                             if (exists){
-                                                return prev;
+                                                return prev.map(cartItem=>cartItem.id ===item.id ?
+                                                    {...cartItem,qty:cartItem.qty +itemQty}:
+                                                    cartItem
+                                                );
                                             }
 
-                                            return[...(prev || []),item]
+                                            return[...(prev || []),{item,qty:itemQty,id:item.id,name:item.name,price:item.price}];
+                                            console.log("cart items:",cartItems);
+                                            
                                            
                                         }
                                       )
@@ -146,6 +160,7 @@ function Order(){
             <div className="col-4 d-flex justify-content-center bg-white menu-scnd-row">
 
                 <div className="cart-prooduct-list">
+                    <h3 className="d-flex justify-content-center">Cart Items</h3>
                 {/* get cart  items one by one and create cards*/}
                     {cartItems?.map((cartItem) => (
                         <div key={cartItem.id} className="row mb-4 single-cart-item" style={{
@@ -177,6 +192,7 @@ function Order(){
                                 </div>
                                 <div className="row d-flex">
                                     <h5 className="d-flex justify-content-center">{cartItem.price}</h5>
+                                    <h5 className="d-flex justify-content-center">{cartItem.qty}</h5>
                                 </div>
 
 
