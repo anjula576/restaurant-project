@@ -116,12 +116,18 @@ function Order(){
                                     onClick={
                                         ()=>setCartItems( prev=>{
                                             // check if item already exists in cart
+                                            const exists =prev?.some(cartItem =>cartItem.id ===item.id);
+                                            if (exists){
+                                                return prev;
+                                            }
+
+                                            return[...(prev || []),item]
                                            
                                         }
                                       )
                                     }
 
-                                    }
+                                    
                                 >Order
                                 </button>
                             </div>
