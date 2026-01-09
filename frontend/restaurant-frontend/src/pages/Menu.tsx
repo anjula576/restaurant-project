@@ -39,9 +39,17 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
     }, []);
 
     return <>
-    <h2>Menu item</h2>
+    <div className='row'>
+        <div className='col-8'>
+             <h2>Menu items</h2>
+        </div>
+        <div className='col-4 d-flex justify-content-end'>
+            <button className='btn btn-primary' data-bs-toggle="modal" data-bs-target="#exampleModal">Add Menu Item</button>
+        </div>
+    </div>
+   
         <div className="row">
-            <div className="col-8 menu-first-row">
+            <div className="col-12 menu-first-row">
                 {menuItems.map((item) => (
                     <div
                         key={item.id}
@@ -77,9 +85,42 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
                 ))}
 
             </div>
-            <div className="col-4 bg-dark menu-scnd-row">
 
+            {/* start of menu adding model */}
+              <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+        <div className="modal-header">
+          <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">x
+    {/* <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16.6"><defs><style andiallelmwithtext="42" tuafontsizes="42">.cls-1{fill:#00425c;}</style></defs><path class="cls-1" d="M323.5,420.36l7.17-7.45a.5.5,0,0,0-.72-.7l-7.14,7.43-7.14-7.43a.5.5,0,1,0-.72.7l7.17,7.45L315,427.82a.5.5,0,0,0,.36.84.51.51,0,0,0,.36-.15l7.14-7.43,7.14,7.43a.51.51,0,0,0,.36.15.47.47,0,0,0,.35-.14.49.49,0,0,0,0-.7Z" transform="translate(-314.81 -412.06)"></path></svg> */}
+</button>
+        </div>
+        <div className="modal-body">
+         
+          <div className="modal-body_subtitle">Add new menu item</div>
+          <div className="contact-form">
+            <div className="input-box">
+              <input placeholder="Your Name" value="" type="text" name="Menu name"/>
             </div>
+            <div className="input-box">
+              <input placeholder="Your Phone" value="" type="tel" name="your-phone"/>
+            </div>
+            <div className="input-box">
+              <textarea placeholder="Enter Your Message" name="your-message"></textarea>
+            </div>
+            <div className="input-box text-center">
+                <button className="btn btn-primary" type="button">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+            {/* end of  menu adding model */}
+
+            {/* <div className="col-4 bg-dark menu-scnd-row">
+
+            </div> */}
         </div>
 
 

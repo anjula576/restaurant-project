@@ -19,3 +19,136 @@ background-color: azure
 .menu-scnd-row{
   height: 100vh;
 }
+
+//  menu model related styles
+body {
+  background-color: #ddd;
+}
+
+.site-content {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.modal-content {
+  border-radius: 22px;
+}
+
+.modal-header {
+    padding: 0;
+    margin: 0;
+    transform: translate(-50%, -35px);
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    border: none;
+}
+
+.modal-header .close {
+    float: none;
+    flex: 0 0 68px;
+    max-width: 68px;
+    height: 68px;
+    display: flex;
+    background-color: #ECECEC;
+    border-radius: 50%;
+    font-size: 42px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    line-height: 1;
+    margin: 0 auto;
+    outline: none;
+    box-shadow: none;
+    opacity: 1;
+    border: none;
+}
+
+.close{
+  margin-bottom: 20px;
+}
+
+.modal-header .close:hover {
+  
+}
+
+.modal-header .close svg {
+    height: 32px;
+}
+
+.modal-body {
+    padding: 60px 0px;
+}
+
+.modal-body_title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.modal-body_subtitle {
+    color: #33BED0;
+    text-align: center;
+    font-size: 22px;
+    line-height: 27px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+
+.contact-form .input-box {
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.contact-form .input-box input[type="text"], 
+.contact-form .input-box input[type="tel"],
+.contact-form .input-box input[type="email"],
+.contact-form .input-box textarea{
+    height: 64px;
+    width: 100%;
+    border: none;
+    background-color: #f8f6f1;
+    border-radius: 6px;
+    padding-left: 30px;
+    padding-right: 30px;
+    outline: none;
+    font-size: 14px;
+    color: #757873;
+    display: block;
+    font-weight: 500;
+}
+
+.contact-form .input-box textarea {
+    height: 120px;
+    width: 100%;
+    padding: 15px 30px 30px;
+}
+
+.btn-primary {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    outline: none !important;
+    background-color: #1f6306;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 32px;
+    transition: all 0.5s linear;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+}
