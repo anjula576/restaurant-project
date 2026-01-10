@@ -3,6 +3,7 @@ import '../assets/css/Menu.scss'
 import {useEffect, useState} from "react";
 import foodimage from "../assets/rice mini.jpg"
 import {PersonStanding} from "lucide-react";
+import axios from 'axios';
 
 
 //  this interface is used to mention the type of "menuItems" array
@@ -21,6 +22,11 @@ interface MenuItem {
 function Menu(){
 
     // store the menu items
+    const[name,setName]=useState<string>("");
+    const[description,setDescription]=useState<string>("");
+    const[price,setPrice]=useState<number>(0);
+    const[imageUrl,setImageUrl]=useState<File | null>(null);
+
 const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
     useEffect(() => {
 
@@ -37,6 +43,81 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
                 }
             )
     }, []);
+
+    // uplaoding the menu items
+    const handleSubmit=async (e:any)=>{
+
+        //  this is used to prevent the default behaviour of the form(usually page refresh)
+        e.preventDefault();
+
+        //  validation-----------------------------------------------
+
+        //  check after trimming the name is empty or not (if empty show the alert)
+        if(!name.trim()){
+            alert("Please enter the menu item name");
+            return;
+        }
+
+        if(!description.trim()){
+            alert("Please enter the description");
+            return;
+        }
+        if(price<=0){
+            alert("Please enter valid price");
+            return;
+        }
+        if(!imageUrl){
+            alert("Please select an image");
+            return;
+        }
+
+        // if the selected file is not an image.
+        // startsWith() method determines whether a string begins with the characters of a specified string, returning true or false as appropriate.
+        if(!imageUrl.type.startsWith("image/")){
+
+            alert("Please select a valid image file");
+            return;
+        }
+
+
+        // formData object is used to send form data, especially when dealing with file uploads.   
+        const formData=new FormData();
+
+        // append method is used to add key/value pairs to the FormData object.
+        formData.append("name",name);
+        formData.append("description",description);
+        formData.append("price",price.toString());
+        formData.append("image",imageUrl);
+
+        try{
+            const response=await axios.post("http://localhost:8080/api/menuitems",formData,{
+
+                // headers to inform the server about the type of data being sent.
+                // multipart/form-data is used when the form includes files, allowing binary data to be sent.
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                    
+                }
+            });
+            
+            console.log("Menu item added successfully:",response.data);
+            alert("Menu item added successfully");
+
+            //  reset the form fields after successful submission
+            setName("");
+            setDescription("");
+            setPrice(0);
+            setImageUrl(null);
+
+        }catch(error){  
+
+            console.error("Error adding menu item:",error);
+            alert("Failed to add menu item. Please try again.");
+        }
+
+        
+    }
+
 
     return <>
     <div className='row'>
@@ -98,20 +179,20 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         <div className="modal-body">
          
           <div className="modal-body_subtitle">Add new menu item</div>
-          <div className="contact-form">
+          <form className="contact-form">
             <div className="input-box">
-              <input placeholder="Your Name" value="" type="text" name="Menu name"/>
+              <input placeholder="Menu Item Name" value="" type="text" name="your-name"/>
             </div>
             <div className="input-box">
-              <input placeholder="Your Phone" value="" type="tel" name="your-phone"/>
+              <input placeholder="Description" value="" type="tel" name="your-phone"/>
             </div>
             <div className="input-box">
-              <textarea placeholder="Enter Your Message" name="your-message"></textarea>
+              <input placeholder="Price" name="your-message"/>
             </div>
             <div className="input-box text-center">
                 <button className="btn btn-primary" type="button">Send</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
