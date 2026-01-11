@@ -34,4 +34,7 @@ public class Menu {
     @Column(name = "status")
     @NotNull
     private Boolean status;
+
+    @Column(name = "image")
+    private String image;
 }

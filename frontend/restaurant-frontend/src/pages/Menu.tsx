@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import foodimage from "../assets/rice mini.jpg"
 import {PersonStanding} from "lucide-react";
 import axios from 'axios';
+import type { height } from '@mui/system';
 
 
 //  this interface is used to mention the type of "menuItems" array
@@ -22,9 +23,9 @@ interface MenuItem {
 function Menu(){
 
     // store the menu items
-    const[name,setName]=useState<string>("");
+    const[itemName,setName]=useState<string>("");
     const[description,setDescription]=useState<string>("");
-    const[price,setPrice]=useState<number>(0);
+    const[price,setPrice]=useState<string>("");
     const[imageUrl,setImageUrl]=useState<File | null>(null);
 
 const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
@@ -50,10 +51,12 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         //  this is used to prevent the default behaviour of the form(usually page refresh)
         e.preventDefault();
 
+        alert("Submitting the form");
+
         //  validation-----------------------------------------------
 
         //  check after trimming the name is empty or not (if empty show the alert)
-        if(!name.trim()){
+        if(!itemName.trim()){
             alert("Please enter the menu item name");
             return;
         }
@@ -62,7 +65,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
             alert("Please enter the description");
             return;
         }
-        if(price<=0){
+        if(Number(price)<=0){
             alert("Please enter valid price");
             return;
         }
@@ -84,9 +87,10 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         const formData=new FormData();
 
         // append method is used to add key/value pairs to the FormData object.
-        formData.append("name",name);
+        formData.append("name",itemName);
         formData.append("description",description);
         formData.append("price",price.toString());
+        formData.append("status","true");
         formData.append("image",imageUrl);
 
         try{
@@ -106,7 +110,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
             //  reset the form fields after successful submission
             setName("");
             setDescription("");
-            setPrice(0);
+            setPrice("0");
             setImageUrl(null);
 
         }catch(error){  
@@ -168,7 +172,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
             </div>
 
             {/* start of menu adding model */}
-              <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div className="modal-dialog modal-dialog-centered">
       <div className="modal-content">
         <div className="modal-header">
@@ -179,18 +183,31 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         <div className="modal-body">
          
           <div className="modal-body_subtitle">Add new menu item</div>
-          <form className="contact-form">
+          <form className="contact-form" onSubmit={handleSubmit}>
             <div className="input-box">
-              <input placeholder="Menu Item Name" value="" type="text" name="your-name"/>
+              <input placeholder="Menu Item Name" value={itemName} type="text" name="your-name" onChange={(e)=>setName(e.target.value)}required/>
             </div>
             <div className="input-box">
-              <input placeholder="Description" value="" type="tel" name="your-phone"/>
+              <input placeholder="Description" value={description} type="text" name="your-phone" onChange={(e)=>setDescription(e.target.value)}required/>
             </div>
             <div className="input-box">
-              <input placeholder="Price" name="your-message"/>
+              <input placeholder="Price" type='text' value={price} name="your-message" onChange={(e)=>setPrice(e.target.value)}required/>
             </div>
-            <div className="input-box text-center">
-                <button className="btn btn-primary" type="button">Send</button>
+           <div className="input-box">
+            {/* in here, if there is image value then return image's 0 th position value,if not set null */}
+            {/*  this is error free method */}
+              <input placeholder="Menu Item Image" accept='image/*' type='file' onChange={(e)=>setImageUrl(e.target.files ? e.target.files[0] : null)} required/>
+            </div>
+
+             <div className="input-box">
+                {/* in here,use the conditional rendering */}
+                {/*in conditional rendering render the relevant conponent if available.without that can cause to crashing the app  */}
+                {/* ex:- true && file -->then render  / false && file --> null */}
+                {imageUrl && <img  src={URL.createObjectURL(imageUrl)} style={{width:60,height:60}} className='image-preview'></img>}
+            </div>
+                
+            <div className="text-center">
+                <button className="btn btn-primary">Send</button>
             </div>
           </form>
         </div>
