@@ -8,14 +8,14 @@ import type { height } from '@mui/system';
 
 
 //  this interface is used to mention the type of "menuItems" array
-//without mentioning this can't assign values to that videos
+//without mentioning this can't assign values to that menuItems
 // interfaces in react used to mention what type of data handle by an array
 interface MenuItem {
     id: number;
     name: string;
     description: string;
     price: number;
-    // imageUrl: string;
+    image: string;
 }
 
 
@@ -36,6 +36,8 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
             .then((data) => {
 
                 setMenuItems(data);
+                console.log(data);
+                
 
             })
             .catch(
@@ -136,6 +138,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         <div className="row">
             <div className="col-12 menu-first-row">
                 {menuItems.map((item) => (
+                    
                     <div
                         key={item.id}
                         style={{
@@ -151,9 +154,13 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
                         className="singleFood"
                     >
                         <img
-                            src="https://rasamalaysia.com/wp-content/uploads/2019/06/chinese-fried-rice-thumb.jpg"
-                            style={{ width: "80%", borderRadius: "10px" }}
+                            // src="https://rasamalaysia.com/wp-content/uploads/2019/06/chinese-fried-rice-thumb.jpg"
+                            // this is the method to load the images from the backend server
+                            src={item.image ? `http://localhost:8080${item.image}` : foodimage}
+                            style={{ width: "90%",height:"100px", borderRadius: "10px" }} 
                         />
+                        
+                        
                         <h4 className="d-flex justify-content-center" style={{fontSize:"15px"}} >{item.name}</h4 >
                         <p style={{ fontSize: "12px",padding:"0px",margin:"5px 0px", color: "#555" }}>{item.description}</p>
                         <div className="row">
@@ -167,6 +174,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
                             </div>
                         </div>
                     </div>
+                    
                 ))}
 
             </div>

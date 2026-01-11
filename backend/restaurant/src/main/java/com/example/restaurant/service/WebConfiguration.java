@@ -30,7 +30,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
         // map url path /images/** to the local folder images/
         // so that images can be accessed from browser
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:images/");
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/");
     }
 }

@@ -47,8 +47,12 @@ public class MenuController {
             @RequestParam("status") Boolean status,
             @RequestParam("image") MultipartFile image) throws IOException {
 
-        // create new menu item
         // set image path to image upload path + image file name
+        // File is a path handler,not a file creator
+        // from File just pointed to that directory.didn't create directory (like tell
+        // the address)
+        // if there is no anything in that directory,it will create that directory from
+        // mkdirs()
         File dir = new File(uploadDir);
         if (!dir.exists()) {
 
@@ -60,13 +64,15 @@ public class MenuController {
         String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
 
         // set image path to image upload path + file name
+        // This tells Java exactly where to save the file.
         Path filePath = Paths.get(uploadDir, fileName);
 
-        // write image to file path
+        // save the image to the disk
+        // getbytes() method of MultipartFile is used to get the byte array of the file
         Files.write(filePath, image.getBytes());
 
         // here save image path to database
-        String imageUrl = "/images/" + fileName;
+        // String imageUrl = "/images/" + fileName;
 
         // create new menu item
         Menu menuItem = new Menu();
@@ -74,7 +80,8 @@ public class MenuController {
         menuItem.setDescription(description);
         menuItem.setPrice(price);
         menuItem.setStatus(status);
-        menuItem.setImage(imageUrl);
+        // menuItem.setImage(imageUrl);
+        menuItem.setImage("/uploads/images/" + fileName);
 
         menuDao.save(menuItem);
 
