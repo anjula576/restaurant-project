@@ -95,6 +95,8 @@ public class MenuController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) {
         menuDao.deleteById(id);
+
+        // response entity is used to return response with status code
         return ResponseEntity.ok("Menu item deleted successfully");
     }
 
