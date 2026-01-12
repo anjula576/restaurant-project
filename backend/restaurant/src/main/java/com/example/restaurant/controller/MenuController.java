@@ -91,4 +91,11 @@ public class MenuController {
 
     }
 
+    // delete mapping to delete menu item by id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) {
+        menuDao.deleteById(id);
+        return ResponseEntity.ok("Menu item deleted successfully");
+    }
+
 }
