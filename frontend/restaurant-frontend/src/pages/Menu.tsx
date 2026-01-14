@@ -47,23 +47,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
             )
     }, []);
 
-    // delete menu item by id
-    const deleteMenuItem=async(id:number)=>{    
-
-        const confirmDelete=window.confirm("Are you sure you want to delete this menu item?");
-
-        if(!confirmDelete){
-            return;
-        }else{
-            try{
-               return await axios.delete(`http://localhost:8080/api/menuitems/${id}`);
-        }catch(error){
-            console.error("Error deleting menu item:",error);
-            alert("Failed to delete menu item. Please try again.");
-        }
-
-        // return await axios.delete(`http://localhost:8080/api/menuitems/${id}`)
-    }
+  
 
     // uplaoding the menu items
     const handleSubmit=async (e:any)=>{
@@ -250,6 +234,6 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
 
     </>
 }
-}
+
 
 export default Menu;

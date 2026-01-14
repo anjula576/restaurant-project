@@ -58,6 +58,25 @@ function Order(){
         setCartItems(prevItems =>prevItems?.filter(prevItem =>prevItem.id !==dltItemId));
     };
 
+
+      // delete menu item by id
+    const deleteMenuItem=async(id:number)=>{    
+
+        const confirmDelete=window.confirm("Are you sure you want to delete this menu item?");
+
+        if(!confirmDelete){
+            return;
+        }else{
+            try{
+               return await axios.delete(`http://localhost:8080/api/menuitems/${id}`);
+        }catch(error){
+            console.error("Error deleting menu item:",error);
+            alert("Failed to delete menu item. Please try again.");
+        }
+
+        // return await axios.delete(`http://localhost:8080/api/menuitems/${id}`)
+    }
+
     return <>
         <h2>Order </h2>
         <div className="row">
