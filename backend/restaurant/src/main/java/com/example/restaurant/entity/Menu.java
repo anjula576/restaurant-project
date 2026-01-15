@@ -27,6 +27,10 @@ public class Menu {
     @NotNull
     private String description;
 
+    @Column(name = "portion")
+    @NotNull
+    private String portion;
+
     @Column(name = "price")
     @NotNull
     private BigDecimal price;

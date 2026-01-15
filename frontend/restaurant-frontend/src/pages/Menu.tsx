@@ -15,6 +15,7 @@ interface MenuItem {
     name: string;
     description: string;
     price: number;
+    portion:string
     image: string;
 }
 
@@ -26,6 +27,7 @@ function Menu(){
     const[itemName,setName]=useState<string>("");
     const[description,setDescription]=useState<string>("");
     const[price,setPrice]=useState<string>("");
+    const[portion,setPortion]=useState<string>("");
     const[imageUrl,setImageUrl]=useState<File | null>(null);
 
 const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
@@ -93,6 +95,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         // append method is used to add key/value pairs to the FormData object.
         formData.append("name",itemName);
         formData.append("description",description);
+        formData.append("portion",portion);
         formData.append("price",price.toString());
         formData.append("status","true");
         formData.append("image",imageUrl);
@@ -199,6 +202,9 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
             </div>
             <div className="input-box">
               <input placeholder="Description" value={description} type="text" name="your-phone" onChange={(e)=>setDescription(e.target.value)}required/>
+            </div>
+            <div className="input-box">
+              <input placeholder="Portion" value={portion} type="text" name="your-phone" onChange={(e)=>setPortion(e.target.value)}required/>
             </div>
             <div className="input-box">
               <input placeholder="Price" type='text' value={price} name="your-message" onChange={(e)=>setPrice(e.target.value)}required/>

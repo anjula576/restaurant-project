@@ -45,6 +45,7 @@ public class MenuController {
             @RequestParam("description") String description,
             @RequestParam("price") BigDecimal price,
             @RequestParam("status") Boolean status,
+            @RequestParam("portion") String portion,
             @RequestParam("image") MultipartFile image) throws IOException {
 
         // set image path to image upload path + image file name
@@ -80,6 +81,7 @@ public class MenuController {
         menuItem.setDescription(description);
         menuItem.setPrice(price);
         menuItem.setStatus(status);
+        menuItem.setPortion("0"); // Default portion value
         // menuItem.setImage(imageUrl);
         menuItem.setImage("/uploads/images/" + fileName);
 

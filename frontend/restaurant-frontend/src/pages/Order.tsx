@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {PersonStanding} from "lucide-react";
 import {CircleX} from "lucide-react";
 import item from "./Item.tsx";
+import axios from 'axios';
 
 
 //  this interface is used to mention the type of "menuItems" array
@@ -73,6 +74,7 @@ function Order(){
             console.error("Error deleting menu item:",error);
             alert("Failed to delete menu item. Please try again.");
         }
+    }
 
         // return await axios.delete(`http://localhost:8080/api/menuitems/${id}`)
     }
@@ -131,6 +133,7 @@ function Order(){
                                 // should convert string to number (must)
                                 onChange={(e)=>setQty(Number(e.target.value))}
                                 />
+
 
 
 
