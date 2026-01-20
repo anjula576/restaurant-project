@@ -218,6 +218,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
              <div className="input-box">
                 {/* in here,use the conditional rendering */}
                 {/*in conditional rendering render the relevant conponent if available.without that can cause to crashing the app  */}
+                {/* createObjectURL means */}
                 {/* ex:- true && file -->then render  / false && file --> null */}
                 {imageUrl && <img  src={URL.createObjectURL(imageUrl)} style={{width:60,height:60}} className='image-preview'></img>}
             </div>

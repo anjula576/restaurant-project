@@ -15,7 +15,7 @@ interface MenuItem {
     name: string;
     description: string;
     price: number;
-    // imageUrl: string;
+    image: string;
 }
 
 interface CartItem {
@@ -69,6 +69,7 @@ function Order(){
             return;
         }else{
             try{
+                // api call to delete the menu item
                return await axios.delete(`http://localhost:8080/api/menuitems/${id}`);
         }catch(error){
             console.error("Error deleting menu item:",error);
@@ -99,7 +100,8 @@ function Order(){
                         className="singleFood"
                     >
                         <img
-                            src="https://rasamalaysia.com/wp-content/uploads/2019/06/chinese-fried-rice-thumb.jpg"
+                        key={item.id}
+                            src={`localhost:8080${item.image}`}
                             style={{width: "90%", height: "60%", borderRadius: "10px"}} alt=""
                         />
 

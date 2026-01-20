@@ -38,6 +38,21 @@ public class MenuController {
         return menuDao.findAll();
     }
 
+    // @GetMapping("order-page")
+    // public List<Menu> getItemsForOrderPage() {
+
+    // List<Menu> menuItems = menuDao.findAll();
+    // return menuItems.stream().map(item->{
+    // Menu menuItem = new Menu();
+    // menuItem.setId(item.getId());
+    // menuItem.setName(item.getName());
+    // menuItem.setDescription(item.getDescription());
+    // menuItem.setPrice(item.getPrice());
+    // menuItem.setImage(item.getImage());
+
+    // }).toList();
+    // }
+
     // post mapping to add new menu item
     @PostMapping
     public ResponseEntity<?> addMenuItem(
