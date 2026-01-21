@@ -174,7 +174,7 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
 
                             </div>
                             <div className="col-6 d-flex align-content-center justify-content-start">
-                                <span className="d-flex justify-content-center align-content-center p-1" style={{width:"55px",backgroundColor:"red",borderRadius:"10px"}}><PersonStanding />10</span>
+                                <span className="d-flex justify-content-center align-content-center p-1" style={{width:"55px",backgroundColor:"red",borderRadius:"10px"}}><PersonStanding />{item.portion}</span>
                                 <span className="bg-succss"></span>
                             </div>
                         </div>

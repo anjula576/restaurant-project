@@ -96,7 +96,7 @@ public class MenuController {
         menuItem.setDescription(description);
         menuItem.setPrice(price);
         menuItem.setStatus(status);
-        menuItem.setPortion("0"); // Default portion value
+        menuItem.setPortion(portion); // Default portion value
         // menuItem.setImage(imageUrl);
         menuItem.setImage("/uploads/images/" + fileName);
 
