@@ -85,6 +85,8 @@ function Order(){
         <div className="row">
             <div className="col-8 menu-first-row">
                 {menuItems.map((item) => (
+                  
+                    
                     <div
                         key={item.id}
                         style={{
@@ -99,9 +101,10 @@ function Order(){
                         }}
                         className="singleFood"
                     >
+                        
                         <img
                         key={item.id}
-                            src={`localhost:8080${item.image}`}
+                            src={`http://localhost:8080${item.image}`}
                             style={{width: "90%", height: "60%", borderRadius: "10px"}} alt=""
                         />
 
