@@ -6,6 +6,7 @@ import com.example.restaurant.entity.Customer;
 import com.example.restaurant.entity.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,21 +38,6 @@ public class MenuController {
 
         return menuDao.findAll();
     }
-
-    // @GetMapping("order-page")
-    // public List<Menu> getItemsForOrderPage() {
-
-    // List<Menu> menuItems = menuDao.findAll();
-    // return menuItems.stream().map(item->{
-    // Menu menuItem = new Menu();
-    // menuItem.setId(item.getId());
-    // menuItem.setName(item.getName());
-    // menuItem.setDescription(item.getDescription());
-    // menuItem.setPrice(item.getPrice());
-    // menuItem.setImage(item.getImage());
-
-    // }).toList();
-    // }
 
     // post mapping to add new menu item
     @PostMapping
@@ -111,7 +97,24 @@ public class MenuController {
     // delete mapping to delete menu item by id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) {
-        menuDao.deleteById(id);
+
+        if (id == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("ID must not be null");
+        }
+
+        if (!menuDao.existsById(id)) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Menu item not found");
+        }
+        // deleteById method of JpaRepository to delete menu item by id (it is inbuilt
+        // function)
+        Menu existingMenuItem = menuDao.findById(id).orElse(null);
+        // menuItem.setStatus(false); // setting status to false instead of deleting
+        existingMenuItem.setStatus(false);
+        menuDao.save(existingMenuItem);
 
         // response entity is used to return response with status code
         return ResponseEntity.ok("Menu item deleted successfully");

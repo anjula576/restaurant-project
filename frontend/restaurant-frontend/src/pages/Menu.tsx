@@ -129,6 +129,33 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
         
     }
 
+    // deleting a menu item
+    const deleteMenuItem=async(id:number)=>{
+        alert("Deleting the menu item" +id);
+
+        if(id===null||id===undefined){
+            alert("Invalid menu item ID");
+            return;
+        }
+        try{    
+
+        
+            const response = await axios.delete(`http://localhost:8080/api/menuitems/${id}`);
+           
+            
+            if(response.status===200){
+                alert("Menu item deleted successfully");
+            }else{
+                alert("Failed to delete the menu item");
+            }
+        
+
+        }catch(error){
+            console.error("Error deleting menu item:",error);
+            alert("Error deleting menu item. Please try again.");
+    }
+}
+
 
     return <>
     <div className='row'>
@@ -176,6 +203,9 @@ const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
                             <div className="col-6 d-flex align-content-center justify-content-start">
                                 <span className="d-flex justify-content-center align-content-center p-1" style={{width:"55px",backgroundColor:"red",borderRadius:"10px"}}><PersonStanding />{item.portion}</span>
                                 <span className="bg-succss"></span>
+                            </div>
+                            <div className="row">
+                                <button onClick={()=>deleteMenuItem(item.id)}>Delete</button>
                             </div>
                         </div>
                     </div>
