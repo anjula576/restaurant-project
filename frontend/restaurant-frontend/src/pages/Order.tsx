@@ -23,7 +23,7 @@ interface CartItem {
     name: string;
     qty:number;
     price: number;
-    // imageUrl: string;
+     imageUrl: string;
 }
 
 
@@ -160,7 +160,7 @@ function Order(){
                                                 );
                                             }
 
-                                            return[...(prev || []),{item,qty:itemQty,id:item.id,name:item.name,price:item.price}];
+                                            return[...(prev || []),{item,qty:itemQty,id:item.id,name:item.name,price:item.price,imageUrl:item.image}];
                                             console.log("cart items:",cartItems);
                                             
                                            
@@ -208,7 +208,7 @@ function Order(){
                                  }}
                             >
                                 <img
-                                    src="https://rasamalaysia.com/wp-content/uploads/2019/06/chinese-fried-rice-thumb.jpg"
+                                    src={`http://localhost:8080${cartItem.imageUrl}`}
                                     style={{width: "90%", height: "60%", borderRadius: "10px"}}
 
                                 />

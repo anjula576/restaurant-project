@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 public class WebConfiguration implements WebMvcConfigurer {
 
     // this function get from the WebMvcConfigurer interface
+    @SuppressWarnings("null")
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
