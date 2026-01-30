@@ -54,6 +54,22 @@ function Order(){
             )
     }, []);
 
+
+    //  function for calculate the subtotal (returned value should be a number)
+    const calculateSubtotal = ():number => {
+
+        // method 1: using reduce
+        // return cartItems.reduce((total, item) => total + item.price * item.qty, 0);
+
+        //  method 2: using for loop
+        let subtotal = 0;
+        for (const item of cartItems) {
+            subtotal += item.price * item.qty;
+        }
+
+        return subtotal;
+
+    }
     //  function to delete the the item
     const handleDlt =(dltItemId:number)=>{
         setCartItems(prevItems =>prevItems?.filter(prevItem =>prevItem.id !==dltItemId));
@@ -83,7 +99,7 @@ function Order(){
     return <>
         <h2>Order </h2>
         <div className="row">
-            <div className="col-8 menu-first-row">
+            <div className="col-12 col-lg-8 menu-first-row">
                 {menuItems.map((item) => (
                   
                     
@@ -185,15 +201,15 @@ function Order(){
 
             </div>
             {/* second section */}
-            <div className="col-4 d-flex justify-content-center bg-white menu-scnd-row">
+            <div className="col-12 col-lg-4 pt-5 pt-lg-0 d-flex justify-content-center bg-white menu-scnd-row">
 
-  <div className="cart-container d-flex flex-column h-100 w-100">
+  <div className="cart-container d-flex flex-column h-100 w-100 col-12 col-lg-4">
 
     {/* Cart Items - scrollable area */}
-    <div className="cart-items-section flex-grow-1">
+    <div className="cart-items-section">
       <h3 className="text-center mb-3">Cart Items</h3>
 
-      <div className="cart-items-list" style={{overflowY: 'auto', maxHeight: '300px'}}  >
+      <div className="cart-items-list" style={{overflowY:'auto',maxHeight:250}}  >
         {cartItems?.length === 0 ? (
           <div className="text-center py-4 text-muted">
             Your cart is empty
@@ -242,11 +258,11 @@ function Order(){
     </div>
 
     {/* Summary / Checkout area - fixed at bottom */}
-    <div className="cart-summary mt-3 pt-3 border-top">
+    <div className="cart-summary mt-3 pt-3 border-top" style={{maxHeight: '250px'}}>
       <div className="d-flex justify-content-between mb-2">
         <span>Subtotal ({cartItems?.length || 0} items)</span>
-        {/* <span>LKR {calculateSubtotal().toFixed(2)}</span> */}
-        <span>LKR 0.00</span>
+        <span>LKR {calculateSubtotal().toFixed(2)}</span>
+        
       </div>
 
   
@@ -257,8 +273,8 @@ function Order(){
       </div>
       <div className="d-flex justify-content-between fw-bold fs-5 border-top pt-2 mt-2">
         <span>Total</span>
-        {/* <span>LKR {calculateSubtotal().toFixed(2)}</span> */}
-        100.00
+        <span>LKR {calculateSubtotal().toFixed(2)}</span>
+       
       </div>
       
 
