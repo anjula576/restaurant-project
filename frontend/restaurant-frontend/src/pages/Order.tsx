@@ -184,56 +184,105 @@ function Order(){
                 ))}
 
             </div>
+            {/* second section */}
             <div className="col-4 d-flex justify-content-center bg-white menu-scnd-row">
 
-                <div className="cart-prooduct-list">
-                    <h3 className="d-flex justify-content-center">Cart Items</h3>
-                {/* get cart  items one by one and create cards*/}
-                    {cartItems?.map((cartItem) => (
-                        <div key={cartItem.id} className="row mb-4 single-cart-item" style={{
-                            width: "250px",
-                            height: "120px",
-                            backgroundColor: "red",
-                            marginBottom: "10px",
-                            borderRadius: "30px"
-                        }}>
-                            {/* close button */}
-                            <div className='d-flex pt-2'style={{height:28}} ><CircleX  onClick={()=>handleDlt(cartItem.id)} /></div>
-                            <div className="col-6"
-                                 style={{
-                                     display: "flex",
-                                     flexDirection: "row",
-                                     justifyContent: "Center",
-                                     alignItems: "center"
-                                 }}
-                            >
-                                <img
-                                    src={`http://localhost:8080${cartItem.imageUrl}`}
-                                    style={{width: "90%", height: "60%", borderRadius: "10px"}}
+  <div className="cart-container d-flex flex-column h-100 w-100">
 
-                                />
-                            </div>
-                            <div className="col-6 d-inline-block align-content-center justify-content-center ">
-                                <div className="row ">
-                                    <h5 className="d-flex justify-content-center">{cartItem.name}</h5>
-                                </div>
-                                <div className="row d-flex">
-                                    <h5 className="d-flex justify-content-center">{cartItem.price}</h5>
-                                    <h5 className="d-flex justify-content-center">{cartItem.qty}</h5>
-                                </div>
+    {/* Cart Items - scrollable area */}
+    <div className="cart-items-section flex-grow-1">
+      <h3 className="text-center mb-3">Cart Items</h3>
 
+      <div className="cart-items-list" style={{overflowY: 'auto', maxHeight: '300px'}}  >
+        {cartItems?.length === 0 ? (
+          <div className="text-center py-4 text-muted">
+            Your cart is empty
+          </div>
+        ) : (
+          cartItems.map((cartItem) => (
+            <div
+              key={cartItem.id}
+              className="single-cart-item d-flex align-items-center"
+            >
+              {/* Delete button */}
+              <button
+                className="btn-close me-2"
+                onClick={() => handleDlt(cartItem.id)}
+                aria-label="Remove item"
+              >
+                <CircleX size={20} />
+              </button>
 
-                            </div>
-                    
+              {/* Image */}
+              <div className="cart-item-image flex-shrink-0">
+                <img
+                  src={`http://localhost:8080${cartItem.imageUrl}`}
+                  alt={cartItem.name}
+                  className="img-fluid rounded"
+                  style={{width: '60px', height: '60px', objectFit: 'cover'}}
+                />
+              </div>
 
-                        </div>
-
-                    ))}
+              {/* Details */}
+              <div className="cart-item-details flex-grow-1 ms-3">
+                <div className="fw-bold">{cartItem.name}</div>
+                <div className="text-muted small">
+                  LKR {cartItem.price.toFixed(2)} × {cartItem.qty}
                 </div>
+              </div>
 
-
-
+              {/* Total for this item (optional) */}
+              <div className="cart-item-subtotal fw-medium">
+                LKR {(cartItem.price * cartItem.qty).toFixed(2)}
+              </div>
             </div>
+          ))
+        )}
+      </div>
+    </div>
+
+    {/* Summary / Checkout area - fixed at bottom */}
+    <div className="cart-summary mt-3 pt-3 border-top">
+      <div className="d-flex justify-content-between mb-2">
+        <span>Subtotal ({cartItems?.length || 0} items)</span>
+        {/* <span>LKR {calculateSubtotal().toFixed(2)}</span> */}
+        <span>LKR 0.00</span>
+      </div>
+
+  
+   {/*  delivery service contain service */}
+      <div className="d-flex justify-content-between mb-2">
+        <span>Delivery / Service</span>
+        <span>LKR 0.00</span> {/* change later */}
+      </div>
+      <div className="d-flex justify-content-between fw-bold fs-5 border-top pt-2 mt-2">
+        <span>Total</span>
+        {/* <span>LKR {calculateSubtotal().toFixed(2)}</span> */}
+        100.00
+      </div>
+      
+
+      {/* Customer / Payment info (example) */}
+      <div className="mt-4">
+        <div className="mb-2">
+          <strong>Name:</strong> John Doe {/* dynamic later */}
+        </div>
+        <div className="mb-2">
+          <strong>Contact:</strong> +1234567890 {/* dynamic later */}
+        </div>
+        <div className="mb-2">
+          <strong>Payment Method:</strong> Cash on Delivery {/* or card, etc */}
+        </div>
+      </div>
+
+      <button className="btn btn-primary w-100 mt-3 py-2">
+        Proceed to Checkout
+      </button>
+    </div>
+  </div>
+</div>
+
+            {/*  end of second section */}
         </div>
 
 
