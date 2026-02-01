@@ -26,6 +26,15 @@ interface CartItem {
      imageUrl: string;
 }
 
+interface Customer {
+    id: number;
+    firstname: string;
+    lastname: string;
+    mobileno: string;
+    email: string;
+    status: boolean;
+}
+
 
 
 function Order(){
@@ -36,9 +45,22 @@ function Order(){
     // store the menu items
     const [menuItems,setMenuItems]=useState<MenuItem[] >([]);
 
+    // store the customer details
+    const [customers,setCustomers]=useState<Customer[]>([]);
+
     //to store cart items
     const [cartItems,setCartItems]=useState<CartItem[]>([])
-    useEffect(() => {
+
+    // store the selected customer id
+    const [selectedCustomerId,setSelectedCustomerId]=useState<number | null>(null);
+
+    // store the selected customer object
+    const [selectedMobileNo,setMobileNo]=useState<string|null>("");
+
+    useEffect(
+      //  this function will run when the component is mounted
+      // don't want to call it separately
+      () => {
 
         fetch("http://localhost:8080/api/menuitems")
             .then((res)=>res.json())
@@ -52,7 +74,45 @@ function Order(){
                     console.log( "Can't load the menu items",error)
                 }
             )
+
+            // fetch customers
+        fetch("http://localhost:8080/api/customer")
+            .then((res)=>res.json())
+            .then((data) => {
+
+              setCustomers(data);
+
+            })
+            .catch(
+              (error)=>{
+                console.log("can't load the customers",error);
+                
+              }
+            )
+
     }, []);
+
+
+    // function for handle customer selection change
+    // changeEvent is used for select, input, textarea elements
+    const handleCustomerChange =(e:React.ChangeEvent<HTMLSelectElement>)=>{
+
+        const customerId =Number(e.target.value);
+
+        //  set customer id to the state
+        setSelectedCustomerId(customerId);
+
+        //  find the selected customer from the customers array
+        const selectedCustomer = customers.find(customer =>customer.id ===customerId);
+
+        // set the mobile number state
+        if (selectedCustomer){
+            setMobileNo (selectedCustomer.mobileno);
+            
+        }else{
+            setMobileNo (null);
+        } 
+      }
 
 
     //  function for calculate the subtotal (returned value should be a number)
@@ -161,7 +221,7 @@ function Order(){
                             <div className="col-6">
                                 <button
                                     className="btn btn-sm btn-primary d-flex"
-                                    style={{width: "60%", marginBottm: "20px"}}
+                                    style={{width: "60%", marginBottom: "20px"}}
 
                                     // onClick={() => setCartItems(prev => [...(prev || []), item])
                                     onClick={
@@ -279,12 +339,35 @@ function Order(){
       
 
       {/* Customer / Payment info (example) */}
-      <div className="mt-4">
-        <div className="mb-2">
-          <strong>Name:</strong> John Doe {/* dynamic later */}
+      <div className=" row mt-4">
+        <div className="col-4 mb-2">
+          <label className='form-label' htmlFor='slctcstmr'>Name:</label> {/* dynamic later */}
         </div>
-        <div className="mb-2">
-          <strong>Contact:</strong> +1234567890 {/* dynamic later */}
+
+        <div className='col-8'>
+          <select className='form-select' id='slctcstmr' onChange={handleCustomerChange}>
+            <option value="">Select Customer</option>
+
+            {/* check cutomer active or not. then create dynamic dropdown from it */}
+            {customers.filter(customer=>customer.status===true).map((customer) => (
+              <option key={customer.id} value={customer.id}>
+                {customer.firstname} {customer.lastname}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-4 mb-2 mt-2">
+          <label className='form-label' htmlFor='slctedcstmrMble'>Contact:</label>{/* dynamic later */}
+        </div>
+        <div className="col-8">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter contact number"
+            value={selectedMobileNo || ""}
+            id='slctedcstmrMble'
+            readOnly
+          />
         </div>
         <div className="mb-2">
           <strong>Payment Method:</strong> Cash on Delivery {/* or card, etc */}
