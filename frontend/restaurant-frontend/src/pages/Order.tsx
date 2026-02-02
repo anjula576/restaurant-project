@@ -356,6 +356,7 @@ function Order(){
             ))}
           </select>
         </div>
+        <div className="row pt-2">
         <div className="col-4 mb-2 mt-2">
           <label className='form-label' htmlFor='slctedcstmrMble'>Contact:</label>{/* dynamic later */}
         </div>
@@ -368,6 +369,7 @@ function Order(){
             id='slctedcstmrMble'
             readOnly
           />
+        </div>
         </div>
         <div className="mb-2">
           <strong>Payment Method:</strong> Cash on Delivery {/* or card, etc */}
