@@ -339,6 +339,7 @@ function Order(){
       
 
       {/* Customer / Payment info (example) */}
+      
       <div className=" row mt-4">
         <div className="col-4 mb-2">
           <label className='form-label' htmlFor='slctcstmr'>Name:</label> {/* dynamic later */}
@@ -363,14 +364,15 @@ function Order(){
         <div className="col-8">
           <input
             type="text"
-            className="form-control"
+            className="form-control ms-2"
             placeholder="Enter contact number"
-            value={selectedMobileNo || ""}
+            value={selectedMobileNo || ""} 
             id='slctedcstmrMble'
             readOnly
           />
         </div>
         </div>
+        
         <div className="mb-2">
           <strong>Payment Method:</strong> Cash on Delivery {/* or card, etc */}
         </div>
