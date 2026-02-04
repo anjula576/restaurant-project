@@ -1,8 +1,6 @@
 package com.example.restaurant.controller;
 
-import com.example.restaurant.dao.CustomerDao;
 import com.example.restaurant.dao.MenuDao;
-import com.example.restaurant.entity.Customer;
 import com.example.restaurant.entity.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

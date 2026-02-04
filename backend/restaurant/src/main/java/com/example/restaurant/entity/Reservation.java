@@ -1,8 +1,6 @@
 package com.example.restaurant.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,45 +15,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "reservation")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "totalamount")
+    @Column(name = "reservationdate")
     @NotNull
-    private BigDecimal totalamount;
+    private LocalDate reservationdate;
 
     @Column(name = "status")
     @NotNull
     private boolean status;
 
-    @Column(name = "paymentstatus")
+    @Column(name = "duration")
     @NotNull
-    private boolean paymentstatus;
-
-    @Column(name = "orderdate")
-    @NotNull
-    private LocalDate orderdate;
-
-    // foreign key relation with customer
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Customer customer_id;
-
-    // foreign key relation with table
-    @ManyToOne
-    @JoinColumn(name = "reservation_id", referencedColumnName = "id")
-    private Reservation reservation_id;
+    private String duration;
 
     // foreign key relation with table
     @ManyToOne
     @JoinColumn(name = "table_id", referencedColumnName = "id")
-    private Customer table_id;
+    private Table table_id;
 
 }
