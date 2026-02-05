@@ -40,6 +40,6 @@ public class Reservation {
     // foreign key relation with table
     @ManyToOne
     @JoinColumn(name = "table_id", referencedColumnName = "id")
-    private Table table_id;
+    private RestaurantTable table_id;
 
 }

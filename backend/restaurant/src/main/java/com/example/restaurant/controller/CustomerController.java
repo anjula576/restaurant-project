@@ -16,32 +16,44 @@ public class CustomerController {
     private CustomerDao customerDao;
 
     @GetMapping
-    public List<Customer> getCustomers(){
+    public List<Customer> getCustomers() {
 
         return customerDao.findAll();
     }
 
-//     post mapping for save customer
+    // post mapping for save customer
     @PostMapping
-    public void saveCustomer(@RequestBody Customer customer){
-        customerDao.save(customer);
+    public String saveCustomer(@RequestBody Customer customer) {
+
+        try {
+            // You can add validation or processing logic here
+            // check if customer is not null
+            if (customer != null) {
+                customerDao.save(customer);
+                return "Customer saved successfully";
+            } else {
+                return "Error saving customer: Customer object is null";
+            }
+        } catch (Exception e) {
+            // Handle exception (e.g., log it)
+            return "Error saving customer: " + e.getMessage();
+        }
+
     }
 
-//    mapping for update
+    // mapping for update
     @PutMapping("/{id}")
     public void updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
         customer.setId(id);
         customerDao.save(customer);
     }
 
-//     mapping for delete
+    // mapping for delete
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable Integer id){
+    public void deleteCustomer(@PathVariable Integer id) {
 
         customerDao.deleteById(id);
     }
-
-
 
 }
