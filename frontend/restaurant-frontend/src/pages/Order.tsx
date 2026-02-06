@@ -402,6 +402,30 @@ function Order() {
                   </div>
                 </div>
                 {/* end of order type field */}
+
+                {/* start of payment  */}
+                <div className=" row mt-4">
+                  <div className="col-4">
+                    <label>Payment Type:</label>
+                  </div>
+                  <div className="col-8">
+                    <div className="row">
+                      <div className="col-4 d-flex" style={{width:80,height:50,display:'flex',flexDirection:'column'}}>
+                        <div className="col-12">1</div>
+                        <div className="col-12">2</div>
+                      </div>
+                      <div className="col-4">zx</div>
+                      <div className="col-4">zx
+
+
+                         
+                      </div>
+                    </div>
+                  </div>
+                  
+        
+                </div>
+                {/* end of payment */}
               </div>
             </div>
           </div>
