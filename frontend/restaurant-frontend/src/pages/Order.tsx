@@ -409,23 +409,39 @@ function Order() {
                     <label>Payment Type:</label>
                   </div>
                   <div className="col-8">
-                    <div className="row">
-                      <div className="col-4 d-flex" style={{width:80,height:50,display:'flex',flexDirection:'column'}}>
+                    <select className="form-select" id="slctcstmr">
+                      <option value="">Select Payment Type</option>
+
+                      <option value="cash">Cash</option>
+                      <option value="card">Card</option>
+                      <option value="mobilepay">Mobile Pay</option>
+                    </select>
+
+                    {/* <div className="row">
+                      <div
+                        className="col-4 d-flex"
+                        style={{
+                          width: 80,
+                          height: 50,
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
                         <div className="col-12">1</div>
                         <div className="col-12">2</div>
                       </div>
                       <div className="col-4">zx</div>
-                      <div className="col-4">zx
-
-
-                         
-                      </div>
-                    </div>
+                      <div className="col-4">zx</div>
+                    </div> */}
                   </div>
-                  
-        
                 </div>
                 {/* end of payment */}
+
+                <div className="row pt-2 ms-1">
+                  <button className="btn btn-primary w-100 mt-3 py-2">
+                    Proceed to Checkout
+                  </button>
+                </div>
               </div>
             </div>
           </div>
