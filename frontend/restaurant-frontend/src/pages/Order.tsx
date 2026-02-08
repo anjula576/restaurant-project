@@ -51,6 +51,17 @@ function Order() {
     null,
   );
 
+  // store the selected resevation id
+  const [selectedReservationId, setSelectedReservationId] = useState<number | null>(
+    null,
+  );
+
+    // store the selected order type
+  const [selectedOrderType, setselectedOrderType] = useState<String | null>(
+    null,
+  );
+
+
   // store the selected customer object
   const [selectedMobileNo, setMobileNo] = useState<string | null>("");
 
@@ -140,6 +151,45 @@ function Order() {
     }
 
     // return await axios.delete(`http://localhost:8080/api/menuitems/${id}`)
+  };
+
+  //  function for place an order
+  const placeOrder = async () => {
+    // handle the errors
+    if (!selectedCustomerId) {
+      alert("Please select a customer before placing the order.");
+      return;
+    } else {
+      const orderData = {
+        totalamount: calculateSubtotal(),
+        status: true,
+        customer_id: null as number | null, // will set later if customer is selected
+        reservation_id: null as number | null, // optional
+        table_id: null as number | null, // optional 
+        ordertype:selectedOrderType,
+
+        orderItems: cartItems.map((cartItem) => {
+          quantity: cartItem.qty;
+          Menuitem_id: cartItem.id;
+          price: cartItem.price;
+        }),
+      };
+
+       // customer id
+    if (selectedCustomerId) {
+      orderData.customer_id = selectedCustomerId;
+    }
+
+    // reservation id (optional)
+    if (selectedReservationId) {
+      orderData.reservation_id = selectedReservationId;
+    }
+
+    }
+
+    //  set optional data for the order
+
+   
   };
 
   return (
@@ -392,7 +442,7 @@ function Order() {
                   </div>
 
                   <div className="col-8">
-                    <select className="form-select" id="slctcstmr">
+                    <select className="form-select" id="slctcstmr" onChange={(e) => setselectedOrderType(e.target.value)}>
                       <option value="">Select Order Type</option>
 
                       <option value="dine-in">Dine In</option>

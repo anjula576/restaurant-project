@@ -40,26 +40,22 @@ public class Order {
     @NotNull
     private boolean status;
 
-    @Column(name = "paymentstatus")
-    @NotNull
-    private boolean paymentstatus;
-
     @Column(name = "orderdate")
     @NotNull
     private LocalDateTime orderdate;
 
     // foreign key relation with customer
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer_id;
 
     // foreign key relation with table
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "reservation_id", referencedColumnName = "id")
     private Reservation reservation_id;
 
     // foreign key relation with table
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "table_id", referencedColumnName = "id")
     private Customer table_id;
 
