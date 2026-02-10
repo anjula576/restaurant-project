@@ -37,9 +37,9 @@ public class OrderItem {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JoinColumn(name = "orders_id", referencedColumnName = "id")
     @JsonIgnore // to avoid infinite recursion during serialization (when converting to JSON)
-    private Order order_id;
+    private Order orders_id;
 
     @ManyToOne
     @JoinColumn(name = "Menuitem_id", referencedColumnName = "id")

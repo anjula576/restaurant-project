@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.example.restaurant.dao.CustomerDao;
 import com.example.restaurant.dao.OrderDao;
+import com.example.restaurant.entity.Customer;
 import com.example.restaurant.entity.Order;
 import com.example.restaurant.entity.OrderItem;
 
@@ -22,6 +25,9 @@ public class OrderController {
 
     @Autowired
     private OrderDao orderDao;
+
+    @Autowired
+    private CustomerDao customerDao;
 
     @GetMapping
     public List<Order> getOrders() {
@@ -46,7 +52,7 @@ public class OrderController {
 
             for (OrderItem item : order.getOrderItems()) {
 
-                item.setOrder_id(order);
+                item.setOrders_id(order);
 
             }
 

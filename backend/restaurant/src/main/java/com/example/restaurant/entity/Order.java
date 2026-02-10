@@ -22,7 +22,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "Orders")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,6 +44,10 @@ public class Order {
     @NotNull
     private LocalDateTime orderdate;
 
+    @Column(name = "ordertype")
+    @NotNull
+    private String ordertype;
+
     // foreign key relation with customer
     @ManyToOne(optional = true)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
@@ -61,7 +65,7 @@ public class Order {
 
     // many to many relation with orderitem through orderitem table
     // need to create list to hold multiple order items
-    @OneToMany(mappedBy = "order_id", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems = new ArrayList<>();
+    @OneToMany(mappedBy = "orders_id", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 
 }

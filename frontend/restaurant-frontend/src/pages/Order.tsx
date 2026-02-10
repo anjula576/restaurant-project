@@ -33,6 +33,26 @@ interface Customer {
   status: boolean;
 }
 
+interface OrderData {
+  totalamount: number;
+  status: boolean;
+  // inside the interface we can use another interface as a type
+  // ? means optional (can be null or undefined)
+  customer_id?: Customer | null;
+  reservation_id?: number | null;
+  table_id?: number | null;
+  ordertype: string | null;
+
+  // array of objects
+  //use square brackets to mention it's an array
+  orderItems: {
+    quantity: number;
+    Menuitem_id: CartItem;
+    price: number;
+  }[];
+
+}
+
 function Order() {
   //  state to store quantity(from the menu item to cart item)
   const [itemQty, setQty] = useState<number>(1);
@@ -51,16 +71,19 @@ function Order() {
     null,
   );
 
+  // store the selected customer object
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>(undefined);
+
+
   // store the selected resevation id
-  const [selectedReservationId, setSelectedReservationId] = useState<number | null>(
+  const [selectedReservationId, setSelectedReservationId] = useState<
+    number | null
+  >(null);
+
+  // store the selected order type
+  const [selectedOrderType, setselectedOrderType] = useState<string | null>(
     null,
   );
-
-    // store the selected order type
-  const [selectedOrderType, setselectedOrderType] = useState<String | null>(
-    null,
-  );
-
 
   // store the selected customer object
   const [selectedMobileNo, setMobileNo] = useState<string | null>("");
@@ -99,10 +122,15 @@ function Order() {
     //  set customer id to the state
     setSelectedCustomerId(customerId);
 
+    
+
     //  find the selected customer from the customers array
     const selectedCustomer = customers.find(
       (customer) => customer.id === customerId,
     );
+
+    //  set the selected customer object to the state
+    setSelectedCustomer(selectedCustomer)
 
     // set the mobile number state
     if (selectedCustomer) {
@@ -155,41 +183,57 @@ function Order() {
 
   //  function for place an order
   const placeOrder = async () => {
+    alert("Order placed button clicked!");
     // handle the errors
     if (!selectedCustomerId) {
       alert("Please select a customer before placing the order.");
       return;
     } else {
-      const orderData = {
+      const orderData: OrderData = {
         totalamount: calculateSubtotal(),
         status: true,
-        customer_id: null as number | null, // will set later if customer is selected
+        customer_id: null, // will set later
         reservation_id: null as number | null, // optional
-        table_id: null as number | null, // optional 
-        ordertype:selectedOrderType,
+        table_id: null as number | null, // optional
+        ordertype: "cash",
 
-        orderItems: cartItems.map((cartItem) => {
-          quantity: cartItem.qty;
-          Menuitem_id: cartItem.id;
-          price: cartItem.price;
-        }),
+        orderItems: cartItems.map((cartItem) => ({
+          quantity: cartItem.qty,
+          Menuitem_id: cartItem,
+          price: cartItem.price,
+        })),
       };
 
-       // customer id
-    if (selectedCustomerId) {
-      orderData.customer_id = selectedCustomerId;
+      // customer id
+      if (selectedCustomer) {
+        orderData.customer_id = selectedCustomer;
+      }
+      console.log("orderdata",orderData);
+      
+
+      // reservation id (optional)
+      // if (selectedReservationId) {
+      //   orderData.reservation_id = selectedReservationId;
+      // }
+
+       // send data to the backend
+    try{
+
+      await axios.post("http://localhost:8080/api/orders", orderData);
+      alert("Order placed successfully!");
+    }catch(error){
+      console.error("Error placing order:", error);
+      alert("Failed to place order. Please try again.");
     }
 
-    // reservation id (optional)
-    if (selectedReservationId) {
-      orderData.reservation_id = selectedReservationId;
-    }
 
     }
-
-    //  set optional data for the order
 
    
+  };
+
+  const setOrderstest = async () => {
+    alert("set order test function called");
   };
 
   return (
@@ -442,7 +486,11 @@ function Order() {
                   </div>
 
                   <div className="col-8">
-                    <select className="form-select" id="slctcstmr" onChange={(e) => setselectedOrderType(e.target.value)}>
+                    <select
+                      className="form-select"
+                      id="slctcstmr"
+                      onChange={(e) => setselectedOrderType(e.target.value)}
+                    >
                       <option value="">Select Order Type</option>
 
                       <option value="dine-in">Dine In</option>
@@ -488,7 +536,10 @@ function Order() {
                 {/* end of payment */}
 
                 <div className="row pt-2 ms-1">
-                  <button className="btn btn-primary w-100 mt-3 py-2">
+                  <button
+                    className="btn btn-primary w-100 mt-3 py-2"
+                    onClick={() => placeOrder()}
+                  >
                     Proceed to Checkout
                   </button>
                 </div>
