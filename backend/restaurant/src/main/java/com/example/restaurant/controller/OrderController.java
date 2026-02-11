@@ -12,10 +12,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.restaurant.dao.CustomerDao;
+import com.example.restaurant.dao.MenuDao;
 import com.example.restaurant.dao.OrderDao;
 import com.example.restaurant.entity.Customer;
+import com.example.restaurant.entity.Menu;
 import com.example.restaurant.entity.Order;
 import com.example.restaurant.entity.OrderItem;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 // without this annotation, react frontend will not be able to access this api
@@ -29,40 +33,63 @@ public class OrderController {
     @Autowired
     private CustomerDao customerDao;
 
+    @Autowired
+    private MenuDao menuDao;
+
     @GetMapping
     public List<Order> getOrders() {
         // Implementation to retrieve and return orders
         return orderDao.findAll();
     }
 
-    @PostMapping
+    // @Transactional
+    // @PostMapping(consumes = "application/json")
+    // public String createOrder(@RequestBody Order order) {
+    // // Implementation to create a new order
+
+    // try {
+    // // You can add validation or processing logic here
+
+    // if (order == null) {
+    // return "Error creating order: Order object is null";
+
+    // }
+
+    // // Set the order date to current date and time
+    // order.setOrderdate(LocalDateTime.now());
+
+    // for (OrderItem item : order.getOrderItems()) {
+
+    // item.setOrders_id(order);
+    // Menu menu = menuDao.findMenuById(item.getMenuitem_id().getId());
+    // if (menu == null) {
+    // throw new RuntimeException("Menu item not found with id: " +
+    // item.getMenuitem_id().getId());
+    // }
+    // item.setMenuitem_id(menu);
+
+    // System.out.println("Incoming orderItems: " + order.getOrderItems());
+
+    // }
+    // System.out.println("Order : " + order);
+    // System.out.println("Order : " + order.getOrderItems());
+
+    // orderDao.save(order);
+
+    // return "Order created successfully" + order.getCustomer_id().getFirstname();
+
+    // } catch (Exception e) {
+    // return "Error creating order: " + e.getMessage();
+    // }
+
+    // }
+
+    @PostMapping(consumes = "application/json")
     public String createOrder(@RequestBody Order order) {
-        // Implementation to create a new order
 
-        try {
-            // You can add validation or processing logic here
-
-            if (order == null) {
-                return "Error creating order: Order object is null";
-
-            }
-
-            // Set the order date to current date and time
-            order.setOrderdate(LocalDateTime.now());
-
-            for (OrderItem item : order.getOrderItems()) {
-
-                item.setOrders_id(order);
-
-            }
-
-            orderDao.save(order);
-
-            return "Order created successfully";
-
-        } catch (Exception e) {
-            return "Error creating order: " + e.getMessage();
-        }
+        System.out.println("Incoming order: " + order);
+        return "Order created successfully" + order.getCustomer_id().getFirstname();
 
     }
+
 }

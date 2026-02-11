@@ -33,6 +33,7 @@ public class MenuController {
 
     @GetMapping
     public List<Menu> getCustomers() {
+        System.out.println("Getting all menu items");
 
         return menuDao.findAll();
     }

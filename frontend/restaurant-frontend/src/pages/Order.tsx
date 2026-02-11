@@ -47,7 +47,7 @@ interface OrderData {
   //use square brackets to mention it's an array
   orderItems: {
     quantity: number;
-    Menuitem_id: CartItem;
+    Menuitem_id: number;
     price: number;
   }[];
 
@@ -199,7 +199,7 @@ function Order() {
 
         orderItems: cartItems.map((cartItem) => ({
           quantity: cartItem.qty,
-          Menuitem_id: cartItem,
+          Menuitem_id: {id:cartItem.id} as unknown as number, // need to convert the cart item id to menu item id
           price: cartItem.price,
         })),
       };
@@ -219,8 +219,8 @@ function Order() {
        // send data to the backend
     try{
 
-      await axios.post("http://localhost:8080/api/orders", orderData);
-      alert("Order placed successfully!");
+      const menuId = await axios.post("http://localhost:8080/api/orders", orderData);
+      alert("Order placed successfully!" +menuId);
     }catch(error){
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
