@@ -65,7 +65,7 @@ public class Order {
 
     // many to many relation with orderitem through orderitem table
     // need to create list to hold multiple order items
-    @OneToMany(mappedBy = "orders_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "Orders_id", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
 }

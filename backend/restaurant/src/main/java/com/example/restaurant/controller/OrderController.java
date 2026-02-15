@@ -84,10 +84,26 @@ public class OrderController {
 
     // }
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping
     public String createOrder(@RequestBody Order order) {
 
+        order.setOrderdate(LocalDateTime.now());
+
+        // for (OrderItem item : order.getOrderItems()) {
+
+        for (OrderItem item : order.getOrderItems()) {
+
+            item.setOrders_id(order);
+            // Menu menu = menuDao.findMenuById(item.getMenuitem_id().getId());
+            // if (menu == null) {
+            // throw new RuntimeException("Menu item not found with id: " +
+            // item.getMenuitem_id().getId());
+            // }
+        }
+
+        orderDao.save(order);
         System.out.println("Incoming order: " + order);
+
         return "Order created successfully" + order.getCustomer_id().getFirstname();
 
     }

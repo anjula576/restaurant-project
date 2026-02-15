@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -37,9 +38,10 @@ public class OrderItem {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "orders_id", referencedColumnName = "id")
+    @JoinColumn(name = "Orders_id", referencedColumnName = "id")
     @JsonIgnore // to avoid infinite recursion during serialization (when converting to JSON)
-    private Order orders_id;
+    @ToString.Exclude // to avoid infinite recursion during toString() method
+    private Order Orders_id;
 
     @ManyToOne
     @JoinColumn(name = "Menuitem_id", referencedColumnName = "id")

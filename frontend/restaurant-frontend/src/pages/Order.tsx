@@ -16,6 +16,10 @@ interface MenuItem {
   image: string;
 }
 
+interface Menu {
+  id: number;
+  }
+
 interface CartItem {
   id: number;
   name: string;
@@ -33,6 +37,12 @@ interface Customer {
   status: boolean;
 }
 
+interface OrderItem {
+  quantity: number;
+  menuitem_id: Menu;
+  price: number;
+}
+
 interface OrderData {
   totalamount: number;
   status: boolean;
@@ -45,11 +55,7 @@ interface OrderData {
 
   // array of objects
   //use square brackets to mention it's an array
-  orderItems: {
-    quantity: number;
-    Menuitem_id: number;
-    price: number;
-  }[];
+  orderItems:OrderItem[];
 
 }
 
@@ -199,7 +205,7 @@ function Order() {
 
         orderItems: cartItems.map((cartItem) => ({
           quantity: cartItem.qty,
-          Menuitem_id: {id:cartItem.id} as unknown as number, // need to convert the cart item id to menu item id
+          menuitem_id: {id:cartItem.id}, // need to convert the cart item id to menu item id
           price: cartItem.price,
         })),
       };
