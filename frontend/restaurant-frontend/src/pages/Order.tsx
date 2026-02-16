@@ -18,7 +18,7 @@ interface MenuItem {
 
 interface Menu {
   id: number;
-  }
+}
 
 interface CartItem {
   id: number;
@@ -53,8 +53,7 @@ interface OrderData {
 
   // array of objects
   //use square brackets to mention it's an array
-  orderItems:OrderItem[];
-
+  orderItems: OrderItem[];
 }
 
 function Order() {
@@ -76,11 +75,17 @@ function Order() {
   );
 
   // store the selected customer object
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>(undefined);
-
+  const [selectedCustomer, setSelectedCustomer] = useState<
+    Customer | undefined
+  >(undefined);
 
   // store the selected order type
   const [selectedOrderType, setselectedOrderType] = useState<string | null>(
+    null,
+  );
+
+  // store the selected payment type
+  const [selectPaymentType, setSelectedPaymentType] = useState<string | null>(
     null,
   );
 
@@ -121,15 +126,13 @@ function Order() {
     //  set customer id to the state
     setSelectedCustomerId(customerId);
 
-    
-
     //  find the selected customer from the customers array
     const selectedCustomer = customers.find(
       (customer) => customer.id === customerId,
     );
 
     //  set the selected customer object to the state
-    setSelectedCustomer(selectedCustomer)
+    setSelectedCustomer(selectedCustomer);
 
     // set the mobile number state
     if (selectedCustomer) {
@@ -137,6 +140,27 @@ function Order() {
     } else {
       setMobileNo(null);
     }
+  };
+
+  //  function for check errors
+  const checkErrors = () => {
+    let errors = "";
+    if (!selectedCustomerId) {
+      errors += "Please select a customer.\n";
+    }
+    if (!selectedOrderType) {
+      errors += "Please select an order type.\n";
+    }
+
+    if (!selectPaymentType) {
+      errors += "Please select a payment type.\n";
+    }
+
+    if (cartItems.length === 0) {
+      errors += "Your cart is empty. Please add items to the cart.\n";
+    }
+
+    return errors;
   };
 
   //  function for calculate the subtotal (returned value should be a number)
@@ -182,10 +206,10 @@ function Order() {
 
   //  function for place an order
   const placeOrder = async () => {
-    alert("Order placed button clicked!");
     // handle the errors
-    if (!selectedCustomerId) {
-      alert("Please select a customer before placing the order.");
+      const errors = checkErrors();
+    if (errors !== "") {
+      alert("Please check following errors /n."+ errors);
       return;
     } else {
       const orderData: OrderData = {
@@ -196,7 +220,7 @@ function Order() {
 
         orderItems: cartItems.map((cartItem) => ({
           quantity: cartItem.qty,
-          menuitem_id: {id:cartItem.id}, // need to convert the cart item id to menu item id
+          menuitem_id: { id: cartItem.id }, // need to convert the cart item id to menu item id
           price: cartItem.price,
         })),
       };
@@ -205,28 +229,25 @@ function Order() {
       if (selectedCustomer) {
         orderData.customer_id = selectedCustomer;
       }
-      console.log("orderdata",orderData);
-      
+      console.log("orderdata", orderData);
 
       // reservation id (optional)
       // if (selectedReservationId) {
       //   orderData.reservation_id = selectedReservationId;
       // }
 
-       // send data to the backend
-    try{
-
-      const menuId = await axios.post("http://localhost:8080/api/orders", orderData);
-      alert("Order placed successfully!" +menuId);
-    }catch(error){
-      console.error("Error placing order:", error);
-      alert("Failed to place order. Please try again.");
+      // send data to the backend
+      try {
+        const menuId = await axios.post(
+          "http://localhost:8080/api/orders",
+          orderData,
+        );
+        alert("Order placed successfully!" + menuId);
+      } catch (error) {
+        console.error("Error placing order:", error);
+        alert("Failed to place order. Please try again.");
+      }
     }
-
-
-    }
-
-   
   };
 
   const setOrderstest = async () => {
@@ -504,7 +525,11 @@ function Order() {
                     <label>Payment Type:</label>
                   </div>
                   <div className="col-8">
-                    <select className="form-select" id="slctcstmr">
+                    <select
+                      className="form-select"
+                      id="slctcstmr"
+                      onChange={(e) => setSelectedPaymentType(e.target.value)}
+                    >
                       <option value="">Select Payment Type</option>
 
                       <option value="cash">Cash</option>
