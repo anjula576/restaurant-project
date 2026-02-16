@@ -49,8 +49,6 @@ interface OrderData {
   // inside the interface we can use another interface as a type
   // ? means optional (can be null or undefined)
   customer_id?: Customer | null;
-  reservation_id?: number | null;
-  table_id?: number | null;
   ordertype: string | null;
 
   // array of objects
@@ -80,11 +78,6 @@ function Order() {
   // store the selected customer object
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>(undefined);
 
-
-  // store the selected resevation id
-  const [selectedReservationId, setSelectedReservationId] = useState<
-    number | null
-  >(null);
 
   // store the selected order type
   const [selectedOrderType, setselectedOrderType] = useState<string | null>(
@@ -199,9 +192,7 @@ function Order() {
         totalamount: calculateSubtotal(),
         status: true,
         customer_id: null, // will set later
-        reservation_id: null as number | null, // optional
-        table_id: null as number | null, // optional
-        ordertype: "cash",
+        ordertype: selectedOrderType,
 
         orderItems: cartItems.map((cartItem) => ({
           quantity: cartItem.qty,

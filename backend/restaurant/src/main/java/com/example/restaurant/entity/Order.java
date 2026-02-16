@@ -53,16 +53,6 @@ public class Order {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer_id;
 
-    // foreign key relation with table
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "reservation_id", referencedColumnName = "id")
-    private Reservation reservation_id;
-
-    // foreign key relation with table
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "table_id", referencedColumnName = "id")
-    private Customer table_id;
-
     // many to many relation with orderitem through orderitem table
     // need to create list to hold multiple order items
     @OneToMany(mappedBy = "Orders_id", cascade = CascadeType.ALL)
