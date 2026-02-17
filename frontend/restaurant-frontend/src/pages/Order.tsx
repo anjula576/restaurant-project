@@ -231,10 +231,6 @@ function Order() {
       }
       console.log("orderdata", orderData);
 
-      // reservation id (optional)
-      // if (selectedReservationId) {
-      //   orderData.reservation_id = selectedReservationId;
-      // }
 
       // send data to the backend
       try {
