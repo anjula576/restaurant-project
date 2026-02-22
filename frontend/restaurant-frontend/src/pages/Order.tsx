@@ -234,6 +234,7 @@ function Order() {
 
       // send data to the backend
       try {
+        // use axios to send a post request to the backend
         const menuId = await axios.post(
           "http://localhost:8080/api/orders",
           orderData,
