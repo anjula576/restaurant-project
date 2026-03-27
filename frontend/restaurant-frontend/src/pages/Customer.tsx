@@ -27,7 +27,14 @@ function Customer() {
     } | null>(null);
 
 
-    const [customer, setCustomer] = useState({
+    const [customer, setCustomer] = useState<{
+        id: number | null;
+        firstname: string;
+        lastname: string;
+        email: string;
+        mobileno: string;
+        status: string | boolean;
+    }>({
         id:null,
         firstname: "",
         lastname: "",
@@ -73,9 +80,11 @@ function Customer() {
 
     //  end of form validation----------------------------------------------
 
-    const customerHandle = (e) => {
+    interface FormEvent {
+        target: HTMLInputElement | HTMLTextAreaElement;
+    }
 
-
+    const customerHandle = (e: FormEvent): void => {
         // this is same to
         // let name = e.target.name;
         // let value = e.target.value;
@@ -86,23 +95,20 @@ function Customer() {
 
         // If value is the string "true" → it becomes true
         // If value is anything else ("false", "abc", empty, etc.) → it becomes false
-       // So no need for a separate "false" condition — one line handles both.
+        // So no need for a separate "false" condition — one line handles both.
 
         if (name === "status") {
             value = value === "true";   // Convert string to boolean
         }
         setCustomer({ ...customer, [name]: value });
 
-       // setCustomer({...customer, [e.target.name]: e.target.value})
+        // setCustomer({...customer, [e.target.name]: e.target.value})
 
-
-
-        setMobileValid(customer.mobileno ==""? false:mobilePatrn.test(customer.mobileno))
-        setEmailValid(customer.email ==""? false:emailPatrn.test(customer.email))
-
+        setMobileValid(customer.mobileno === "" ? false : mobilePatrn.test(customer.mobileno));
+        setEmailValid(customer.email === "" ? false : emailPatrn.test(customer.email));
     }
 
-    const firstNamehandle = (e)=>{
+    const firstNamehandle = (e: FormEvent): void => {
 
         // eslint-disable-next-line prefer-const
         let { name, value } = e.target;
@@ -110,7 +116,7 @@ function Customer() {
 
         setFirstNameValid(customer.firstname ==""? false:namePatrn.test(customer.firstname));
 
-    }
+        }
 
     const lastNamehandle = (e)=>{
 
@@ -199,11 +205,29 @@ function Customer() {
 
                 // remove validations
 
-                document.getElementById("txtFirstName").classList.remove("is-valid","is-invalid");
-                document.getElementById("txtLastName").classList.remove("is-valid","is-invalid");
-                document.getElementById("txtMobileNo").classList.remove("is-valid","is-invalid");
-                document.getElementById("txtEmail").classList.remove("is-valid","is-invalid");
-                document.getElementById("txtNotes").classList.remove("is-valid","is-invalid");
+                const txtFirstName = document.getElementById("txtFirstName");
+                if (txtFirstName) {
+                    txtFirstName.classList.remove("is-valid", "is-invalid");
+                }
+
+
+                const txtLastName = document.getElementById("txtLastName");
+                if (txtLastName) {
+                    txtLastName.classList.remove("is-valid","is-invalid");
+                }
+                
+                const txtMobileNo = document.getElementById("txtMobileNo");
+                if (txtMobileNo) {
+                    txtMobileNo.classList.remove("is-valid","is-invalid");
+                }
+                const txtEmail = document.getElementById("txtEmail");
+                if (txtEmail) {
+                    txtEmail.classList.remove("is-valid", "is-invalid");
+                }
+                const txtNotes = document.getElementById("txtNotes");
+                if (txtNotes) {
+                    txtNotes.classList.remove("is-valid","is-invalid");
+                }
 
                 //  this is the timeout function to use to set null to already opened alert
                 //  after that automatically close the alert
@@ -245,11 +269,16 @@ function Customer() {
 
                     // remove validations
 
-                    document.getElementById("txtFirstName").classList.remove("is-valid","is-invalid");
-                    document.getElementById("txtLastName").classList.remove("is-valid","is-invalid");
-                    document.getElementById("txtMobileNo").classList.remove("is-valid","is-invalid");
-                    document.getElementById("txtEmail").classList.remove("is-valid","is-invalid");
-                    document.getElementById("txtNotes").classList.remove("is-valid","is-invalid");
+                    const txtFirstNameEl = document.getElementById("txtFirstName");
+                    if (txtFirstNameEl) txtFirstNameEl.classList.remove("is-valid","is-invalid");
+                    const txtLastNameEl = document.getElementById("txtLastName");
+                    if (txtLastNameEl) txtLastNameEl.classList.remove("is-valid","is-invalid");
+                    const txtMobileNoEl = document.getElementById("txtMobileNo");
+                    if (txtMobileNoEl) txtMobileNoEl.classList.remove("is-valid","is-invalid");
+                    const txtEmailEl = document.getElementById("txtEmail");
+                    if (txtEmailEl) txtEmailEl.classList.remove("is-valid","is-invalid");
+                    const txtNotesEl = document.getElementById("txtNotes");
+                    if (txtNotesEl) txtNotesEl.classList.remove("is-valid","is-invalid");
 
 
                     //  this is the timeout function to use to set null to already opened alert
@@ -270,11 +299,17 @@ function Customer() {
         }
 
         //  this call when editing the form
-        const handleEdit =(row)=>{
+        interface Customer {
+            id: number | null;
+            firstname: string;
+            lastname: string;
+            email: string;
+            mobileno: string;
+            status: string | boolean;
+        }
 
-        //     change the isEditing status
+        const handleEdit = (row: Customer): void => {
             setIsEditing(true);
-          //  setSelectedCustomer(row);
             setCustomer(row);
         }
 
