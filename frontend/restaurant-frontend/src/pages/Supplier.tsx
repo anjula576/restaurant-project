@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
 
 
 function Supplier(){
 
-    const [supplier, setSupplier] = useState([])
+    const [supplier, setSupplier] = useState<any[]>([])
 
 
+ 
     // get all suppliers from backend
     const getSuppliers = () => {
         try {
@@ -14,7 +15,7 @@ function Supplier(){
             .then((response) => response.json())
             .then((data) => {
                 setSupplier(data);
-                console.log("Suppliers fetched successfully:");
+                console.log("Suppliers fetched successfully:"+data);
             })
             .catch((error) => {
                 console.error("Error fetching suppliers:", error);
@@ -54,6 +55,12 @@ function Supplier(){
     }
 
 
+       useEffect(() => {   
+
+        getSuppliers();
+    }, [])
+
+
     return (
         <div>
             <div className="accordion" id="accordionExample">
@@ -80,7 +87,9 @@ function Supplier(){
     </h2>
     <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
       <div className="accordion-body">
-        <DataTable data={supplier} onEdit={editBtn} onDelete={deleteBtn}></DataTable>
+ <DataTable key={supplier.length} columns={columns} data={supplier}
+                                                       onEdit={(row) => handleEdit(row)} onDelete={(id)=>handleDelete(id)}/>
+
       </div>
     </div>
   </div>
@@ -90,3 +99,4 @@ function Supplier(){
 }
 
 export default Supplier;
+
