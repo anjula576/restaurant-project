@@ -26,7 +26,9 @@ function Customer() {
         message: string
     } | null>(null);
 
-
+    // this is usedstate function
+    // this is used to store the form data when add new customer or edit the customer
+    //  speciality in here is mentied the initial values of the form fields in the useState function
     const [customer, setCustomer] = useState<{
         id: number | null;
         firstname: string;
@@ -187,7 +189,8 @@ function Customer() {
 
 
 
-                const res = await axios.put(`http://localhost:8080/api/customer/${customer.id}`, customer);console.log("response", res.data);
+                const res = await axios.put(`http://localhost:8080/api/customer/${customer.id}`, customer);
+                console.log("response", res.data);
 
                 // window.alert("customer deleted successfully")
                 setAlert({type: "success", message: "Customer updated successfully" });

@@ -33,4 +33,8 @@ public class Supplier {
     @Column(name = "email")
     @NotNull
     private String email;
+
+    @Column(name = "address")
+    @NotNull
+    private String address;
 }

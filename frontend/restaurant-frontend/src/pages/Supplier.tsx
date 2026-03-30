@@ -6,6 +6,25 @@ function Supplier(){
 
     const [supplier, setSupplier] = useState<any[]>([])
 
+    // this is usedstate function
+    // this is used to store the form data when add new supplier or edit the supplier
+    //  speciality in here is mentied the initial values of the form fields in the useState function
+        const [customer, setCustomer] = useState<{
+            id: number | null;
+            name: string;
+            email: string;
+            mobileno: string;
+            address:string;
+            status: string | boolean;
+        }>({
+            id:null,
+            name: "",
+            email: "",
+            mobileno: "",
+            address: "",
+            status: "",
+        })
+
 
  
     // get all suppliers from backend
@@ -36,6 +55,23 @@ function Supplier(){
             {title: "Address", property: "address"},
         ];
 
+
+        const formErrors = () => {
+            let errors = "";
+
+            if(supplier.name === ""){
+                errors += "Supplier name is required. ";
+            }
+
+            if(supplier.email === ""){
+               errors += "Email is required. ";
+            }
+            if(supplier.address === ""){
+                errors += "Address is required. ";
+            }
+
+            return errors;
+        }
         const editBtn = (id: any) => {
             console.log("Edit supplier:", id);
         }
@@ -74,7 +110,22 @@ function Supplier(){
       <div className="accordion-body">
 {/* Supplier Form */}
         <form>
-
+            <div className="row">
+                <div className="col-md-6">
+                    <label htmlFor="supplierName" className="form-label">Supplier Name</label>
+                    <input type="text" className="form-control" id="supplierName" />
+                </div>
+                <div className="col-md-6">
+                    <label htmlFor="supplierEmail" className="form-label">Email</label>
+                    <input type="email" className="form-control" id="supplierEmail" />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-md-12">
+                    <label htmlFor="supplierAddress" className="form-label">Address</label>
+                    <input type="text" className="form-control" id="supplierAddress" />
+                </div>
+            </div>
         </form>
       </div>
     </div>
