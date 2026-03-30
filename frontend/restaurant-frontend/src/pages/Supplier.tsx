@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
+import axios from "axios";
 
 
 function Supplier(){
 
-    const [supplier, setSupplier] = useState<any[]>([])
+    
 
     // this is usedstate function
     // this is used to store the form data when add new supplier or edit the supplier
     //  speciality in here is mentied the initial values of the form fields in the useState function
-        const [customer, setCustomer] = useState<{
+        const [supplier, setSupplier] = useState<{
             id: number | null;
             name: string;
             email: string;
@@ -25,6 +26,26 @@ function Supplier(){
             status: "",
         })
 
+//  form field validations -----------------------------------------
+
+    const [nameValid, setNameValid] = useState<String | null>(null);
+    const [emailValid, setEmailValid] = useState<String | null>(null);
+    const [mobileValid, setMobileValid] = useState<String | null>(null);
+    const [addressValid, setAddressValid] = useState<String | null>(null);
+
+
+    // The first / means start of regex literal.
+    // The last / means end of regex literal.
+    //  + means “one or more times”. (This is a quantifier in regex.)
+
+    const namePatrn = /^[A-Za-z\s]{3,15}$/;
+    const mobilePatrn = /^[0-9]{10}$/;
+
+    // w - means Shorthand for word characters → [A-Za-z0-9_] (letters, digits, underscore).
+
+    const emailPatrn = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    //  end of form validation----------------------------------------------
 
  
     // get all suppliers from backend
@@ -72,6 +93,28 @@ function Supplier(){
 
             return errors;
         }
+
+        // function to handle form submission
+        const onSubmit = async (e: any) => {
+
+            // prevent the default form submission behavior
+            e.preventDefault();
+
+            if(formErrors() !== ""){
+                window.alert(formErrors());
+                return;
+            }
+
+            try {
+                const res = await axios.post("http://localhost:8080/api/suppliers", supplier);
+                console.log("Supplier added successfully:", res.data);
+                getSuppliers(); // Refresh the supplier list
+            } catch (error) {
+                console.error("Error adding supplier:", error);
+            }
+        }
+
+        
         const editBtn = (id: any) => {
             console.log("Edit supplier:", id);
         }

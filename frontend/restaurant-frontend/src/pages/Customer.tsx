@@ -136,6 +136,8 @@ function Customer() {
         let { name, value } = e.target;
         setCustomer({ ...customer, [name]: value });
 
+        //if the mobile number field is empty, set mobileValid to false. Otherwise, 
+        // test the mobile number against the regex pattern and set mobileValid accordingly.
         setMobileValid(customer.mobileno ==""? false:mobilePatrn.test(customer.mobileno))
 
     }
