@@ -1,4 +1,3 @@
-
 import Layout from '../components/Layout.tsx'
 import React, {useEffect, useState} from "react";
 import DataTable from "../components/DataTable";
@@ -99,10 +98,15 @@ function Customer() {
         // If value is anything else ("false", "abc", empty, etc.) → it becomes false
         // So no need for a separate "false" condition — one line handles both.
 
+        //  in here we are checking the name of the field is status or not. if the name is status,
+        //  then we need to convert the string value to boolean before setting it to the customer state.
+        //  because in the form we are using radio buttons for status field and the value of radio button is string("true" or "false"). 
+        // but in the backend we are expecting boolean value(true or false). so we need to convert the string value to boolean before setting it to the customer state.
+        let finalValue: string | boolean = value;
         if (name === "status") {
-            value = value === "true";   // Convert string to boolean
+            finalValue = value === "true";   // Convert string to boolean
         }
-        setCustomer({ ...customer, [name]: value });
+        setCustomer({ ...customer, [name]: finalValue });
 
         // setCustomer({...customer, [e.target.name]: e.target.value})
 
@@ -110,39 +114,80 @@ function Customer() {
         setEmailValid(customer.email === "" ? false : emailPatrn.test(customer.email));
     }
 
+    //  first name handle and validation    ---------------------------------
     const firstNamehandle = (e: FormEvent): void => {
 
-        // eslint-disable-next-line prefer-const
+              // eslint-disable-next-line prefer-const
         let { name, value } = e.target;
-        setCustomer({ ...customer, [name]: value });
-
-        setFirstNameValid(customer.firstname ==""? false:namePatrn.test(customer.firstname));
+        setCustomer({ ...customer, [name]: value })
+        
 
         }
 
-    const lastNamehandle = (e)=>{
+
+    const CheckFirstNameValid = (e:any) => {
+
+    const value = e.target.value;
+
+    if (value === "") {
+        setFirstNameValid(false);
+    } else {
+        setFirstNameValid(namePatrn.test(value));
+    }
+};
+
+
+// lastname handle and validation ---------------------------------
+
+    const lastNamehandle = (e:any)=>{
 
         // eslint-disable-next-line prefer-const
         let { name, value } = e.target;
         setCustomer({ ...customer, [name]: value });
 
-        setLastNameValid(customer.lastname ==""? false:namePatrn.test(customer.lastname))
-
     }
 
-    const mobileNohandle = (e)=>{
+
+    
+    const CheckLastNameValid = (e:any) => {
+
+    const value = e.target.value;
+
+    if (value === "") {
+        setLastNameValid(false);
+    } else {
+        setLastNameValid(namePatrn.test(value));
+    }
+};
+
+
+// mobile number handle and validation ---------------------------------
+
+    const mobileNohandle = (e: React.ChangeEvent<HTMLInputElement>)=>{
 
         // eslint-disable-next-line prefer-const
         let { name, value } = e.target;
         setCustomer({ ...customer, [name]: value });
 
-        //if the mobile number field is empty, set mobileValid to false. Otherwise, 
-        // test the mobile number against the regex pattern and set mobileValid accordingly.
-        setMobileValid(customer.mobileno ==""? false:mobilePatrn.test(customer.mobileno))
-
     }
 
-    const emailhandle = (e)=>{
+
+     
+    const CheckMobileNoValid = (e:any) => {
+
+    const value = e.target.value;
+
+    if (value === "") {
+        setMobileValid(false);
+    } else {
+        setMobileValid(mobilePatrn.test(value));
+    }
+};
+
+
+// email handle and validation ---------------------------------
+
+    const emailhandle = (e: React.ChangeEvent<HTMLInputElement>)=>{
 
         // eslint-disable-next-line prefer-const
         let { name, value } = e.target;
@@ -151,6 +196,18 @@ function Customer() {
         setEmailValid(customer.email ==""? false:emailPatrn.test(customer.email))
 
     }
+
+    const CheckEmailValid = (e:any) => {
+
+    const value = e.target.value;
+
+    if (value === "") {
+        setEmailValid(false);
+    } else {
+        setEmailValid(emailPatrn.test(value));
+    }
+};
+
 
     const checkFormErrors=()=>{
 
@@ -253,10 +310,15 @@ function Customer() {
 
         //  submit function
 
-        const onSubmit = async (e) => {
+        const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
             // from here,disable the page refresh when submitting the form.
             e.preventDefault();
+
+            if(!firstNameValid || !lastNameValid || !emailValid || !mobileValid){
+                window.alert("Please fill the required fields");
+                return;
+            }
 
         const formErrors = checkFormErrors()
 
@@ -322,7 +384,7 @@ function Customer() {
 
 
         //  delete function
-        const deleteCustomer =async (id)=>{
+        const deleteCustomer =async (id:number)=>{
 
         const confirmDlt =window.confirm("Are you sure to delete?")
             if (confirmDlt){
@@ -347,14 +409,17 @@ function Customer() {
         }
 
 
-        const columns = [
-            {title: "ID", property: "id"},
-            {title: "First Name", property: "firstname"},
-            {title: "Last Name", property: "lastname"},
-            {title: "Email", property: "email"},
-            {title: "Mobile No", property: "mobileno"},
-            {title: "Status", property: "status"}
-        ];
+        // form error checking function
+         type Column = { title: string; property: string };
+
+const columns: Column[] = [
+  { title: 'ID', property: 'id' },
+  { title: 'First Name', property: 'firstname' },
+  { title: 'Last Name', property: 'lastname' },
+  { title: 'Email', property: 'email' },
+  { title: 'Mobile No', property: 'mobileno' },
+  { title: 'Status', property: 'status' }
+];
 
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -368,10 +433,7 @@ function Customer() {
 
         return (
             <>
-
-
-
-                    <div className="row">
+          <div className="row">
                         <div className="col-12 col-md-12 col-lg-12">
                             <div className="accordion ms-2 me-2" id="accordionPanelsStayOpenExample">
                                 <div className="accordion-item">
@@ -390,9 +452,9 @@ function Customer() {
                                                     <div className="col-lg-4 col-12">
                                                         <label htmlFor="txtFirstName" className="form-label">
                                                             First Name</label>
-                                                        <input type="text"
+                                                        <input type="text" onChange={firstNamehandle}
                                                                value={customer.firstname}
-                                                               name="firstname" onChange={firstNamehandle}
+                                                               name="firstname" onBlur={CheckFirstNameValid}
 
                                                                //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
                                                                // Backticks are used for template literals.
@@ -413,7 +475,7 @@ function Customer() {
                                                     <div className="col-lg-4 col-12">
                                                         <label htmlFor="txtLastName" className="form-label">Last
                                                             Name</label>
-                                                        <input type="text"
+                                                        <input type="text" onBlur={CheckLastNameValid}
                                                                value={customer.lastname}
                                                                name="lastname" onChange={lastNamehandle}
                                                                className={`form-control ${
@@ -442,14 +504,9 @@ function Customer() {
 
                                                                name="mobileno"
                                                                onChange={mobileNohandle}
-                                                               onBlur={() => setMobileValid(/^[0-9]{10}$/.test(customer.mobileno))}
-                                                               className={`form-control ${
-                                                                   mobileValid === null
-                                                                       ? ""
-                                                                       : mobileValid
-                                                                           ? "is-valid"
-                                                                           : "is-invalid"
-                                                               }`} id="txtMobileNo"
+                                                              // onBlur={() => setMobileValid(/^[0-9]{10}$/.test(customer.mobileno))}
+                                                              onBlur={CheckMobileNoValid}
+                                                               className="form-control"id="txtMobileNo"
                                                               />
                                                     </div>
 
@@ -466,6 +523,7 @@ function Customer() {
                                                         <input type="email"
                                                                value={customer.email}
                                                                name="email" onChange={emailhandle}
+                                                               onBlur={CheckEmailValid}
                                                                className={`form-control ${
                                                                    emailValid === null
                                                                        ? ""
@@ -515,7 +573,7 @@ function Customer() {
                                                     <div className="col-4">
                                                         <label htmlFor="txtNotes" className="form-label">Notes</label>
                                                         <textarea className="form-control" id="txtNotes"
-                                                                  rows="3"></textarea>
+                                                                  rows={3}></textarea>
                                                     </div>
                                                 </div>
 
@@ -567,7 +625,7 @@ function Customer() {
                                             {/* in here when change the customer count automatically unmount the datatable component
                                         and remount.this is an easier way to update component when list an list updates*/}
                                             <DataTable key={customers.length} columns={columns} data={customers}
-                                                       onEdit={(row) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>
+                                                       onEdit={(row: Customer) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>
 
 
                                         </div>

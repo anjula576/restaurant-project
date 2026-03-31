@@ -5,7 +5,7 @@ import axios from "axios";
 
 function Supplier(){
 
-    
+    const[suppliers,setSuppliers] = useState([]);
 
     // this is usedstate function
     // this is used to store the form data when add new supplier or edit the supplier
@@ -107,14 +107,16 @@ function Supplier(){
 
             try {
                 const res = await axios.post("http://localhost:8080/api/suppliers", supplier);
+
                 console.log("Supplier added successfully:", res.data);
+
                 getSuppliers(); // Refresh the supplier list
             } catch (error) {
                 console.error("Error adding supplier:", error);
             }
         }
 
-        
+
         const editBtn = (id: any) => {
             console.log("Edit supplier:", id);
         }

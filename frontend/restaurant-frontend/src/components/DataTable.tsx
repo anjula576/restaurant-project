@@ -4,7 +4,19 @@ import React from "react";
 // this is common file to generate the table module
 //  should pass the columns and data when add this component
 
-function DataTable( {columns=[],data=[],onEdit,onDelete}){
+type Column = {
+    title: string;
+    property: string;
+};
+
+type DataTableProps = {
+    columns: Column[];
+    data: any[];
+    onEdit: (row: any) => void;
+    onDelete: (id: any) => void;
+};
+
+function DataTable({ columns = [], data = [], onEdit, onDelete }: DataTableProps) {
 
     return(
 <table className="table table-active">
