@@ -3,6 +3,7 @@ package com.example.restaurant.controller;
 import com.example.restaurant.dao.CustomerDao;
 import com.example.restaurant.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class CustomerController {
 
     // mapping for update
     @PutMapping("/{id}")
-    public void updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+    public void updateCustomer(@PathVariable("id") Integer id, @RequestBody Customer customer) {
         customer.setId(id);
         customerDao.save(customer);
     }
@@ -51,10 +52,13 @@ public class CustomerController {
     // mapping for delete
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable("id") Integer id) {
-        if (id != null) {
+    public ResponseEntity<String> deleteCustomer(@PathVariable("id") Integer id) {
+        if (id != 0) {
             System.out.println("Deleting customer with ID: " + id); // Debug statement
             customerDao.deleteById(id);
+            return ResponseEntity.ok("Customer deleted successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid customer ID");
         }
     }
 

@@ -389,9 +389,9 @@ function Customer() {
         const confirmDlt =window.confirm("Are you sure to delete?")
             if (confirmDlt){
                 try {
-                 await axios.delete(`http://localhost:8080/api/customer/${id}`);
+                const backendRes = await axios.delete(`http://localhost:8080/api/customer/${id}`);
 
-                // window.alert("customer deleted successfully")
+                 window.alert(backendRes.data) // Show the response message from the backend
                     setAlert({type: "success", message: "Customer deleted successfully" });
 
                     // setCustomers(customers.filter((c)=>c.id !==id))
