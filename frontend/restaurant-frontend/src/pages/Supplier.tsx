@@ -5,6 +5,8 @@ import axios from "axios";
 
 function Supplier(){
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [alert, setAlert] = useState<{type: string, message: string} | null>(null);
     const[suppliers,setSuppliers] = useState([]);
 
     // this is usedstate function
@@ -94,11 +96,12 @@ function Supplier(){
             return errors;
         }
 
-        // function to handle form submission
-        const onSubmit = async (e: any) => {
 
-            // prevent the default form submission behavior
-            e.preventDefault();
+
+        // function to handle form submission
+        const submitSupplier = async (e: any) => {
+
+    
 
             if(formErrors() !== ""){
                 window.alert(formErrors());
@@ -114,6 +117,17 @@ function Supplier(){
             } catch (error) {
                 console.error("Error adding supplier:", error);
             }
+        }
+
+        //  update supplier function
+        const updateSupplier = async (e: any) => {
+
+            // prevent the default form submission behavior
+             e.preventDefault();
+
+
+
+
         }
 
 
@@ -171,6 +185,15 @@ function Supplier(){
                     <input type="text" className="form-control" id="supplierAddress" />
                 </div>
             </div>
+
+              <div className="row">
+
+                {/* conditional button */}
+                {isEditing ? (<button type="button" className="btn btn-secondary" onClick={() => updateSupplier}>Edit the Supplier</button>) 
+                : (<button type="button" className="btn btn-primary" onClick={() => submitSupplier}>Add the Supplier</button>)}
+
+              </div>
+           
         </form>
       </div>
     </div>

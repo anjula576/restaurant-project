@@ -1,6 +1,8 @@
 package com.example.restaurant.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +28,35 @@ public class SupplierController {
     @GetMapping
     public List<Supplier> getSuppliers() {
         return supplierDao.findAll();
+    }
+
+    @SuppressWarnings("null")
+    @PostMapping
+    public String addSupplier(@RequestBody Supplier supplier) {
+        // return supplierDao.save(supplier);
+
+        try {
+
+            // validation for supplier details
+            if (supplier.getName() == "") {
+                return "Supplier name is required";
+            }
+            if (supplier.getMobileno() == "") {
+                return "Mobile number is required";
+            }
+            if (supplier.getEmail() == "") {
+                return "Email is required";
+            }
+            if (supplier.getAddress() == "") {
+                return "Address is required";
+            }
+
+            supplierDao.save(supplier);
+            return "Supplier added successfully";
+
+        } catch (Exception e) {
+            System.out.println("Error saving supplier: " + e.getMessage());
+            return e.getMessage();
+        }
     }
 }

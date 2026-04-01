@@ -583,7 +583,7 @@ const columns: Column[] = [
                                                     {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
                                                     {isEditing ? (<button type="button" onClick={() => {
                                                         onUpdate();
-                                                    }} className="btn btn-primary">Update</button>) : (
+                                                    }} className="btn btn-primary">Update the Customer</button>) : (
                                                         <button type="submit" className="btn btn-primary">Add New
                                                             Customer</button>)}
 
