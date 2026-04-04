@@ -96,6 +96,41 @@ function Supplier(){
             return errors;
         }
 
+        // handle form data
+
+        const handleSupplierName = (e: any) => {
+            console.log(supplier);
+            console.log(e.target.value);
+            
+            setSupplier({...supplier, name: e.target.value});
+        }
+
+        const handleSupplierEmail = (e: any) => {
+                        console.log(supplier);
+
+            setSupplier({...supplier, email: e.target.value});
+        }
+
+        const handleSupplierAddress = (e: any) => {
+                        console.log(supplier);
+
+            setSupplier({...supplier, address: e.target.value});
+        }
+
+        // fields validations
+
+        //  in here if pattern is matched return null (null means no error) otherwise return the error message
+        const validateSupplierName = () => {
+            setNameValid(supplier.name === "" ? "Supplier name is required" : (namePatrn.test(supplier.name) ? null : "Supplier name must be 3-15 characters and contain only letters and spaces"));
+        }
+
+        const validateSupplierEmail = () => {
+            setEmailValid(supplier.email === "" ? "Email is required" : (emailPatrn.test(supplier.email) ? null : "Invalid email format"));
+        }
+
+        const validateSupplierAddress = () => {
+            setAddressValid(supplier.address === "" ? "Address is required" : null);
+        }
 
 
         // function to handle form submission
@@ -172,17 +207,17 @@ function Supplier(){
             <div className="row">
                 <div className="col-md-6">
                     <label htmlFor="supplierName" className="form-label">Supplier Name</label>
-                    <input type="text" className="form-control" id="supplierName" />
+                    <input type="text"onChange={handleSupplierName} onBlur={validateSupplierName} className={`form-control  ${nameValid==null ?"" :nameValid ?'is-valid' : 'is-invalid'}`} id="supplierName" />
                 </div>
                 <div className="col-md-6">
                     <label htmlFor="supplierEmail" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="supplierEmail" />
+                    <input type="email" onChange={handleSupplierEmail} onBlur={validateSupplierEmail} className={`form-control ${emailValid==null ?"" :emailValid ?'is-valid' : 'is-invalid'}`} id="supplierEmail" />
                 </div>
             </div>
             <div className="row">
                 <div className="col-md-12">
-                    <label htmlFor="supplierAddress" className="form-label">Address</label>
-                    <input type="text" className="form-control" id="supplierAddress" />
+                    <label htmlFor="supplierAddress"  className={`form-label `}>Address</label>
+                    <input type="text" onChange={handleSupplierAddress} onBlur={validateSupplierAddress} className={`form-control ${addressValid==null ?"" :addressValid ?'is-valid' : 'is-invalid'}`} id="supplierAddress" />
                 </div>
             </div>
 
