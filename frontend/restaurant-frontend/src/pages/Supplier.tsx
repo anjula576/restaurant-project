@@ -30,10 +30,10 @@ function Supplier(){
 
 //  form field validations -----------------------------------------
 
-    const [nameValid, setNameValid] = useState<String | null>(null);
-    const [emailValid, setEmailValid] = useState<String | null>(null);
-    const [mobileValid, setMobileValid] = useState<String | null>(null);
-    const [addressValid, setAddressValid] = useState<String | null>(null);
+    const [nameValid, setNameValid] = useState<boolean | null>(null);
+    const [emailValid, setEmailValid] = useState<boolean | null>(null);
+    const [mobileValid, setMobileValid] = useState<boolean | null>(null);
+    const [addressValid, setAddressValid] = useState<boolean | null>(null);
 
 
     // The first / means start of regex literal.
@@ -56,7 +56,7 @@ function Supplier(){
             fetch("http://localhost:8080/api/suppliers")
             .then((response) => response.json())
             .then((data) => {
-                setSupplier(data);
+                setSuppliers(data);
                 console.log("Suppliers fetched successfully:"+data);
             })
             .catch((error) => {
@@ -121,15 +121,17 @@ function Supplier(){
 
         //  in here if pattern is matched return null (null means no error) otherwise return the error message
         const validateSupplierName = () => {
-            setNameValid(supplier.name === "" ? "Supplier name is required" : (namePatrn.test(supplier.name) ? null : "Supplier name must be 3-15 characters and contain only letters and spaces"));
+            setNameValid(supplier.name === "" ? false : (namePatrn.test(supplier.name) ? true : false));
+            console.log("name valid "+nameValid);
+            
         }
 
         const validateSupplierEmail = () => {
-            setEmailValid(supplier.email === "" ? "Email is required" : (emailPatrn.test(supplier.email) ? null : "Invalid email format"));
+            setEmailValid(supplier.email === "" ? false : (emailPatrn.test(supplier.email) ? true : false));
         }
 
         const validateSupplierAddress = () => {
-            setAddressValid(supplier.address === "" ? "Address is required" : null);
+            setAddressValid(supplier.address === "" ? false : true);
         }
 
 
@@ -215,7 +217,11 @@ function Supplier(){
                 </div>
             </div>
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-3">
+                    <label htmlFor="supplierMobile"  className={`form-label `}>MobileMobile</label>
+                    <input type="text" onChange={handleSupplierMobile} onBlur={validateSupplierMobile} className={`form-control ${mobileValid==null ?"" :mobileValid ?'is-valid' : 'is-invalid'}`} id="supplierMobile" />
+                </div>
+                 <div className="col-md-3">
                     <label htmlFor="supplierAddress"  className={`form-label `}>Address</label>
                     <input type="text" onChange={handleSupplierAddress} onBlur={validateSupplierAddress} className={`form-control ${addressValid==null ?"" :addressValid ?'is-valid' : 'is-invalid'}`} id="supplierAddress" />
                 </div>
@@ -224,8 +230,15 @@ function Supplier(){
               <div className="row">
 
                 {/* conditional button */}
-                {isEditing ? (<button type="button" className="btn btn-secondary" onClick={() => updateSupplier}>Edit the Supplier</button>) 
-                : (<button type="button" className="btn btn-primary" onClick={() => submitSupplier}>Add the Supplier</button>)}
+                {isEditing ? (
+                    <button type="button" className="btn btn-secondary" onClick={updateSupplier}>
+                        Edit the Supplier
+                    </button>
+                ) : (
+                    <button type="button" className="btn btn-primary" onClick={submitSupplier}>
+                        Add the Supplier
+                    </button>
+                )}
 
               </div>
            
@@ -241,8 +254,8 @@ function Supplier(){
     </h2>
     <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
       <div className="accordion-body">
- <DataTable key={supplier.length} columns={columns} data={supplier}
-                                                       onEdit={(row) => handleEdit(row)} onDelete={(id)=>handleDelete(id)}/>
+ <DataTable key={suppliers.length} columns={columns} data={suppliers}
+                                                       onEdit={(row) => handleEdit(row)} onDelete={(id) => handleDelete(id)}/>
 
       </div>
     </div>
