@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
 import axios from "axios";
+import {Alert} from "@mui/material";
 
 
 function Supplier(){
 
     const [isEditing, setIsEditing] = useState(false);
-    const [alert, setAlert] = useState<{type: string, message: string} | null>(null);
-    const[suppliers,setSuppliers] = useState([]);
+    
+   const [alert, setAlert] = useState<{
+        type: "success" | "error" | "warning" | "info";
+        message: string
+    } | null>(null);    const[suppliers,setSuppliers] = useState([]);
 
     // this is usedstate function
     // this is used to store the form data when add new supplier or edit the supplier
@@ -75,6 +79,7 @@ function Supplier(){
            
             {title: "Supplier Name", property: "name"},
             {title: "Email", property: "email"},
+            {title: "Mobile No", property: "mobileno"},
             {title: "Address", property: "address"},
         ];
 
@@ -117,6 +122,11 @@ function Supplier(){
             setSupplier({...supplier, address: e.target.value});
         }
 
+        const handleSupplierMobile = (e: any) => {
+                        console.log(supplier);
+            setSupplier({...supplier, mobileno: e.target.value});
+        }
+
         // fields validations
 
         //  in here if pattern is matched return null (null means no error) otherwise return the error message
@@ -134,6 +144,9 @@ function Supplier(){
             setAddressValid(supplier.address === "" ? false : true);
         }
 
+        const validateSupplierMobile = () => {
+            setMobileValid(supplier.mobileno === "" ? false : (mobilePatrn.test(supplier.mobileno) ? true : false));
+        }
 
         // function to handle form submission
         const submitSupplier = async (e: any) => {
@@ -150,7 +163,16 @@ function Supplier(){
 
                 console.log("Supplier added successfully:", res.data);
 
+                 setAlert({type: "success", message: "Supplier added successfully" });
+
+
                 getSuppliers(); // Refresh the supplier list
+
+                   //  this is the timeout function to use to set null to already opened alert
+                //  after that automatically close the alert
+                setTimeout(()=>{setAlert(null)},3000);
+
+                
             } catch (error) {
                 console.error("Error adding supplier:", error);
             }
@@ -216,18 +238,18 @@ function Supplier(){
                     <input type="email" onChange={handleSupplierEmail} onBlur={validateSupplierEmail} className={`form-control ${emailValid==null ?"" :emailValid ?'is-valid' : 'is-invalid'}`} id="supplierEmail" />
                 </div>
             </div>
-            <div className="row">
+            <div className="row mt-2">
                 <div className="col-md-3">
-                    <label htmlFor="supplierMobile"  className={`form-label `}>MobileMobile</label>
+                    <label htmlFor="supplierMobile"  className={`form-label `}>Mobile No</label>
                     <input type="text" onChange={handleSupplierMobile} onBlur={validateSupplierMobile} className={`form-control ${mobileValid==null ?"" :mobileValid ?'is-valid' : 'is-invalid'}`} id="supplierMobile" />
                 </div>
                  <div className="col-md-3">
                     <label htmlFor="supplierAddress"  className={`form-label `}>Address</label>
-                    <input type="text" onChange={handleSupplierAddress} onBlur={validateSupplierAddress} className={`form-control ${addressValid==null ?"" :addressValid ?'is-valid' : 'is-invalid'}`} id="supplierAddress" />
+                    <textarea onChange={handleSupplierAddress} onBlur={validateSupplierAddress} className={`form-control ${addressValid==null ?"" :addressValid ?'is-valid' : 'is-invalid'}`} id="supplierAddress" ></textarea>
                 </div>
             </div>
 
-              <div className="row">
+              <div className="row pt-2">
 
                 {/* conditional button */}
                 {isEditing ? (
