@@ -2,6 +2,8 @@ package com.example.restaurant.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,5 +60,11 @@ public class SupplierController {
             System.out.println("Error saving supplier: " + e.getMessage());
             return e.getMessage();
         }
+    }
+
+    @PutMapping("/{id}")
+    public void updateSupplier(@PathVariable("id") Integer id, @RequestBody Supplier supplier) {
+        supplier.setId(id);
+        supplierDao.save(supplier);
     }
 }
