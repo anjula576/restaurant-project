@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.restaurant.entity.Supplier;
 import com.example.restaurant.dao.SupplierDao;
@@ -66,5 +67,16 @@ public class SupplierController {
     public void updateSupplier(@PathVariable("id") Integer id, @RequestBody Supplier supplier) {
         supplier.setId(id);
         supplierDao.save(supplier);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteSupplier(@PathVariable("id") Integer id) {
+        if (id != 0) {
+            System.out.println("Deleting supplier with ID: " + id); // Debug statement
+            supplierDao.deleteById(id);
+            return "Supplier deleted successfully";
+        } else {
+            return "Error deleting supplier: Invalid ID";
+        }
     }
 }
