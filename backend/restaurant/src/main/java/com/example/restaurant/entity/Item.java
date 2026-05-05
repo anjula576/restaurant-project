@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,4 +47,10 @@ public class Item {
     @Column(name = "purchaseprice")
     @NotNull
     private BigDecimal purchaseprice;
+
+    // many to many relationship with supplier
+    // an item can have many suppliers and a supplier can supply many items
+    @ManyToMany
+    @JoinTable(name = "item_has_supplier", joinColumns = @JoinColumn(name = "item_id"), inverseJoinColumns = @JoinColumn(name = "supplier_id"))
+    private Set<Supplier> suppliers = new HashSet<>();
 }
