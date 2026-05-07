@@ -1,10 +1,31 @@
 import {Alert} from "@mui/material";
 import AlertTitle from "@mui/material/AlertTitle";
 import DataTable from "../components/DataTable.tsx";
-import React from "react";
+import { useEffect, useState } from "react";
 
+interface Supplier {
+    id: number;
+    name: string;
+    mobileno: string;
+    email: string;
+    address: string;
+}
 
+const [suppliers,setSuppliers] = useState<Supplier[]>([]);
 function Item(){
+    useEffect(() => {
+
+        fetch('http://localhost:8080/api/suppliers')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Log the fetched data to the console
+                setSuppliers(data); // Update the state with the fetched suppliers
+            })
+            .catch(error => {
+                console.error('Error fetching suppliers:', error);
+            });
+        // Add your effect logic here
+    }, []);
 
     return (
         <>
@@ -26,6 +47,23 @@ function Item(){
                                 <div className="accordion-body">
                                     <form >
                                         <div className="row">
+
+                                            {/*supplier*/}
+                                            <div className="col-lg-4 col-12">
+                                                <label htmlFor="selectSupplier" className="form-label">
+                                                    Supplier` Name</label>
+                                                    <select className="form-select" id="selectSupplier">
+
+                                                        <option value="">Select Supplier</option>
+
+                                                        {/* create options for each supplier */}
+                                                        {suppliers.map((supplier) => (
+                                                            <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
+                                                        ))}
+                                                        </select>
+                                                
+                                            </div>
+
                                             {/*item name*/}
                                             <div className="col-lg-4 col-12">
                                                 <label htmlFor="txtItemName" className="form-label">
@@ -44,7 +82,7 @@ function Item(){
                                             </div>
 
                                             {/*total qty*/}
-                                            <div className="col-lg-4 col-12">
+                                            <div className="col-lg-2 col-12">
                                                 <label htmlFor="txTotalQty" className="form-label">Total Quantity</label>
                                                 <input type="text" className="form-control"
 
@@ -61,7 +99,7 @@ function Item(){
                                             </div>
 
                                             {/*available qty*/}
-                                            <div className="col-lg-4 col-12">
+                                            <div className="col-lg-2 col-12">
                                                 <label htmlFor="txtAvailableQty" className="form-label">Available Quantity</label>
                                                 <input type="text" className="form-control"
                                                        name="itemqty"
