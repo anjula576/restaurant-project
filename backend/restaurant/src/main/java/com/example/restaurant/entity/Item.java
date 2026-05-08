@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,14 +34,6 @@ public class Item {
     @Column(name = "unit")
     @NotNull
     private BigDecimal unit;
-
-    @Column(name = "rop")
-    @NotNull
-    private BigDecimal rop;
-
-    @Column(name = "roq")
-    @NotNull
-    private BigDecimal roq;
 
     @Column(name = "purchaseprice")
     @NotNull

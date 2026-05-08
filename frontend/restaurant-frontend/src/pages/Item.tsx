@@ -4,16 +4,19 @@ import DataTable from "../components/DataTable.tsx";
 import { useEffect, useState } from "react";
 
 interface Supplier {
-    id: number;
-    name: string;
-    mobileno: string;
-    email: string;
-    address: string;
+  id: number;
+  name: string;
+  mobileno: number;
+  email: string;
+  address: string;
+
 }
 
-const [suppliers,setSuppliers] = useState<Supplier[]>([]);
+
 function Item(){
-    useEffect(() => {
+   const [suppliers,setSuppliers] = useState<Supplier[]|null>([]); 
+
+   useEffect(() => {
 
         fetch('http://localhost:8080/api/suppliers')
             .then(response => response.json())
@@ -57,7 +60,7 @@ function Item(){
                                                         <option value="">Select Supplier</option>
 
                                                         {/* create options for each supplier */}
-                                                        {suppliers.map((supplier) => (
+                                                        {suppliers?.map((supplier) => (
                                                             <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
                                                         ))}
                                                         </select>
