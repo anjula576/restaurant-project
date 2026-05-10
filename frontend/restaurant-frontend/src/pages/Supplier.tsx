@@ -148,7 +148,7 @@ function Supplier() {
         ? false
         : emailPatrn.test(supplier.email)
           ? true
-          : false,
+          : false ,
     );
   };
 
