@@ -3,15 +3,22 @@ package com.example.restaurant.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity(name = "item")
-@Data
+
+// don't use @Data because it will generate toString method which will cause
+// infinite loop when we try to print the object
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     @Id
@@ -33,14 +40,12 @@ public class Item {
 
     @Column(name = "unit")
     @NotNull
-    private BigDecimal unit;
+    private String unit;
 
     @Column(name = "purchaseprice")
     @NotNull
     private BigDecimal purchaseprice;
 
-    // many to many relationship with supplier
-    // an item can have many suppliers and a supplier can supply many items
     @ManyToMany
     @JoinTable(name = "item_has_supplier", joinColumns = @JoinColumn(name = "item_id"), inverseJoinColumns = @JoinColumn(name = "supplier_id"))
     private Set<Supplier> suppliers = new HashSet<>();

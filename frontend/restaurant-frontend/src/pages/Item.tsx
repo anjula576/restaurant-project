@@ -11,29 +11,63 @@ interface Supplier {
   address: string;
 }
 
+interface Item {
+  id: number;
+  itemname: string;
+  availableqty: number;
+  totalqty: number;
+  unit: string;
+  purchaseprice: number;
+}
+
 function Item() {
   const [suppliers, setSuppliers] = useState<Supplier[] | null>([]);
 
+  const [items, setItems] = useState<Item[]>([]);
+
   const columns = [
-    { name: "Item Name", property:"itemname"},
-     { name: "Available Qty", property:"availableqty"},
-     { name: "Total Qty", property:"totalqty"},
-     { name: "Unit", property:"unit"},
-     { name: "Purchase Price", property:"purchaseprice"},
+    { title: "Item Name", property:"itemname"},
+     { title: "Available Qty", property:"availableqty"},
+     { title: "Total Qty", property:"totalqty"},
+     { title: "Unit", property:"unit"},
+     { title: "Purchase Price", property:"purchaseprice"},
 ]
 
-  useEffect(() => {
-    fetch("http://localhost:8080/api/suppliers")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data); // Log the fetched data to the console
-        setSuppliers(data); // Update the state with the fetched suppliers
-      })
-      .catch((error) => {
-        console.error("Error fetching suppliers:", error);
-      });
-    // Add your effect logic here
-  }, []);
+useEffect(() => {
+  fetch("http://localhost:8080/api/suppliers")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); // Log the fetched data to the console
+      setSuppliers(data); // Update the state with the fetched suppliers
+    })
+    .catch((error) => {
+      console.error("Error fetching suppliers:", error);
+    });
+
+
+    fetch("http://localhost:8080/api/items")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); // Log the fetched data to the console
+      setItems(data); // Update the state with the fetched items
+    })
+    .catch((error) => {
+      console.error("Error fetching items:", error);
+    });
+  // Add your effect logic here
+}, []);
+
+//function for edit items
+const handleEdit = (row: Item) => {
+  console.log("Edit item with ID:", row.id);
+  // Implement your edit logic here, such as opening a modal with the item details
+}
+
+// function for delete items
+const deleteCustomer = (id: number) => {
+  console.log("Delete item with ID:", id);
+  // Implement your delete logic here, such as showing a confirmation dialog and making an API call to delete the item
+}
 
   return (
     <>
@@ -165,34 +199,7 @@ function Item() {
                         />
                       </div>
 
-                      <div className="col-2 mt-4">
-                        <div className="col-lg-4 col-12">
-                          <label htmlFor="txtRop" className="form-label">
-                            ROP
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="rop"
-                            id="txtRop"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-2 mt-4">
-                        {/*roq*/}
-                        <div className="col-lg-4 col-12">
-                          <label htmlFor="txtROQ" className="form-label">
-                            ROQ
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="roq"
-                            id="txtRoq"
-                          />
-                        </div>
-                      </div>
+                
                     </div>
 
                     <br />
@@ -246,8 +253,8 @@ function Item() {
                   {/*use key when need to update a component when change the count*/}
                   {/* in here when change the customer count automatically unmount the datatable component
                                         and remount.this is an easier way to update component when list an list updates*/}
-                  {/*<DataTable key={customers.length} columns={columns} data={customers}*/}
-                  {/*           onEdit={(row) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>*/}
+                  <DataTable key={items.length} columns={columns} data={items}
+                            onEdit={(row) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>
                 </div>
               </div>
             </div>

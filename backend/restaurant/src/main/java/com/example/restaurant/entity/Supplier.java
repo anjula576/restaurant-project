@@ -3,24 +3,25 @@ package com.example.restaurant.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "supplier")
-@AllArgsConstructor
+
+// use getter and setter to access the private variables of the class
+// don't use @Data because it will generate toString method which will cause
+// infinite loop when we try to print the object
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
 public class Supplier {
 
     @Id
@@ -44,5 +45,6 @@ public class Supplier {
     private String address;
 
     @ManyToMany(mappedBy = "suppliers")
+    @JsonIgnore
     private Set<Item> items = new HashSet<>();
 }
