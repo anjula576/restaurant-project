@@ -20,10 +20,19 @@ interface Item {
   purchaseprice: number;
 }
 
+interface AlertState {
+  type: "success" | "error" | "warning" | "info";
+  message: string;
+}
+
 function Item() {
   const [suppliers, setSuppliers] = useState<Supplier[] | null>([]);
 
   const [items, setItems] = useState<Item[]>([]);
+
+  const [alert, setAlert] = useState<AlertState | null>(null);
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const columns = [
     { title: "Item Name", property:"itemname"},
@@ -60,7 +69,11 @@ useEffect(() => {
 //function for edit items
 const handleEdit = (row: Item) => {
   console.log("Edit item with ID:", row.id);
-  // Implement your edit logic here, such as opening a modal with the item details
+  //   your edit logic here, such as opening a modal with the item details
+}
+
+//function for update items
+const onUpdate = () => {
 }
 
 // function for delete items
@@ -201,33 +214,35 @@ const deleteCustomer = (id: number) => {
 
                 
                     </div>
+                    
 
                     <br />
-                    <div className="row">
-                      {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
-                      {/*{isEditing ? (<button type="button" onClick={() => {*/}
-                      {/*    onUpdate();*/}
-                      {/*}} className="btn btn-primary">Update</button>) : (*/}
-                      {/*    <button type="submit" className="btn btn-primary">Add New*/}
-                      {/*        Customer</button>)}*/}
-
-                      {/*this is conditional reading.div show only if alert is not null*/}
-                      {/*{alert && (*/}
-                      {/*    //  this div style is used to change the position of the alert*/}
-                      {/*    <div className="col-4" style={{*/}
-                      {/*        position: "fixed",*/}
-                      {/*        top: "20px",*/}
-                      {/*        right: "20px",*/}
-                      {/*        zIndex: 9999,*/}
-                      {/*        minWidth: "300px"*/}
-                      {/*    }}>*/}
-                      {/*        <Alert variant="filled">*/}
-                      {/*            <AlertTitle>Success</AlertTitle>*/}
-
-                      {/*        </Alert>*/}
-                      {/*    </div>*/}
-                      {/*)}*/}
-                    </div>
+                     <div className="row">
+                    
+                                                                        {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
+                                                                        {isEditing ? (<button type="button" onClick={() => {
+                                                                            onUpdate();
+                                                                        }} className="btn btn-primary">Update the Customer</button>) : (
+                                                                            <button type="submit" className="btn btn-primary">Add New
+                                                                                Customer</button>)}
+                    
+                                                                        {/*this is conditional reading.div show only if alert is not null*/}
+                                                                        {alert && (
+                                                                            //  this div style is used to change the position of the alert
+                                                                            <div className="col-4" style={{
+                                                                                position: "fixed",
+                                                                                top: "20px",
+                                                                                right: "20px",
+                                                                                zIndex: 9999,
+                                                                                minWidth: "300px"
+                                                                            }}>
+                                                                                <Alert variant="filled" severity={alert.type} onClose={() => setAlert(null)}>
+                                                                                    <AlertTitle>Success</AlertTitle>
+                                                                                    {alert.message}
+                                                                                </Alert>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                   </form>
                 </div>
               </div>
