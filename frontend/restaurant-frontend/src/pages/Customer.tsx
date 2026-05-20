@@ -237,6 +237,8 @@ function Customer() {
         status: "",
     };
 
+
+   
     //  update function
     const onUpdate = async () => {
 
@@ -309,6 +311,7 @@ function Customer() {
     }
 
         //  submit function
+        //for save the customer details to the database when submit the form
 
         const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -427,9 +430,6 @@ const columns: Column[] = [
             getCustomers();
         }, [])
 
-
-        console.log("columns", columns);
-        console.log("Customers1", customers);
 
         return (
             <>
