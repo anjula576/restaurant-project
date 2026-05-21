@@ -2,6 +2,7 @@ import { Alert } from "@mui/material";
 import AlertTitle from "@mui/material/AlertTitle";
 import DataTable from "../components/DataTable.tsx";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface Supplier {
   id: number;
@@ -33,6 +34,22 @@ function Item() {
   const [alert, setAlert] = useState<AlertState | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);
+
+  // this is used to store the form data when add new customer or edit the customer
+      //  speciality in here is mentied the initial values of the form fields in the useState function
+      const [item, setItem] = useState<{
+          id: number | null;
+          itemname: string;
+          availableqty: string;
+          totalqty: string;
+          purchaseprice: string;
+      }>({
+          id:null,
+          itemname: "",
+          availableqty: "",
+          totalqty: "",
+          purchaseprice: "",
+      })
 
   const columns = [
     { title: "Item Name", property:"itemname"},
@@ -70,6 +87,20 @@ useEffect(() => {
 const handleEdit = (row: Item) => {
   console.log("Edit item with ID:", row.id);
   //   your edit logic here, such as opening a modal with the item details
+}
+
+const submitCustomer = async () => {  
+
+  try{
+    // your submit logic here, such as sending a POST request to the server with the form data
+    // if the submission is successful, you can set the alert state to show a success message
+
+    const backendResponse = await axios.post("http://localhost:8080/api/items", item)
+    setAlert({ type: "success", message: "Item submitted successfully!" });
+  }catch(error){
+    console.error("Error submitting item:", error);
+    setAlert({ type: "error", message: "Failed to submit item. Please try again." });
+  }
 }
 
 //function for update items
@@ -223,7 +254,9 @@ const deleteCustomer = (id: number) => {
                                                                         {isEditing ? (<button type="button" onClick={() => {
                                                                             onUpdate();
                                                                         }} className="btn btn-primary">Update the Customer</button>) : (
-                                                                            <button type="submit" className="btn btn-primary">Add New
+                                                                            <button type="submit" className="btn btn-primary" onClick={() => {
+                                                                                submitCustomer();
+                                                                            }}>Add New
                                                                                 Customer</button>)}
                     
                                                                         {/*this is conditional reading.div show only if alert is not null*/}
