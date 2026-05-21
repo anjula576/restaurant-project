@@ -89,19 +89,31 @@ const handleEdit = (row: Item) => {
   //   your edit logic here, such as opening a modal with the item details
 }
 
+//function for handle the change of the form fields when add new customer or edit the customer
+const itemNameHandle =(e:any)=>{
+
+  let {name, value} = e.target.value;
+  setItem({...item, [name]: value});
+}
+
 const submitCustomer = async () => {  
 
   try{
     // your submit logic here, such as sending a POST request to the server with the form data
     // if the submission is successful, you can set the alert state to show a success message
 
-    const backendResponse = await axios.post("http://localhost:8080/api/items", item)
-    setAlert({ type: "success", message: "Item submitted successfully!" });
+    const backendResponse = await axios.post("http://localhost:8080/api/items", item);
+
+    if(backendResponse.status === 200 || backendResponse.status === 201){
+ 
+       setAlert({ type: "success", message: "Item submitted successfully!" });
+    }
+   
   }catch(error){
     console.error("Error submitting item:", error);
     setAlert({ type: "error", message: "Failed to submit item. Please try again." });
   }
-}
+} 
 
 //function for update items
 const onUpdate = () => {
@@ -166,7 +178,7 @@ const deleteCustomer = (id: number) => {
                         <input
                           type="text"
                           className="form-control"
-                          name="itemname"
+                          name="itemname" onChange={itemNameHandle}
                           //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
                           // Backticks are used for template literals.
                           //to use template literals in JavaScript for embedding variables, expressions, or writing multi-line strings.
