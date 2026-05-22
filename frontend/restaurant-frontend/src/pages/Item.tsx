@@ -42,13 +42,23 @@ function Item() {
           itemname: string;
           availableqty: string;
           totalqty: string;
+          unit:string;
           purchaseprice: string;
+// this is used to store the suppliers list when add new item or edit the item
+// when add new item or edit the item we need to show the suppliers list in the dropdown. so we need to store the suppliers list in the state
+          suppliers:{
+            id:number;
+            name:string;
+          }[];
       }>({
           id:null,
           itemname: "",
           availableqty: "",
           totalqty: "",
+          unit: "",
           purchaseprice: "",
+
+          suppliers:[],
       })
 
   const columns = [
@@ -89,29 +99,64 @@ const handleEdit = (row: Item) => {
   //   your edit logic here, such as opening a modal with the item details
 }
 
+const handleSupplier =(supplier:any)=>{
+
+  setItem({...item,suppliers:[...item.suppliers,supplier]});
+
+  console.log(item);
+  
+}
+
 //function for handle the change of the form fields when add new customer or edit the customer
 const itemNameHandle =(e:any)=>{
 
-  let {name, value} = e.target.value;
-  setItem({...item, [name]: value});
+  setItem({...item, itemname: e.target.value});
+    console.log(item);
+    console.log(e.target.value)
+
+
 }
 
-const submitCustomer = async () => {  
+const availableQtyHandle =(e:any)=>{
+
+  setItem({...item, availableqty: e.target.value});
+    console.log(item);
+    console.log(e.target.value)
+
+}
+
+const totalQtyHandle =(e:any)=>{
+
+  setItem({...item, totalqty: e.target.value});
+    console.log(item);
+    console.log(e.target.value)
+
+}
+
+const purchasePriceHandle =(e:any)=>{
+
+  setItem({...item, purchaseprice: e.target.value});
+    console.log(item);
+    console.log(e.target.value)
+
+}
+
+const submitItem = async () => {  
 
   try{
     // your submit logic here, such as sending a POST request to the server with the form data
     // if the submission is successful, you can set the alert state to show a success message
 
-    const backendResponse = await axios.post("http://localhost:8080/api/items", item);
+     await axios.post("http://localhost:8080/api/items", item);
 
-    if(backendResponse.status === 200 || backendResponse.status === 201){
+    // if(backendResponse.status === 200 || backendResponse.status === 201){
  
-       setAlert({ type: "success", message: "Item submitted successfully!" });
-    }
+    //    setAlert({ type: "success", message: "Item submitted successfully!" });
+    // }
    
   }catch(error){
     console.error("Error submitting item:", error);
-    setAlert({ type: "error", message: "Failed to submit item. Please try again." });
+    // setAlert({ type: "error", message: "Failed to submit item. Please try again." });
   }
 } 
 
@@ -158,7 +203,7 @@ const deleteCustomer = (id: number) => {
                         <label htmlFor="selectSupplier" className="form-label">
                           Supplier` Name
                         </label>
-                        <select className="form-select" id="selectSupplier">
+                        <select className="form-select" id="selectSupplier" onChange={handleSupplier}>
                           <option value="">Select Supplier</option>
 
                           {/* create options for each supplier */}
@@ -190,7 +235,7 @@ const deleteCustomer = (id: number) => {
 
                       {/*total qty*/}
                       <div className="col-lg-2 col-12">
-                        <label htmlFor="txTotalQty" className="form-label">
+                        <label htmlFor="txTotalQty" className="form-label" onChange={totalQtyHandle}>
                           Total Quantity
                         </label>
                         <input
@@ -209,7 +254,7 @@ const deleteCustomer = (id: number) => {
 
                       {/*available qty*/}
                       <div className="col-lg-2 col-12">
-                        <label htmlFor="txtAvailableQty" className="form-label">
+                        <label htmlFor="txtAvailableQty" className="form-label" onChange={availableQtyHandle}>
                           Available Quantity
                         </label>
                         <input
@@ -252,6 +297,7 @@ const deleteCustomer = (id: number) => {
                           className="form-control"
                           name="purchaseprice"
                           id="txtPurchasePrice"
+                          onChange={purchasePriceHandle}
                         />
                       </div>
 
@@ -267,7 +313,7 @@ const deleteCustomer = (id: number) => {
                                                                             onUpdate();
                                                                         }} className="btn btn-primary">Update the Customer</button>) : (
                                                                             <button type="submit" className="btn btn-primary" onClick={() => {
-                                                                                submitCustomer();
+                                                                                submitItem();
                                                                             }}>Add New
                                                                                 Customer</button>)}
                     
