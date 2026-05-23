@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.restaurant.dao.ItemDao;
 import com.example.restaurant.entity.Item;
 
+import java.io.StringReader;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,15 @@ public class ItemController {
     }
 
     @PostMapping
-    public Item createItem(@RequestBody @NonNull Item item) {
-        return itemDao.save(item);
+    public String createItem(@RequestBody @NonNull Item item) {
+        try {
+
+            itemDao.save(item);
+            return "ok";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error" + e.getMessage();
+        }
     }
 
 }

@@ -47,8 +47,7 @@ function Item() {
 // this is used to store the suppliers list when add new item or edit the item
 // when add new item or edit the item we need to show the suppliers list in the dropdown. so we need to store the suppliers list in the state
           suppliers:{
-            id:number;
-            name:string;
+            id:string;
           }[];
       }>({
           id:null,
@@ -99,20 +98,19 @@ const handleEdit = (row: Item) => {
   //   your edit logic here, such as opening a modal with the item details
 }
 
-const handleSupplier =(supplier:any)=>{
+const handleSupplier =(e:any)=>{
 
-  setItem({...item,suppliers:[...item.suppliers,supplier]});
+  const {name,value} = e.target;
+  if (suppliers) {
+    setItem({ ...item, suppliers: [{ id: value }] });
+  }
 
-  console.log(item);
-  
 }
 
 //function for handle the change of the form fields when add new customer or edit the customer
 const itemNameHandle =(e:any)=>{
 
   setItem({...item, itemname: e.target.value});
-    console.log(item);
-    console.log(e.target.value)
 
 
 }
@@ -120,43 +118,55 @@ const itemNameHandle =(e:any)=>{
 const availableQtyHandle =(e:any)=>{
 
   setItem({...item, availableqty: e.target.value});
-    console.log(item);
-    console.log(e.target.value)
 
 }
 
 const totalQtyHandle =(e:any)=>{
 
   setItem({...item, totalqty: e.target.value});
-    console.log(item);
-    console.log(e.target.value)
+
 
 }
 
 const purchasePriceHandle =(e:any)=>{
 
   setItem({...item, purchaseprice: e.target.value});
-    console.log(item);
-    console.log(e.target.value)
 
 }
 
-const submitItem = async () => {  
 
+const handleUnit =(e:any)=>{
+
+setItem({...item, unit: e.target.value});
+
+}
+const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {  
+
+
+  e.preventDefault(); // Prevent the default form submission behavior
+  console.log("item submit button pressed");
+  
   try{
     // your submit logic here, such as sending a POST request to the server with the form data
     // if the submission is successful, you can set the alert state to show a success message
 
-     await axios.post("http://localhost:8080/api/items", item);
+    const backendResponse =  await axios.post("http://localhost:8080/api/items", item);
+    console.log("item"+item);
+    console.log(backendResponse.data);
 
-    // if(backendResponse.status === 200 || backendResponse.status === 201){
+    if(backendResponse.data =="ok"){
  
-    //    setAlert({ type: "success", message: "Item submitted successfully!" });
-    // }
+       setAlert({ type: "success", message: "Item submitted successfully!" });
+
+       console.log("item 2"+item);
+    console.log(backendResponse.data);
+    }
    
   }catch(error){
+    console.log("item wasn't save.this is an error");
     console.error("Error submitting item:", error);
-    // setAlert({ type: "error", message: "Failed to submit item. Please try again." });
+    setAlert({ type: "error", message: "Failed to submit item. Please try again." });
+
   }
 } 
 
@@ -196,7 +206,7 @@ const deleteCustomer = (id: number) => {
                 className="accordion-collapse collapse"
               >
                 <div className="accordion-body">
-                  <form>
+                  <form onSubmit={submitItem}>
                     <div className="row">
                       {/*supplier*/}
                       <div className="col-lg-4 col-12">
@@ -235,12 +245,12 @@ const deleteCustomer = (id: number) => {
 
                       {/*total qty*/}
                       <div className="col-lg-2 col-12">
-                        <label htmlFor="txTotalQty" className="form-label" onChange={totalQtyHandle}>
+                        <label htmlFor="txTotalQty" className="form-label" >
                           Total Quantity
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control" onChange={totalQtyHandle}
                           /* in here use onblur*/
                           /*When you type the 10th digit, your state may still not have
                                                     updated in time (React state updates are async), so the regex test happens with 9 digits.
@@ -254,13 +264,13 @@ const deleteCustomer = (id: number) => {
 
                       {/*available qty*/}
                       <div className="col-lg-2 col-12">
-                        <label htmlFor="txtAvailableQty" className="form-label" onChange={availableQtyHandle}>
+                        <label htmlFor="txtAvailableQty" className="form-label" >
                           Available Quantity
                         </label>
                         <input
                           type="text"
-                          className="form-control"
-                          name="itemqty"
+                          className="form-control" onChange={availableQtyHandle}
+                          name="itemqty"  
                           id="txtAvailableQty"
                         />
                       </div>
@@ -274,7 +284,7 @@ const deleteCustomer = (id: number) => {
                         <label htmlFor="selectUnit" className="form-label">
                           Unit
                         </label>
-                        <select className="form-select">
+                        <select className="form-select" onChange={handleUnit}>
                           <option>g</option>
                           <option>Kg</option>
                           <option>Items</option>
@@ -311,11 +321,10 @@ const deleteCustomer = (id: number) => {
                                                                         {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
                                                                         {isEditing ? (<button type="button" onClick={() => {
                                                                             onUpdate();
-                                                                        }} className="btn btn-primary">Update the Customer</button>) : (
-                                                                            <button type="submit" className="btn btn-primary" onClick={() => {
-                                                                                submitItem();
-                                                                            }}>Add New
-                                                                                Customer</button>)}
+                                                                        }} className="btn btn-primary">Update the Item</button>) : (
+                                                                            <button type="submit" className="btn btn-primary"
+                                                                            >Add New
+                                                                                Item</button>)}
                     
                                                                         {/*this is conditional reading.div show only if alert is not null*/}
                                                                         {alert && (
