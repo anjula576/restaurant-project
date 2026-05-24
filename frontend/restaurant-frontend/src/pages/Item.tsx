@@ -68,30 +68,125 @@ function Item() {
      { title: "Purchase Price", property:"purchaseprice"},
 ]
 
-useEffect(() => {
-  fetch("http://localhost:8080/api/suppliers")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data); // Log the fetched data to the console
-      setSuppliers(data); // Update the state with the fetched suppliers
-    })
-    .catch((error) => {
-      console.error("Error fetching suppliers:", error);
-    });
+// use state for validate the form fields when add new item or edit the item
+const [itemNamevalid, setItemNameValid] = useState<boolean | null>(null);
+const [availableQtyValid, setAvailableQtyValid] = useState<boolean | null>(null);
+const [totalQtyValid, setTotalQtyValid] = useState<boolean | null>(null);
+const [purchasePriceValid, setPurchasePriceValid] = useState<boolean | null>(null);
+const [supplierValid, setSupplierValid] = useState<boolean | null>(null);
+const [unitValid, setUnitValid] = useState<boolean | null>(null);
 
+// regex pattern for validate the form fields
+
+const itemNamePattern =/^[A-Za-z\s]{3,15}$/;
+const AvailableQtyPattern =/^[0-9]+$/;
+const TotalQtyPattern =/^[0-9]+$/;
+const PurchasePricePattern =/^[0-9]+(\.[0-9]{1,2})?$/;
+
+
+const loadSuppliers = () => {
+
+    fetch("http://localhost:8080/api/suppliers")
+        .then((response) => response.json())
+        .then((data) => {
+            setSuppliers(data);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+}
+
+const loadItems = () => {
 
     fetch("http://localhost:8080/api/items")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data); // Log the fetched data to the console
-      setItems(data); // Update the state with the fetched items
-    })
-    .catch((error) => {
-      console.error("Error fetching items:", error);
-    });
-  // Add your effect logic here
-}, []);
+        .then((response) => response.json())
+        .then((data) => {
+            setItems(data);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 
+}
+
+// function for validate the form fields when add new item or edit the item
+
+const validateItemName = (e:any) => {
+  const itemName = e.target.value;
+
+  if(itemName==""){
+    setItemNameValid(false);
+    return;
+  }
+
+  return itemNamePattern.test(itemName);
+
+}
+
+const validateAvailableQty = (e:any) => {
+
+  const availableQty = e.target.value;
+
+  if(availableQty==""){
+    setAvailableQtyValid(false);
+    return;
+  }
+
+  return AvailableQtyPattern.test(availableQty);
+
+}
+
+const validateTotalQty = (e:any) => {
+
+  const totalQty = e.target.value;
+
+  if(totalQty==""){
+    setTotalQtyValid(false);
+    return;
+  }
+
+  return TotalQtyPattern.test(totalQty);
+
+}
+
+const validatePurchasePrice = (e:any) => {
+
+  const purchasePrice = e.target.value;
+
+  if(purchasePrice==""){
+    setPurchasePriceValid(false);
+    return;
+  }
+
+  return PurchasePricePattern.test(purchasePrice);
+
+}
+
+
+const validateSupplier = (e:any) => {
+
+  const supplier = e.target.value;
+  if(supplier==""){
+    setSupplierValid(false);
+    return;
+  }
+
+  // there is no need to validate the supplier because we are getting the supplier list from the database and we are showing it in the dropdown. so the user can only select the supplier from the dropdown. so there is no need to validate the supplier.
+  return true;
+}
+
+
+const validateUnit = (e:any) => {
+
+  const unit = e.target.value;
+
+  if(unit==""){
+    setUnitValid(false);
+    return;
+  }
+  return true;
+}
 //function for edit items
 const handleEdit = (row: Item) => {
   console.log("Edit item with ID:", row.id);
@@ -111,7 +206,6 @@ const handleSupplier =(e:any)=>{
 const itemNameHandle =(e:any)=>{
 
   setItem({...item, itemname: e.target.value});
-
 
 }
 
@@ -140,32 +234,85 @@ const handleUnit =(e:any)=>{
 setItem({...item, unit: e.target.value});
 
 }
+
+
+const handleErrors =()=>{
+  let errors =[];
+
+  //push the error messages to the errors array if the form fields are not valid
+   if(supplierValid===false){
+    errors.push("Supplier is required");
+  }
+  if(itemNamevalid===false){
+    errors.push("Item Name is required and should not contain any special characters");
+  }
+  if(availableQtyValid===false){
+    errors.push("Available Quantity is required and should be a positive number");
+  }
+  if(totalQtyValid===false){
+    errors.push("Total Quantity is required and should be a positive number");
+  }
+  if(purchasePriceValid===false){
+    errors.push("Purchase Price is required and should be a positive number");
+  }
+  if(unitValid===false){
+    errors.push("Unit is required");
+  }
+
+  // if there are any errors, set the alert state to show the error message
+  // in here we are joining the errors array to show all the error messages in one alert. you can also show the error messages in separate alerts if you want.
+  if(errors.length > 0){
+    setAlert({ type: "error", message: errors.join("\n ") });
+
+    //this here is used to destroy the alert after 3 seconds
+    setTimeout(() => {
+      setAlert(null);
+    }, 3000);
+    
+    return true; // errors exist
+  }
+  return false; // no errors
+}
+
 const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {  
 
+// Prevent the default form submission behavior
+  e.preventDefault(); 
 
-  e.preventDefault(); // Prevent the default form submission behavior
-  console.log("item submit button pressed");
+  const hasErrors = handleErrors();
+
+  // if there are any errors, return from the function to prevent the form submission
+  if (hasErrors) {
+    return;
+  }
   
   try{
     // your submit logic here, such as sending a POST request to the server with the form data
     // if the submission is successful, you can set the alert state to show a success message
 
     const backendResponse =  await axios.post("http://localhost:8080/api/items", item);
-    console.log("item"+item);
-    console.log(backendResponse.data);
+  
 
     if(backendResponse.data =="ok"){
  
        setAlert({ type: "success", message: "Item submitted successfully!" });
 
-       console.log("item 2"+item);
-    console.log(backendResponse.data);
+      //  destroy the alert after 3 seconds
+       setTimeout(() => {
+        setAlert(null);
+       }, 3000);
+
+     
     }
    
   }catch(error){
-    console.log("item wasn't save.this is an error");
-    console.error("Error submitting item:", error);
+  
     setAlert({ type: "error", message: "Failed to submit item. Please try again." });
+
+     //  destroy the alert after 3 seconds
+       setTimeout(() => {
+        setAlert(null);
+       }, 3000);
 
   }
 } 
@@ -179,6 +326,12 @@ const deleteCustomer = (id: number) => {
   console.log("Delete item with ID:", id);
   // Implement your delete logic here, such as showing a confirmation dialog and making an API call to delete the item
 }
+
+
+useEffect(() => {
+  loadSuppliers();
+  loadItems();
+}, []);
 
   return (
     <>
@@ -213,7 +366,7 @@ const deleteCustomer = (id: number) => {
                         <label htmlFor="selectSupplier" className="form-label">
                           Supplier` Name
                         </label>
-                        <select className="form-select" id="selectSupplier" onChange={handleSupplier}>
+                        <select className="form-select" id="selectSupplier" name="supplier" onChange={handleSupplier} onBlur={validateSupplier}>
                           <option value="">Select Supplier</option>
 
                           {/* create options for each supplier */}
@@ -233,7 +386,7 @@ const deleteCustomer = (id: number) => {
                         <input
                           type="text"
                           className="form-control"
-                          name="itemname" onChange={itemNameHandle}
+                          name="itemname" onChange={itemNameHandle} onBlur={validateItemName}
                           //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
                           // Backticks are used for template literals.
                           //to use template literals in JavaScript for embedding variables, expressions, or writing multi-line strings.
@@ -250,14 +403,14 @@ const deleteCustomer = (id: number) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control" onChange={totalQtyHandle}
+                          className="form-control" onChange={totalQtyHandle} onBlur={validateTotalQty}
                           /* in here use onblur*/
                           /*When you type the 10th digit, your state may still not have
                                                     updated in time (React state updates are async), so the regex test happens with 9 digits.
                                                      Then when you type the 11th, it finally has the full 10 digits.*/
                           /*Validate on blur (when user leaves the field)*/
 
-                          name="totalquantity"
+                          name="totalqty"
                           id="txTotalQty"
                         />
                       </div>
@@ -269,8 +422,8 @@ const deleteCustomer = (id: number) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control" onChange={availableQtyHandle}
-                          name="itemqty"  
+                          className="form-control" onChange={availableQtyHandle} onBlur={validateAvailableQty}
+                          name="availableqty"  
                           id="txtAvailableQty"
                         />
                       </div>
@@ -284,7 +437,7 @@ const deleteCustomer = (id: number) => {
                         <label htmlFor="selectUnit" className="form-label">
                           Unit
                         </label>
-                        <select className="form-select" onChange={handleUnit}>
+                        <select className="form-select" name="unit" onChange={handleUnit} onBlur={validateUnit} id="selectUnit">
                           <option>g</option>
                           <option>Kg</option>
                           <option>Items</option>
@@ -307,7 +460,7 @@ const deleteCustomer = (id: number) => {
                           className="form-control"
                           name="purchaseprice"
                           id="txtPurchasePrice"
-                          onChange={purchasePriceHandle}
+                          onChange={purchasePriceHandle} onBlur={validatePurchasePrice}
                         />
                       </div>
 
