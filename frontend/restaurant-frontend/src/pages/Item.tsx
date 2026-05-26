@@ -69,12 +69,12 @@ function Item() {
 ]
 
 // use state for validate the form fields when add new item or edit the item
-const [itemNamevalid, setItemNameValid] = useState<boolean | null>(null);
-const [availableQtyValid, setAvailableQtyValid] = useState<boolean | null>(null);
-const [totalQtyValid, setTotalQtyValid] = useState<boolean | null>(null);
-const [purchasePriceValid, setPurchasePriceValid] = useState<boolean | null>(null);
-const [supplierValid, setSupplierValid] = useState<boolean | null>(null);
-const [unitValid, setUnitValid] = useState<boolean | null>(null);
+const [itemNamevalid, setItemNameValid] = useState<boolean | null>(false);
+const [availableQtyValid, setAvailableQtyValid] = useState<boolean | null>(false);
+const [totalQtyValid, setTotalQtyValid] = useState<boolean | null>(false);
+const [purchasePriceValid, setPurchasePriceValid] = useState<boolean | null>(false);
+const [supplierValid, setSupplierValid] = useState<boolean | null>(false);
+const [unitValid, setUnitValid] = useState<boolean | null>(false);
 
 // regex pattern for validate the form fields
 
@@ -241,37 +241,25 @@ const handleErrors =()=>{
 
   //push the error messages to the errors array if the form fields are not valid
    if(supplierValid===false){
-    errors.push("Supplier is required");
+    errors.push("Supplier is required \n");
   }
   if(itemNamevalid===false){
-    errors.push("Item Name is required and should not contain any special characters");
+    errors.push("Item Name is required and should not contain any special characters \n");
   }
   if(availableQtyValid===false){
-    errors.push("Available Quantity is required and should be a positive number");
+    errors.push("Available Quantity is required and should be a positive number \n");
   }
   if(totalQtyValid===false){
-    errors.push("Total Quantity is required and should be a positive number");
+    errors.push("Total Quantity is required and should be a positive number \n");
   }
   if(purchasePriceValid===false){
-    errors.push("Purchase Price is required and should be a positive number");
+    errors.push("Purchase Price is required and should be a positive number \n");
   }
   if(unitValid===false){
-    errors.push("Unit is required");
+    errors.push("Unit is required \n");
   }
 
-  // if there are any errors, set the alert state to show the error message
-  // in here we are joining the errors array to show all the error messages in one alert. you can also show the error messages in separate alerts if you want.
-  if(errors.length > 0){
-    setAlert({ type: "error", message: errors.join("\n ") });
-
-    //this here is used to destroy the alert after 3 seconds
-    setTimeout(() => {
-      setAlert(null);
-    }, 3000);
-    
-    return true; // errors exist
-  }
-  return false; // no errors
+  return errors;
 }
 
 const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {  
@@ -279,10 +267,14 @@ const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {
 // Prevent the default form submission behavior
   e.preventDefault(); 
 
-  const hasErrors = handleErrors();
+  const formErrors = handleErrors();
 
   // if there are any errors, return from the function to prevent the form submission
-  if (hasErrors) {
+  if (formErrors.length > 0) {
+    setAlert({ type: "error", message: formErrors.join("\n ") });
+    setTimeout(() => {
+      setAlert(null);
+    }, 3000);
     return;
   }
   
@@ -438,6 +430,9 @@ useEffect(() => {
                           Unit
                         </label>
                         <select className="form-select" name="unit" onChange={handleUnit} onBlur={validateUnit} id="selectUnit">
+                          <option value="" selected>
+                            Select Unit
+                          </option>
                           <option>g</option>
                           <option>Kg</option>
                           <option>Items</option>
