@@ -13,6 +13,7 @@ interface Supplier {
 }
 
 interface Item {
+  suppliers: any;
   id: number;
   itemname: string;
   availableqty: number;
@@ -191,6 +192,19 @@ const validateUnit = (e:any) => {
 const handleEdit = (row: Item) => {
   console.log("Edit item with ID:", row.id);
   //   your edit logic here, such as opening a modal with the item details
+
+  setIsEditing(true);
+  setItem({
+    id: row.id,
+    itemname: row.itemname,
+    availableqty: row.availableqty.toString(),
+    totalqty: row.totalqty.toString(),
+    unit: row.unit,
+    purchaseprice: row.purchaseprice.toString(),
+    suppliers: row.suppliers.map((supplier: { id: { toString: () => any; }; }) => ({
+   id: supplier.id.toString()
+})), // You may want to set this to the correct supplier(s) if available
+  });
 }
 
 const handleSupplier =(e:any)=>{
@@ -311,6 +325,8 @@ const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {
 
 //function for update items
 const onUpdate = () => {
+
+
 }
 
 // function for delete items
@@ -358,7 +374,7 @@ useEffect(() => {
                         <label htmlFor="selectSupplier" className="form-label">
                           Supplier` Name
                         </label>
-                        <select className="form-select" id="selectSupplier" name="supplier" onChange={handleSupplier} onBlur={validateSupplier}>
+                        <select className="form-select"  id="selectSupplier" value={item.suppliers[0]?.id || ""} name="supplier" onChange={handleSupplier} onBlur={validateSupplier}>
                           <option value="">Select Supplier</option>
 
                           {/* create options for each supplier */}
@@ -377,7 +393,7 @@ useEffect(() => {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control" value={item.itemname}
                           name="itemname" onChange={itemNameHandle} onBlur={validateItemName}
                           //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
                           // Backticks are used for template literals.
@@ -395,7 +411,7 @@ useEffect(() => {
                         </label>
                         <input
                           type="text"
-                          className="form-control" onChange={totalQtyHandle} onBlur={validateTotalQty}
+                          className="form-control" value={item.totalqty} onChange={totalQtyHandle} onBlur={validateTotalQty}
                           /* in here use onblur*/
                           /*When you type the 10th digit, your state may still not have
                                                     updated in time (React state updates are async), so the regex test happens with 9 digits.
@@ -414,7 +430,7 @@ useEffect(() => {
                         </label>
                         <input
                           type="text"
-                          className="form-control" onChange={availableQtyHandle} onBlur={validateAvailableQty}
+                          className="form-control" onChange={availableQtyHandle} value={item.availableqty} onBlur={validateAvailableQty}
                           name="availableqty"  
                           id="txtAvailableQty"
                         />
@@ -429,7 +445,7 @@ useEffect(() => {
                         <label htmlFor="selectUnit" className="form-label">
                           Unit
                         </label>
-                        <select className="form-select" name="unit" onChange={handleUnit} onBlur={validateUnit} id="selectUnit">
+                        <select className="form-select" name="unit" value={item.unit} onChange={handleUnit} onBlur={validateUnit} id="selectUnit">
                           <option value="" selected>
                             Select Unit
                           </option>
@@ -455,7 +471,7 @@ useEffect(() => {
                           className="form-control"
                           name="purchaseprice"
                           id="txtPurchasePrice"
-                          onChange={purchasePriceHandle} onBlur={validatePurchasePrice}
+                          onChange={purchasePriceHandle} value={item.purchaseprice} onBlur={validatePurchasePrice}
                         />
                       </div>
 
