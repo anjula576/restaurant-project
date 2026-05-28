@@ -3,6 +3,8 @@ import AlertTitle from "@mui/material/AlertTitle";
 import DataTable from "../components/DataTable.tsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
 interface Supplier {
   id: number;
@@ -13,7 +15,7 @@ interface Supplier {
 }
 
 interface Item {
-  suppliers: any;
+  suppliers: Supplier[];
   id: number;
   itemname: string;
   availableqty: number;
@@ -37,309 +39,322 @@ function Item() {
   const [isEditing, setIsEditing] = useState(false);
 
   // this is used to store the form data when add new customer or edit the customer
-      //  speciality in here is mentied the initial values of the form fields in the useState function
-      const [item, setItem] = useState<{
-          id: number | null;
-          itemname: string;
-          availableqty: string;
-          totalqty: string;
-          unit:string;
-          purchaseprice: string;
-// this is used to store the suppliers list when add new item or edit the item
-// when add new item or edit the item we need to show the suppliers list in the dropdown. so we need to store the suppliers list in the state
-          suppliers:{
-            id:string;
-          }[];
-      }>({
-          id:null,
-          itemname: "",
-          availableqty: "",
-          totalqty: "",
-          unit: "",
-          purchaseprice: "",
+  //  speciality in here is mentied the initial values of the form fields in the useState function
+  const [item, setItem] = useState<{
+    id: number | null;
+    itemname: string;
+    availableqty: string;
+    totalqty: string;
+    unit: string;
+    purchaseprice: string;
+    // this is used to store the suppliers list when add new item or edit the item
+    // when add new item or edit the item we need to show the suppliers list in the dropdown. so we need to store the suppliers list in the state
+    suppliers: {
+      id: string;
+    }[];
+  }>({
+    id: null,
+    itemname: "",
+    availableqty: "",
+    totalqty: "",
+    unit: "",
+    purchaseprice: "",
 
-          suppliers:[],
-      })
+    suppliers: [],
+  });
 
   const columns = [
-    { title: "Item Name", property:"itemname"},
-     { title: "Available Qty", property:"availableqty"},
-     { title: "Total Qty", property:"totalqty"},
-     { title: "Unit", property:"unit"},
-     { title: "Purchase Price", property:"purchaseprice"},
-]
+    { title: "Item Name", property: "itemname" },
+    { title: "Available Qty", property: "availableqty" },
+    { title: "Total Qty", property: "totalqty" },
+    { title: "Unit", property: "unit" },
+    { title: "Purchase Price", property: "purchaseprice" },
+  ];
 
-// use state for validate the form fields when add new item or edit the item
-const [itemNamevalid, setItemNameValid] = useState<boolean | null>(false);
-const [availableQtyValid, setAvailableQtyValid] = useState<boolean | null>(false);
-const [totalQtyValid, setTotalQtyValid] = useState<boolean | null>(false);
-const [purchasePriceValid, setPurchasePriceValid] = useState<boolean | null>(false);
-const [supplierValid, setSupplierValid] = useState<boolean | null>(false);
-const [unitValid, setUnitValid] = useState<boolean | null>(false);
+  // use state for validate the form fields when add new item or edit the item
+  const [itemNamevalid, setItemNameValid] = useState<boolean | null>(false);
+  const [availableQtyValid, setAvailableQtyValid] = useState<boolean | null>(
+    false,
+  );
+  const [totalQtyValid, setTotalQtyValid] = useState<boolean | null>(false);
+  const [purchasePriceValid, setPurchasePriceValid] = useState<boolean | null>(
+    false,
+  );
+  const [supplierValid, setSupplierValid] = useState<boolean | null>(false);
+  const [unitValid, setUnitValid] = useState<boolean | null>(false);
 
-// regex pattern for validate the form fields
+  // regex pattern for validate the form fields
 
-const itemNamePattern =/^[A-Za-z\s]{3,15}$/;
-const AvailableQtyPattern =/^[0-9]+$/;
-const TotalQtyPattern =/^[0-9]+$/;
-const PurchasePricePattern =/^[0-9]+(\.[0-9]{1,2})?$/;
+  const itemNamePattern = /^[A-Za-z\s]{3,15}$/;
+  const AvailableQtyPattern = /^[0-9]+$/;
+  const TotalQtyPattern = /^[0-9]+$/;
+  const PurchasePricePattern = /^[0-9]+(\.[0-9]{1,2})?$/;
 
-
-const loadSuppliers = () => {
-
+  const loadSuppliers = () => {
     fetch("http://localhost:8080/api/suppliers")
-        .then((response) => response.json())
-        .then((data) => {
-            setSuppliers(data);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+      .then((response) => response.json())
+      .then((data) => {
+        setSuppliers(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-}
-
-const loadItems = () => {
-
+  const loadItems = () => {
     fetch("http://localhost:8080/api/items")
-        .then((response) => response.json())
-        .then((data) => {
-            setItems(data);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+      .then((response) => response.json())
+      .then((data) => {
+        setItems(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-}
+  // function for validate the form fields when add new item or edit the item
 
-// function for validate the form fields when add new item or edit the item
+  const validateItemName = (e: any) => {
+    const itemName = e.target.value;
 
-const validateItemName = (e:any) => {
-  const itemName = e.target.value;
+    if (itemName == "" || !itemNamePattern.test(itemName)) {
+      setItemNameValid(false);
+      return;
+    }
 
-  if(itemName==""){
-    setItemNameValid(false);
+    setItemNameValid(true);
+    return ;
+  };
+
+  const validateAvailableQty = (e: any) => {
+    const availableQty = e.target.value;
+    console.log("validat available qty");
+    
+
+    if (availableQty == "" || !AvailableQtyPattern.test(availableQty)) {
+      setAvailableQtyValid(false);
+      return;
+    }
+
+    setAvailableQtyValid(true);
+    return ;
+  };
+
+  const validateTotalQty = (e: any) => {
+    const totalQty = e.target.value;
+
+    if (totalQty == "" || !TotalQtyPattern.test(totalQty)) {
+      setTotalQtyValid(false);
+      return;
+    }
+
+    setTotalQtyValid(true);
     return;
-  }
+  };
 
-  return itemNamePattern.test(itemName);
+  const validatePurchasePrice = (e: any) => {
+    const purchasePrice = e.target.value;
 
-}
+    if (purchasePrice == "" || !PurchasePricePattern.test(purchasePrice)) {
+      setPurchasePriceValid(false);
+      return;
+    }
 
-const validateAvailableQty = (e:any) => {
-
-  const availableQty = e.target.value;
-
-  if(availableQty==""){
-    setAvailableQtyValid(false);
+    setPurchasePriceValid(true);
     return;
-  }
+  };
 
-  return AvailableQtyPattern.test(availableQty);
+  const validateSupplier = (selectedOptions: any) => {
 
-}
+  if (!selectedOptions || selectedOptions.length === 0) {
 
-const validateTotalQty = (e:any) => {
-
-  const totalQty = e.target.value;
-
-  if(totalQty==""){
-    setTotalQtyValid(false);
-    return;
-  }
-
-  return TotalQtyPattern.test(totalQty);
-
-}
-
-const validatePurchasePrice = (e:any) => {
-
-  const purchasePrice = e.target.value;
-
-  if(purchasePrice==""){
-    setPurchasePriceValid(false);
-    return;
-  }
-
-  return PurchasePricePattern.test(purchasePrice);
-
-}
-
-
-const validateSupplier = (e:any) => {
-
-  const supplier = e.target.value;
-  if(supplier==""){
     setSupplierValid(false);
     return;
+
   }
 
-  // there is no need to validate the supplier because we are getting the supplier list from the database and we are showing it in the dropdown. so the user can only select the supplier from the dropdown. so there is no need to validate the supplier.
-  return true;
+  setSupplierValid(true);
+  return;
+
 }
 
+  const validateUnit = (e: any) => {
+    const unit = e.target.value;
 
-const validateUnit = (e:any) => {
-
-  const unit = e.target.value;
-
-  if(unit==""){
-    setUnitValid(false);
+    if (unit == "" ) {
+      setUnitValid(false);
+      return;
+    }
+    setUnitValid(true);
     return;
-  }
-  return true;
-}
-//function for edit items
-const handleEdit = (row: Item) => {
-  console.log("Edit item with ID:", row.id);
-  //   your edit logic here, such as opening a modal with the item details
+  };
+  //function for edit items
+  const handleEdit = (row: Item) => {
+    console.log("Edit item with ID:", row.id);
+    //   your edit logic here, such as opening a modal with the item details
 
-  setIsEditing(true);
-  setItem({
-    id: row.id,
-    itemname: row.itemname,
-    availableqty: row.availableqty.toString(),
-    totalqty: row.totalqty.toString(),
-    unit: row.unit,
-    purchaseprice: row.purchaseprice.toString(),
-    suppliers: row.suppliers.map((supplier: { id: { toString: () => any; }; }) => ({
-   id: supplier.id.toString()
-})), // You may want to set this to the correct supplier(s) if available
-  });
-}
+    setIsEditing(true);
+    setItem({
+      id: row.id,
+      itemname: row.itemname,
+      availableqty: row.availableqty.toString(),
+      totalqty: row.totalqty.toString(),
+      unit: row.unit,
+      purchaseprice: row.purchaseprice.toString(),
+      suppliers: row.suppliers.map(
+        (supplier: { id: { toString: () => any } }) => ({
+          id: supplier.id.toString(),
+        }),
+      ), // You may want to set this to the correct supplier(s) if available
+    });
+  };
 
-const handleSupplier =(e:any)=>{
+  const handleSupplier = (e: any) => {
+    const { name, value } = e.target;
+    if (suppliers) {
+      setItem({ ...item, suppliers: [{ id: value }] });
+    }
+  };
 
-  const {name,value} = e.target;
-  if (suppliers) {
-    setItem({ ...item, suppliers: [{ id: value }] });
-  }
+  //function for handle the change of the form fields when add new customer or edit the customer
+  const itemNameHandle = (e: any) => {
+    setItem({ ...item, itemname: e.target.value });
+    console.log("item name field"+item.suppliers);
+    
+  };
 
-}
+  const availableQtyHandle = (e: any) => {
+    setItem({ ...item, availableqty: e.target.value });
+    console.log("available qty"+item.availableqty);
+    console.log(item);
+    
+  };
 
-//function for handle the change of the form fields when add new customer or edit the customer
-const itemNameHandle =(e:any)=>{
+  const totalQtyHandle = (e: any) => {
+    setItem({ ...item, totalqty: e.target.value });
+  };
 
-  setItem({...item, itemname: e.target.value});
+  const purchasePriceHandle = (e: any) => {
+    setItem({ ...item, purchaseprice: e.target.value });
+  };
 
-}
+  const handleUnit = (e: any) => {
+    setItem({ ...item, unit: e.target.value });
+  };
 
-const availableQtyHandle =(e:any)=>{
+  const handleErrors = () => {
+    let errors = [];
 
-  setItem({...item, availableqty: e.target.value});
+    //push the error messages to the errors array if the form fields are not valid
+    if (supplierValid === false) {
+      errors.push("Supplier is required \n");
+    }
+    if (itemNamevalid === false) {
+      errors.push(
+        "Item Name is required and should not contain any special characters \n",
+      );
+    }
+    if (availableQtyValid === false) {
+      errors.push(
+        "Available Quantity is required and should be a positive number \n",
+      );
+    }
+    if (totalQtyValid === false) {
+      errors.push(
+        "Total Quantity is required and should be a positive number \n",
+      );
+    }
+    if (purchasePriceValid === false) {
+      errors.push(
+        "Purchase Price is required and should be a positive number \n",
+      );
+    }
+    if (unitValid === false) {
+      errors.push("Unit is required \n");
+    }
 
-}
+    return errors;
+  };
 
-const totalQtyHandle =(e:any)=>{
+  const supplierOptions = (suppliers ?? []).map((s) => ({
+    value: s.id,
+    label: s.name,
+  }));
 
-  setItem({...item, totalqty: e.target.value});
-
-
-}
-
-const purchasePriceHandle =(e:any)=>{
-
-  setItem({...item, purchaseprice: e.target.value});
-
-}
-
-
-const handleUnit =(e:any)=>{
-
-setItem({...item, unit: e.target.value});
-
-}
+// this is used to convert the suppliers list from the database to the format
+// that is required by the react-select component (react-select got from the external library)
+const payload = {
+  ...item,
+  suppliers: item.suppliers.map(id => ({ id }))
+};
 
 
-const handleErrors =()=>{
-  let errors =[];
+  const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Prevent the default form submission behavior
+    e.preventDefault();
 
-  //push the error messages to the errors array if the form fields are not valid
-   if(supplierValid===false){
-    errors.push("Supplier is required \n");
-  }
-  if(itemNamevalid===false){
-    errors.push("Item Name is required and should not contain any special characters \n");
-  }
-  if(availableQtyValid===false){
-    errors.push("Available Quantity is required and should be a positive number \n");
-  }
-  if(totalQtyValid===false){
-    errors.push("Total Quantity is required and should be a positive number \n");
-  }
-  if(purchasePriceValid===false){
-    errors.push("Purchase Price is required and should be a positive number \n");
-  }
-  if(unitValid===false){
-    errors.push("Unit is required \n");
-  }
+    const formErrors = handleErrors();
 
-  return errors;
-}
+    console.log("item"+item);
+    console.log("payload"+payload);
+    console.log(itemNamevalid,supplierValid,availableQtyValid,totalQtyValid,unitValid,purchasePriceValid);
+    
 
-const submitItem = async (e: React.FormEvent<HTMLFormElement>) => {  
-
-// Prevent the default form submission behavior
-  e.preventDefault(); 
-
-  const formErrors = handleErrors();
-
-  // if there are any errors, return from the function to prevent the form submission
-  if (formErrors.length > 0) {
-    setAlert({ type: "error", message: formErrors.join("\n ") });
-    setTimeout(() => {
-      setAlert(null);
-    }, 3000);
-    return;
-  }
-  
-  try{
-    // your submit logic here, such as sending a POST request to the server with the form data
-    // if the submission is successful, you can set the alert state to show a success message
-
-    const backendResponse =  await axios.post("http://localhost:8080/api/items", item);
-  
-
-    if(backendResponse.data =="ok"){
- 
-       setAlert({ type: "success", message: "Item submitted successfully!" });
-
-      //  destroy the alert after 3 seconds
-       setTimeout(() => {
+    // if there are any errors, return from the function to prevent the form submission
+    if (formErrors.length > 0) {
+       console.log("Error part");
+      setAlert({ type: "error", message: formErrors.join("\n ") });
+      setTimeout(() => {
         setAlert(null);
-       }, 3000);
+      }, 9000);
+      return;
+    }
+
+    try {
+      // your submit logic here, such as sending a POST request to the server with the form data
+      // if the submission is successful, you can set the alert state to show a success message
 
      
-    }
-   
-  }catch(error){
-  
-    setAlert({ type: "error", message: "Failed to submit item. Please try again." });
+      
+      const backendResponse = await axios.post(
+        "http://localhost:8080/api/items",
+        payload,
+      );
 
-     //  destroy the alert after 3 seconds
-       setTimeout(() => {
+      if (backendResponse.data == "ok") {
+        setAlert({ type: "success", message: "Item submitted successfully!" });
+
+        //  destroy the alert after 3 seconds
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+      }
+    } catch (error) {
+      setAlert({
+        type: "error",
+        message: "Failed to submit item. Please try again.",
+      });
+
+      //  destroy the alert after 3 seconds
+      setTimeout(() => {
         setAlert(null);
-       }, 3000);
+      }, 3000);
+    }
+  };
 
-  }
-} 
+  //function for update items
+  const onUpdate = () => {};
 
-//function for update items
-const onUpdate = () => {
+  // function for delete items
+  const deleteCustomer = (id: number) => {
+    console.log("Delete item with ID:", id);
+    // Implement your delete logic here, such as showing a confirmation dialog and making an API call to delete the item
+  };
 
-
-}
-
-// function for delete items
-const deleteCustomer = (id: number) => {
-  console.log("Delete item with ID:", id);
-  // Implement your delete logic here, such as showing a confirmation dialog and making an API call to delete the item
-}
-
-
-useEffect(() => {
-  loadSuppliers();
-  loadItems();
-}, []);
+  useEffect(() => {
+    loadSuppliers();
+    loadItems();
+  }, []);
 
   return (
     <>
@@ -374,16 +389,27 @@ useEffect(() => {
                         <label htmlFor="selectSupplier" className="form-label">
                           Supplier` Name
                         </label>
-                        <select className="form-select"  id="selectSupplier" value={item.suppliers[0]?.id || ""} name="supplier" onChange={handleSupplier} onBlur={validateSupplier}>
-                          <option value="">Select Supplier</option>
-
-                          {/* create options for each supplier */}
-                          {suppliers?.map((supplier) => (
-                            <option key={supplier.id} value={supplier.id}>
-                              {supplier.name}
-                            </option>
-                          ))}
-                        </select>
+                        <Select
+                          isMulti
+                        
+                          id="selectSupplier"
+                          name="supplier"
+                          options={supplierOptions}
+                          onChange={(selectedOptions) => {
+                            setItem({
+                              ...item,
+                              suppliers: selectedOptions.map((opt) => ({
+                                id: opt.value.toString(),
+                              })),
+                            });
+                          }}
+                          onBlur={validateSupplier}
+                          value={supplierOptions.filter((option) =>
+                            item.suppliers.some(
+                              (s) => s.id === option.value.toString(),
+                            ),
+                          )}
+                        />
                       </div>
 
                       {/*item name*/}
@@ -393,8 +419,11 @@ useEffect(() => {
                         </label>
                         <input
                           type="text"
-                          className="form-control" value={item.itemname}
-                          name="itemname" onChange={itemNameHandle} onBlur={validateItemName}
+                          className="form-control"
+                          value={item.itemname}
+                          name="itemname"
+                          onChange={itemNameHandle}
+                          onBlur={validateItemName}
                           //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
                           // Backticks are used for template literals.
                           //to use template literals in JavaScript for embedding variables, expressions, or writing multi-line strings.
@@ -406,12 +435,15 @@ useEffect(() => {
 
                       {/*total qty*/}
                       <div className="col-lg-2 col-12">
-                        <label htmlFor="txTotalQty" className="form-label" >
+                        <label htmlFor="txTotalQty" className="form-label">
                           Total Quantity
                         </label>
                         <input
                           type="text"
-                          className="form-control" value={item.totalqty} onChange={totalQtyHandle} onBlur={validateTotalQty}
+                          className="form-control"
+                          value={item.totalqty}
+                          onChange={totalQtyHandle}
+                          onBlur={validateTotalQty}
                           /* in here use onblur*/
                           /*When you type the 10th digit, your state may still not have
                                                     updated in time (React state updates are async), so the regex test happens with 9 digits.
@@ -425,13 +457,16 @@ useEffect(() => {
 
                       {/*available qty*/}
                       <div className="col-lg-2 col-12">
-                        <label htmlFor="txtAvailableQty" className="form-label" >
+                        <label htmlFor="txtAvailableQty" className="form-label">
                           Available Quantity
                         </label>
                         <input
                           type="text"
-                          className="form-control" onChange={availableQtyHandle} value={item.availableqty} onBlur={validateAvailableQty}
-                          name="availableqty"  
+                          className="form-control"
+                          onChange={availableQtyHandle}
+                          value={item.availableqty}
+                          onBlur={validateAvailableQty}
+                          name="availableqty"
                           id="txtAvailableQty"
                         />
                       </div>
@@ -445,7 +480,14 @@ useEffect(() => {
                         <label htmlFor="selectUnit" className="form-label">
                           Unit
                         </label>
-                        <select className="form-select" name="unit" value={item.unit} onChange={handleUnit} onBlur={validateUnit} id="selectUnit">
+                        <select
+                          className="form-select"
+                          name="unit"
+                          value={item.unit}
+                          onChange={handleUnit}
+                          onBlur={validateUnit}
+                          id="selectUnit"
+                        >
                           <option value="" selected>
                             Select Unit
                           </option>
@@ -471,42 +513,56 @@ useEffect(() => {
                           className="form-control"
                           name="purchaseprice"
                           id="txtPurchasePrice"
-                          onChange={purchasePriceHandle} value={item.purchaseprice} onBlur={validatePurchasePrice}
+                          onChange={purchasePriceHandle}
+                          value={item.purchaseprice}
+                          onBlur={validatePurchasePrice}
                         />
                       </div>
-
-                
                     </div>
-                    
 
                     <br />
-                     <div className="row">
-                    
-                                                                        {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
-                                                                        {isEditing ? (<button type="button" onClick={() => {
-                                                                            onUpdate();
-                                                                        }} className="btn btn-primary">Update the Item</button>) : (
-                                                                            <button type="submit" className="btn btn-primary"
-                                                                            >Add New
-                                                                                Item</button>)}
-                    
-                                                                        {/*this is conditional reading.div show only if alert is not null*/}
-                                                                        {alert && (
-                                                                            //  this div style is used to change the position of the alert
-                                                                            <div className="col-4" style={{
-                                                                                position: "fixed",
-                                                                                top: "20px",
-                                                                                right: "20px",
-                                                                                zIndex: 9999,
-                                                                                minWidth: "300px"
-                                                                            }}>
-                                                                                <Alert variant="filled" severity={alert.type} onClose={() => setAlert(null)}>
-                                                                                    <AlertTitle>Success</AlertTitle>
-                                                                                    {alert.message}
-                                                                                </Alert>
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
+                    <div className="row">
+                      {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
+                      {isEditing ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onUpdate();
+                          }}
+                          className="btn btn-primary"
+                        >
+                          Update the Item
+                        </button>
+                      ) : (
+                        <button type="submit" className="btn btn-primary">
+                          Add New Item
+                        </button>
+                      )}
+
+                      {/*this is conditional reading.div show only if alert is not null*/}
+                      {alert && (
+                        //  this div style is used to change the position of the alert
+                        <div
+                          className="col-4"
+                          style={{
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999,
+                            minWidth: "300px",
+                          }}
+                        >
+                          <Alert
+                            variant="filled"
+                            severity={alert.type}
+                            onClose={() => setAlert(null)}
+                          >
+                            <AlertTitle>Success</AlertTitle>
+                            {alert.message}
+                          </Alert>
+                        </div>
+                      )}
+                    </div>
                   </form>
                 </div>
               </div>
@@ -532,8 +588,13 @@ useEffect(() => {
                   {/*use key when need to update a component when change the count*/}
                   {/* in here when change the customer count automatically unmount the datatable component
                                         and remount.this is an easier way to update component when list an list updates*/}
-                  <DataTable key={items.length} columns={columns} data={items}
-                            onEdit={(row) => handleEdit(row)} onDelete={(id)=>deleteCustomer(id)}/>
+                  <DataTable
+                    key={items.length}
+                    columns={columns}
+                    data={items}
+                    onEdit={(row) => handleEdit(row)}
+                    onDelete={(id) => deleteCustomer(id)}
+                  />
                 </div>
               </div>
             </div>
