@@ -188,25 +188,27 @@ function Item() {
   };
   //function for edit items
   
-  // const handleEdit = (row: Item) => {
-  //   console.log("Edit item with ID:", row.id);
-  //   //   your edit logic here, such as opening a modal with the item details
+ const handleEdit = (row: Item) => {
+  console.log("Edit item:", row);
 
-  //   setIsEditing(true);
-  //   setItem({
-  //     id: row.id,
-  //     itemname: row.itemname,
-  //     availableqty: row.availableqty.toString(),
-  //     totalqty: row.totalqty.toString(),
-  //     unit: row.unit,
-  //     purchaseprice: row.purchaseprice.toString(),
-  //     suppliers: row.suppliers.map(
-  //       (supplier: { id: { toString: () => any } }) => ({
-  //         id: supplier.id.toString(),
-  //       }),
-  //     ), // You may want to set this to the correct supplier(s) if available
-  //   });
-  // };
+  setIsEditing(true);
+
+  setItem({
+    id: row.id,
+    itemname: row.itemname,
+    availableqty: row.availableqty?.toString() || "",
+    totalqty: row.totalqty?.toString() || "",
+    unit: row.unit,
+    purchaseprice: row.purchaseprice?.toString() || "",
+    
+    // in here we need to convert the suppliers list from the database to the 
+    // format that is required by the react-select component (react-select got from the external library)
+
+    suppliers: (row.suppliers || []).map((s: any) =>
+      typeof s === "object" ? s.id : parseInt(s),
+    ),
+  });
+};
 
   // const handleSupplier = (e: any) => {
   //   const { name, value } = e.target;
@@ -215,10 +217,7 @@ function Item() {
   //   }
   // };
 
-  const handleEdit = (row: Item) => {
-  console.log("Edit item with ID:", row.id);
-  setIsEditing(true);
-  }
+  
 
   //function for handle the change of the form fields when add new customer or edit the customer
   const itemNameHandle = (e: any) => {
