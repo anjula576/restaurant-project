@@ -49,9 +49,7 @@ function Item() {
     purchaseprice: string;
     // this is used to store the suppliers list when add new item or edit the item
     // when add new item or edit the item we need to show the suppliers list in the dropdown. so we need to store the suppliers list in the state
-    suppliers: {
-      id: string;
-    }[];
+    suppliers:number[];
   }>({
     id: null,
     itemname: "",
@@ -189,32 +187,38 @@ function Item() {
     return;
   };
   //function for edit items
+  
+  // const handleEdit = (row: Item) => {
+  //   console.log("Edit item with ID:", row.id);
+  //   //   your edit logic here, such as opening a modal with the item details
+
+  //   setIsEditing(true);
+  //   setItem({
+  //     id: row.id,
+  //     itemname: row.itemname,
+  //     availableqty: row.availableqty.toString(),
+  //     totalqty: row.totalqty.toString(),
+  //     unit: row.unit,
+  //     purchaseprice: row.purchaseprice.toString(),
+  //     suppliers: row.suppliers.map(
+  //       (supplier: { id: { toString: () => any } }) => ({
+  //         id: supplier.id.toString(),
+  //       }),
+  //     ), // You may want to set this to the correct supplier(s) if available
+  //   });
+  // };
+
+  // const handleSupplier = (e: any) => {
+  //   const { name, value } = e.target;
+  //   if (suppliers) {
+  //     setItem({ ...item, suppliers: [{ id: value }] });
+  //   }
+  // };
+
   const handleEdit = (row: Item) => {
-    console.log("Edit item with ID:", row.id);
-    //   your edit logic here, such as opening a modal with the item details
-
-    setIsEditing(true);
-    setItem({
-      id: row.id,
-      itemname: row.itemname,
-      availableqty: row.availableqty.toString(),
-      totalqty: row.totalqty.toString(),
-      unit: row.unit,
-      purchaseprice: row.purchaseprice.toString(),
-      suppliers: row.suppliers.map(
-        (supplier: { id: { toString: () => any } }) => ({
-          id: supplier.id.toString(),
-        }),
-      ), // You may want to set this to the correct supplier(s) if available
-    });
-  };
-
-  const handleSupplier = (e: any) => {
-    const { name, value } = e.target;
-    if (suppliers) {
-      setItem({ ...item, suppliers: [{ id: value }] });
-    }
-  };
+  console.log("Edit item with ID:", row.id);
+  setIsEditing(true);
+  }
 
   //function for handle the change of the form fields when add new customer or edit the customer
   const itemNameHandle = (e: any) => {
@@ -395,18 +399,16 @@ const payload = {
                           id="selectSupplier"
                           name="supplier"
                           options={supplierOptions}
-                          onChange={(selectedOptions) => {
-                            setItem({
-                              ...item,
-                              suppliers: selectedOptions.map((opt) => ({
-                                id: opt.value.toString(),
-                              })),
-                            });
-                          }}
+                         onChange={(selectedOptions) => {
+  setItem({
+    ...item,
+    suppliers: selectedOptions.map((opt) => opt.value),
+  });
+}}
                           onBlur={validateSupplier}
                           value={supplierOptions.filter((option) =>
                             item.suppliers.some(
-                              (s) => s.id === option.value.toString(),
+                              (s) => s === option.value,
                             ),
                           )}
                         />
