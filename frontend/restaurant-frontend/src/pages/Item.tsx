@@ -200,7 +200,7 @@ function Item() {
     totalqty: row.totalqty?.toString() || "",
     unit: row.unit,
     purchaseprice: row.purchaseprice?.toString() || "",
-    
+
     // in here we need to convert the suppliers list from the database to the 
     // format that is required by the react-select component (react-select got from the external library)
 
@@ -279,6 +279,9 @@ function Item() {
     return errors;
   };
 
+  // this is used to convert the suppliers list 
+  // from the database to the format that is required by the react-select component 
+  // (react-select got from the external library)
   const supplierOptions = (suppliers ?? []).map((s) => ({
     value: s.id,
     label: s.name,
@@ -399,7 +402,9 @@ const payload = {
                           name="supplier"
                           options={supplierOptions}
                          onChange={(selectedOptions) => {
+                          
   setItem({
+    
     ...item,
     suppliers: selectedOptions.map((opt) => opt.value),
   });
