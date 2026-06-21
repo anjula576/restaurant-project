@@ -114,6 +114,8 @@ function Item() {
 
   const validateItemName = (e: any) => {
     const itemName = e.target.value;
+    console.log("item"+itemName);
+    
 
     if (itemName == "" || !itemNamePattern.test(itemName)) {
       setItemNameValid(false);
@@ -126,7 +128,7 @@ function Item() {
 
   const validateAvailableQty = (e: any) => {
     const availableQty = e.target.value;
-    console.log("validat available qty");
+    console.log("validat available qty"+availableQty);
     
 
     if (availableQty == "" || !AvailableQtyPattern.test(availableQty)) {
@@ -140,6 +142,8 @@ function Item() {
 
   const validateTotalQty = (e: any) => {
     const totalQty = e.target.value;
+    console.log("total"+totalQty);
+    
 
     if (totalQty == "" || !TotalQtyPattern.test(totalQty)) {
       setTotalQtyValid(false);
@@ -152,6 +156,7 @@ function Item() {
 
   const validatePurchasePrice = (e: any) => {
     const purchasePrice = e.target.value;
+    console.log("purchase price"+purchasePrice);
 
     if (purchasePrice == "" || !PurchasePricePattern.test(purchasePrice)) {
       setPurchasePriceValid(false);
@@ -164,6 +169,8 @@ function Item() {
 
   const validateSupplier = (selectedOptions: any) => {
 
+    console.log("supplier"+selectedOptions);
+    
   if (!selectedOptions || selectedOptions.length === 0) {
 
     setSupplierValid(false);
@@ -178,6 +185,9 @@ function Item() {
 
   const validateUnit = (e: any) => {
     const unit = e.target.value;
+
+    console.log("unit"+unit);
+    
 
     if (unit == "" ) {
       setUnitValid(false);
@@ -210,12 +220,6 @@ function Item() {
   });
 };
 
-  // const handleSupplier = (e: any) => {
-  //   const { name, value } = e.target;
-  //   if (suppliers) {
-  //     setItem({ ...item, suppliers: [{ id: value }] });
-  //   }
-  // };
 
   
 
@@ -349,7 +353,60 @@ const payload = {
   };
 
   //function for update items
-  const onUpdate = () => {};
+  const onUpdate = async () => {
+   
+
+    const formErrors = handleErrors();
+
+    console.log("item"+item);
+    console.log("payload"+payload);
+    console.log(itemNamevalid,supplierValid,availableQtyValid,totalQtyValid,unitValid,purchasePriceValid);
+    
+
+    // if there are any errors, return from the function to prevent the form submission
+    if (formErrors.length > 0) {
+       console.log("Error part");
+      setAlert({ type: "error", message: formErrors.join("\n ") });
+      setTimeout(() => {
+        setAlert(null);
+      }, 9000);
+      return;
+    }
+
+    try {
+      // your submit logic here, such as sending a POST request to the server with the form data
+      // if the submission is successful, you can set the alert state to show a success message
+
+     
+      
+      const backendResponse = await axios.put(
+        "http://localhost:8080/api/items",
+        payload,
+      );
+
+      if (backendResponse.data == "ok") {
+        setAlert({ type: "success", message: "Item updated successfully!" });
+
+        //  destroy the alert after 3 seconds
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+      }
+    } catch (error) {
+      setAlert({
+        type: "error",
+        message: "Failed to update item. Please try again.",
+      });
+
+      //  destroy the alert after 3 seconds
+      setTimeout(() => {
+        setAlert(null);
+      }, 3000);
+    }
+
+
+
+  };
 
   // function for delete items
   const deleteCustomer = (id: number) => {
@@ -535,7 +592,7 @@ const payload = {
                           onClick={() => {
                             onUpdate();
                           }}
-                          className="btn btn-primary"
+                          className="btn btn-secondary"
                         >
                           Update the Item
                         </button>
@@ -563,7 +620,7 @@ const payload = {
                             severity={alert.type}
                             onClose={() => setAlert(null)}
                           >
-                            <AlertTitle>Success</AlertTitle>
+                            <AlertTitle>Alert</AlertTitle>
                             {alert.message}
                           </Alert>
                         </div>
