@@ -58,7 +58,7 @@ public class ItemController {
         }
 
         try {
-            if (!itemDao.findById(id).isPresent()) {
+            if (itemDao.findItemById(id) == null) {
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body("Item not found");
@@ -70,8 +70,7 @@ public class ItemController {
         // deleteById method of JpaRepository to delete menu item by id (it is inbuilt
         // function)
         Item existingItem = itemDao.findById(id).orElse(null);
-        // item.setStatus(false); // setting status to false instead of deleting
-        existingItem.setStatus(false);
+
         itemDao.save(existingItem);
 
         // response entity is used to return response with status code
