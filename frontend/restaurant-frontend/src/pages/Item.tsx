@@ -10,6 +10,7 @@ interface Supplier {
   id: number;
   name: string;
   mobileno: number;
+  
   email: string;
   address: string;
 }
@@ -355,8 +356,6 @@ const payload = {
   //function for update items
   const onUpdate = async () => {
    
-
-
     const formErrors = handleErrors();
 
     console.log("item"+item);

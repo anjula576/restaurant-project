@@ -13,12 +13,13 @@ import Order from "./pages/Order.tsx";
 import Reservation from "./pages/Reservation.tsx";
 import Item from "./pages/Item.tsx";
 import Supplier from "./pages/Supplier.tsx";
+import Porder from "./pages/Porder.tsx";
 
 
 function App() {
 
     return (
-
+// 
         <Router>
             <div className="d-flex">
                 <Sidebar/>
@@ -30,7 +31,7 @@ function App() {
                             <Route path={"/customer"} element={<Customer/>}></Route>
                             <Route path={"/order"} element={<Order/>}></Route>
                             <Route path={"/menu"} element={<Menu/>}></Route>
-                            <Route path={"/reservation"} element={<Reservation/>}></Route>
+                            <Route path={"/purchaseorder"} element={<Porder/>}></Route>
                             <Route path={"/item"} element={<Item/>}></Route>
                             <Route path={"/supplier"} element={<Supplier/>}></Route>
                         </Routes>
