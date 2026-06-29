@@ -10,7 +10,7 @@ interface Supplier {
   id: number;
   name: string;
   mobileno: number;
-  
+
   email: string;
   address: string;
 }
@@ -460,12 +460,12 @@ const payload = {
                           options={supplierOptions}
                          onChange={(selectedOptions) => {
                           
-  setItem({
+         setItem({
     
-    ...item,
-    suppliers: selectedOptions.map((opt) => opt.value),
-  });
-}}
+       ...item,
+        suppliers: selectedOptions.map((opt) => opt.value),
+         });
+         }}
                           onBlur={validateSupplier}
                           value={supplierOptions.filter((option) =>
                             item.suppliers.some(
