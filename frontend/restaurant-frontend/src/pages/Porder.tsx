@@ -1,4 +1,10 @@
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
+interface AlertState {
+  type: "success" | "error" | "warning" | "info";
+  message: string;
+}
 
 function Porder(){
 
