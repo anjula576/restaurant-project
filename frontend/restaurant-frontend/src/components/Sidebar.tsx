@@ -40,6 +40,7 @@ const Sidebar: React.FC = () => {
                 <SidebarMenuItem icon={<UtensilsCrossed />} label="Menu" path="/menu" expanded={expanded}/>
                 <SidebarMenuItem icon={<PackageSearch />} label="Item" path="/item" expanded={expanded}/>
                 <SidebarMenuItem icon={<BookUser />} label="Suppliers" path="/supplier" expanded={expanded}/>
+                <SidebarMenuItem icon={<BookUser />} label="Purchase Order" path="/purchaseorder" expanded={expanded}/>
 
 
             </div>

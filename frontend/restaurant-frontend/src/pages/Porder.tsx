@@ -1,12 +1,72 @@
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { useState } from "react";
+import DataTable from "../components/DataTable";
+
+
 
 interface AlertState {
   type: "success" | "error" | "warning" | "info";
   message: string;
 }
 
+interface Item {
+  id: number;
+  itemname: string;
+  availableqty: number;
+  totalqty: number;
+  unit: string;
+  purchaseprice: number;
+}
+
 function Porder(){
+
+    const [alert, setAlert] = useState<AlertState | null>(null);
+
+    const [items, setItems] = useState<Item[]>([]);
+
+    const [isEditing, setIsEditing] = useState(false);
+
+
+
+    const [item, setItem] = useState<{
+    id: number | null;
+    itemname: string;
+    availableqty: string;
+    totalqty: string;
+    unit: string;
+    purchaseprice: string;
+   
+  }>({
+    id: null,
+    itemname: "",
+    availableqty: "",
+    totalqty: "",
+    unit: "",
+    purchaseprice: "",
+  });
+
+     const columns = [
+    { title: "Item Name", property: "itemname" },
+    { title: "Available Qty", property: "availableqty" },
+    { title: "Total Qty", property: "totalqty" },
+    { title: "Unit", property: "unit" },
+    { title: "Purchase Price", property: "purchaseprice" },
+  ];
+
+  const handleEdit = (item: Item) => {
+
+  }
+
+    
+  const deleteCustomer = (id: number) => {
+
+  }
+
+  const onUpdate = () => {
+  }
+
+
 
     return (
          <>
@@ -34,7 +94,7 @@ function Porder(){
                 className="accordion-collapse collapse"
               >
                 <div className="accordion-body">
-                  <form onSubmit={submitItem}>
+                  <form>
                     <div className="row">
                       {/*supplier*/}
                       <div className="col-lg-4 col-12">
@@ -52,10 +112,10 @@ function Porder(){
                         <input
                           type="text"
                           className="form-control"
-                          value={item.itemname}
+                    
                           name="itemname"
-                          onChange={itemNameHandle}
-                          onBlur={validateItemName}
+                      
+                          
                           //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
                           // Backticks are used for template literals.
                           //to use template literals in JavaScript for embedding variables, expressions, or writing multi-line strings.
@@ -73,9 +133,7 @@ function Porder(){
                         <input
                           type="text"
                           className="form-control"
-                          value={item.totalqty}
-                          onChange={totalQtyHandle}
-                          onBlur={validateTotalQty}
+                         
                           /* in here use onblur*/
                           /*When you type the 10th digit, your state may still not have
                                                     updated in time (React state updates are async), so the regex test happens with 9 digits.
@@ -101,8 +159,7 @@ function Porder(){
                           className="form-select"
                           name="unit"
                           value={item.unit}
-                          onChange={handleUnit}
-                          onBlur={validateUnit}
+                  
                           id="selectUnit"
                         >
                           <option value="" selected>
@@ -130,9 +187,7 @@ function Porder(){
                           className="form-control"
                           name="purchaseprice"
                           id="txtPurchasePrice"
-                          onChange={purchasePriceHandle}
-                          value={item.purchaseprice}
-                          onBlur={validatePurchasePrice}
+                         
                         />
                       </div>
                     </div>
@@ -225,3 +280,5 @@ function Porder(){
 }
 
 export default Porder;
+
+
