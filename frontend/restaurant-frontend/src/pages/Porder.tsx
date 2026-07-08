@@ -94,148 +94,36 @@ function Porder(){
                 className="accordion-collapse collapse"
               >
                 <div className="accordion-body">
-                  <form>
-                    <div className="row">
-                      {/*supplier*/}
-                      <div className="col-lg-4 col-12">
-                        <label htmlFor="selectSupplier" className="form-label">
-                          Supplier` Name
-                        </label>
-                        <select id="selectSupplier" className="form-control"></select>
-                      </div>
+                  {/* Purchase Order Form Content */}
+                  <div className="row">
+                    <div className="col-6">main form
 
-                      {/*item name*/}
-                      <div className="col-lg-4 col-12">
-                        <label htmlFor="txtItemName" className="form-label">
-                          Item Name
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                    
-                          name="itemname"
-                      
-                          
-                          //  (`)-It’s called a backtick.On most keyboards it’s just under the Esc key (top left).
-                          // Backticks are used for template literals.
-                          //to use template literals in JavaScript for embedding variables, expressions, or writing multi-line strings.
-                          // and in here uses the nested if
+                      <form>
+                        <div className="row">
+                          <div className="col-6">
+                             <label className="form-label">supplier Name</label>
+                          <input
+                            type="text"
+                            className="form-control"/>
 
-                          id="txtItemName"
-                        />
-                      </div>
-
-                      {/*total qty*/}
-                      <div className="col-lg-2 col-12">
-                        <label htmlFor="txTotalQty" className="form-label">
-                          Total Quantity
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="">supplier address</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                            />
+                          </div>
                          
-                          /* in here use onblur*/
-                          /*When you type the 10th digit, your state may still not have
-                                                    updated in time (React state updates are async), so the regex test happens with 9 digits.
-                                                     Then when you type the 11th, it finally has the full 10 digits.*/
-                          /*Validate on blur (when user leaves the field)*/
-
-                          name="totalqty"
-                          id="txTotalQty"
-                        />
-                      </div>
-
-                    </div>
-
-                    <br />
-                    <div className="row">
-                      <div className="col-lg-4 col-12">
-                        {/*unit*/}
-
-                        <label htmlFor="selectUnit" className="form-label">
-                          Unit
-                        </label>
-                        <select
-                          className="form-select"
-                          name="unit"
-                          value={item.unit}
-                  
-                          id="selectUnit"
-                        >
-                          <option value="" selected>
-                            Select Unit
-                          </option>
-                          <option>g</option>
-                          <option>Kg</option>
-                          <option>Items</option>
-                          <option>Packets</option>
-                        </select>
-                      </div>
-                      {/*Purchase Price*/}
-
-                      <br />
-
-                      <div className="col-lg-4 col-12">
-                        <label
-                          htmlFor="txtPurchasePrice"
-                          className="form-label"
-                        >
-                          Purchase Price
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="purchaseprice"
-                          id="txtPurchasePrice"
-                         
-                        />
-                      </div>
-                    </div>
-
-                    <br />
-                    <div className="row">
-                      {/* check isEditing is true. if true show the update button ,if false show the submit button*/}
-                      {isEditing ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            onUpdate();
-                          }}
-                          className="btn btn-secondary"
-                        >
-                          Update the Porder
-                        </button>
-                      ) : (
-                        <button type="submit" className="btn btn-primary">
-                          Add New Porder
-                        </button>
-                      )}
-
-                      {/*this is conditional reading.div show only if alert is not null*/}
-                      {alert && (
-                        //  this div style is used to change the position of the alert
-                        <div
-                          className="col-4"
-                          style={{
-                            position: "fixed",
-                            top: "20px",
-                            right: "20px",
-                            zIndex: 9999,
-                            minWidth: "300px",
-                          }}
-                        >
-                          <Alert
-                            variant="filled"
-                            severity={alert.type}
-                            onClose={() => setAlert(null)}
-                          >
-                            <AlertTitle>Alert</AlertTitle>
-                            {alert.message}
-                          </Alert>
                         </div>
-                      )}
+
+
+                      </form>
+
+
                     </div>
-                  </form>
+                    <div className="col-6">second form</div>
+                  </div>
                 </div>
               </div>
             </div>
