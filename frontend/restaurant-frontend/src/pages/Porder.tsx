@@ -108,12 +108,44 @@ function Porder(){
 
                           </div>
                           <div className="col-6">
-                            <label htmlFor="">supplier address</label>
+                            <label htmlFor="">Porder code</label>
                             <input
                               type="text"
                               className="form-control"
                             />
                           </div>
+
+                      
+                          <div className="col-6">
+
+                            <label htmlFor="">Required Date</label>
+                            <input
+                              type="date"
+                              className="form-control"
+                            />
+
+                          </div>
+
+                          <div className="col-6">
+
+                            <label>Note</label>
+
+                            <textarea className="form-control"></textarea>
+                            </div>
+
+                            <div className="col-6">
+                              <label htmlFor="">status</label>
+                              <select className="form-select">
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                              </select>
+                            </div>
+
+                            <div className="col-6">
+                              <label htmlFor="">Total</label>
+                              <input className="form-control" type="text" />
+                            </div>
                          
                         </div>
 
