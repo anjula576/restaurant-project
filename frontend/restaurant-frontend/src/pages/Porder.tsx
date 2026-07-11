@@ -3,8 +3,6 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useState } from "react";
 import DataTable from "../components/DataTable";
 
-
-
 interface AlertState {
   type: "success" | "error" | "warning" | "info";
   message: string;
@@ -19,24 +17,20 @@ interface Item {
   purchaseprice: number;
 }
 
-function Porder(){
+function Porder() {
+  const [alert, setAlert] = useState<AlertState | null>(null);
 
-    const [alert, setAlert] = useState<AlertState | null>(null);
+  const [items, setItems] = useState<Item[]>([]);
 
-    const [items, setItems] = useState<Item[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
 
-    const [isEditing, setIsEditing] = useState(false);
-
-
-
-    const [item, setItem] = useState<{
+  const [item, setItem] = useState<{
     id: number | null;
     itemname: string;
     availableqty: string;
     totalqty: string;
     unit: string;
     purchaseprice: string;
-   
   }>({
     id: null,
     itemname: "",
@@ -46,7 +40,7 @@ function Porder(){
     purchaseprice: "",
   });
 
-     const columns = [
+  const columns = [
     { title: "Item Name", property: "itemname" },
     { title: "Available Qty", property: "availableqty" },
     { title: "Total Qty", property: "totalqty" },
@@ -54,22 +48,14 @@ function Porder(){
     { title: "Purchase Price", property: "purchaseprice" },
   ];
 
-  const handleEdit = (item: Item) => {
+  const handleEdit = (item: Item) => {};
 
-  }
+  const deleteCustomer = (id: number) => {};
 
-    
-  const deleteCustomer = (id: number) => {
+  const onUpdate = () => {};
 
-  }
-
-  const onUpdate = () => {
-  }
-
-
-
-    return (
-         <>
+  return (
+    <>
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12">
           <div
@@ -96,66 +82,104 @@ function Porder(){
                 <div className="accordion-body">
                   {/* Purchase Order Form Content */}
                   <div className="row">
-                    <div className="col-6">main form
-
+                    <div className="col-6">
+                      main form
                       <form>
                         <div className="row">
                           <div className="col-6">
-                             <label className="form-label">supplier Name</label>
-                          <input
-                            type="text"
-                            className="form-control"/>
-
+                            <label className="form-label">supplier Name</label>
+                            <input type="text" className="form-control" />
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Porder code</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                            />
+                            <input type="text" className="form-control" />
                           </div>
 
-                      
                           <div className="col-6">
-
                             <label htmlFor="">Required Date</label>
-                            <input
-                              type="date"
-                              className="form-control"
-                            />
-
+                            <input type="date" className="form-control" />
                           </div>
 
                           <div className="col-6">
-
                             <label>Note</label>
 
                             <textarea className="form-control"></textarea>
-                            </div>
+                          </div>
 
-                            <div className="col-6">
-                              <label htmlFor="">status</label>
-                              <select className="form-select">
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
-                              </select>
-                            </div>
-
-                            <div className="col-6">
-                              <label htmlFor="">Total</label>
-                              <input className="form-control" type="text" />
-                            </div>
-                         
+                          <div className="col-6">
+                            <label htmlFor="">status</label>
+                            <select className="form-select">
+                              <option value="pending">Pending</option>
+                              <option value="approved">Approved</option>
+                              <option value="rejected">Rejected</option>
+                            </select>
+                          </div>
                         </div>
-
-
                       </form>
-
-
                     </div>
-                    <div className="col-6">second form</div>
+                    <div className="col-6 bg-secondary p-3 rounded-2">
+                      second form
+                      <form>
+                        <div className="row">
+                          <div className="col-6">
+                            <label htmlFor="">Item Name</label>
+                            <input type="text" className="form-control" />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="">Purchase Price</label>
+                            <input type="text" className="form-control" />
+                          </div>
+
+                          <div className="col-6">
+                            <label htmlFor="">Quantity</label>
+                            <input type="text" className="form-control" />
+                          </div>
+
+                          <div className="col-6">
+                            <label htmlFor="">Line Price</label>
+                            <input type="text" className="form-control" />
+                          </div>
+                          <div className="row">
+                            <div className="col-6">
+                              
+                                <button className="btn btn-primary mt-4 me-2">
+                                  Add Item
+                                </button>
+                            
+                              
+                                <button className="btn btn-primary mt-4">
+                                  Clear Item
+                                </button>
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    
                   </div>
+                  <div className="row bg-body-secondary p-3 rounded-2 mt-4">
+                     <table className="table table-bordered mt-4">
+                      <thead>
+                        <tr>
+                          <th>Item Name</th>
+                          <th>Purchase Price</th>
+                          <th>Quantity</th>
+                          <th>Line Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Item 1</td>
+                          <td>$10.00</td>
+                          <td>5</td>
+                          <td>$50.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+                    <button className="btn btn-primary mt-4">Submit Order</button>  
+                    <button className="btn btn-secondary mt-4 ms-2">Clear Order</button>
                 </div>
               </div>
             </div>
@@ -194,11 +218,7 @@ function Porder(){
         </div>
       </div>
     </>
-    )
-
-
+  );
 }
 
 export default Porder;
-
-
