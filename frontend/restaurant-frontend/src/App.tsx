@@ -14,6 +14,7 @@ import Reservation from "./pages/Reservation.tsx";
 import Item from "./pages/Item.tsx";
 import Supplier from "./pages/Supplier.tsx";
 import Porder from "./pages/Porder.tsx";
+import Grn from "./pages/Grn.tsx";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                             <Route path={"/purchaseorder"} element={<Porder/>}></Route>
                             <Route path={"/item"} element={<Item/>}></Route>
                             <Route path={"/supplier"} element={<Supplier/>}></Route>
+                            <Route path={"/grn"} element={<Grn/>}></Route>
                         </Routes>
                     </Content>
                 </div>
