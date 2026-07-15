@@ -51,18 +51,19 @@ function Porder() {
     purchaseprice: "",
   });
 
-  const columns = [
-    { title: "Item Name", property: "itemname" },
-    { title: "Available Qty", property: "availableqty" },
-    { title: "Total Qty", property: "totalqty" },
-    { title: "Unit", property: "unit" },
-    { title: "Purchase Price", property: "purchaseprice" },
-  ];
+  const columns =[
+    {title:"Porder Code",property:"pordercode"},
+    {title:"Required Date",property:"requireddate"},
+    {title:"Note",property:"note"},
+    {title:"Status",property:"status"},
+    {title:"Total",property:"total"}
+  ]
 
   const loadPorders =()=>{
     fetch("http://localhost:8080/api/porders")
     .then((response) => response.json())
     .then((data) => {
+      console.log("Fetched porders:", data);
       setPorders(data);
     })
     .catch((error) => {
