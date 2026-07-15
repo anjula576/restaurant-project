@@ -1,6 +1,6 @@
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
 
 interface AlertState {
@@ -16,11 +16,22 @@ interface Item {
   unit: string;
   purchaseprice: number;
 }
+ interface Porder {
+  id: number;
+  suppliername: string;
+  pordercode: string;
+  requireddate: string;
+  note: string;
+  status: boolean;
+  total: number;
+
+}
+
 
 function Porder() {
   const [alert, setAlert] = useState<AlertState | null>(null);
 
-  const [items, setItems] = useState<Item[]>([]);
+  const [porders, setPorders] = useState<Porder[]>([]);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -48,11 +59,26 @@ function Porder() {
     { title: "Purchase Price", property: "purchaseprice" },
   ];
 
+  const loadPorders =()=>{
+    fetch("http://localhost:8080/api/porders")
+    .then((response) => response.json())
+    .then((data) => {
+      setPorders(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  }
+
   const handleEdit = (item: Item) => {};
 
   const deleteCustomer = (id: number) => {};
 
   const onUpdate = () => {};
+
+   useEffect(() => {
+      loadPorders();
+    }, []);
 
   return (
     <>
@@ -205,9 +231,9 @@ function Porder() {
                   {/* in here when change the customer count automatically unmount the datatable component
                                         and remount.this is an easier way to update component when list an list updates*/}
                   <DataTable
-                    key={items.length}
+                    key={porders.length}
                     columns={columns}
-                    data={items}
+                    data={porders}
                     onEdit={(row) => handleEdit(row)}
                     onDelete={(id) => deleteCustomer(id)}
                   />
