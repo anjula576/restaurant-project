@@ -27,13 +27,25 @@ interface Item {
 
 }
 
+interface Supplier {
+  id: number;
+  name: string;
+  mobileno: number;
+  email: string;
+  address: string;
+}
+
 
 function Porder() {
   const [alert, setAlert] = useState<AlertState | null>(null);
 
   const [porders, setPorders] = useState<Porder[]>([]);
 
+  const [porder,setPorder] =useState<Porder | null>(null);
+
   const [isEditing, setIsEditing] = useState(false);
+
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
 
   const [item, setItem] = useState<{
     id: number | null;
@@ -59,13 +71,32 @@ function Porder() {
     {title:"Total",property:"total"}
   ]
 
+  const currentDate = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format  
+
+  const maxDateObj = new Date(currentDate);
+  maxDateObj.setMonth(maxDateObj.getMonth() + 3); // Add 3 months to the current date
+  const maxDate = maxDateObj.toISOString().split("T")[0]; // Get max date in YYYY-MM-DD format
+
+
+  const loadSuppliers =()=>{
+    fetch("http://localhost:8080/api/suppliers")
+    .then((response) => response.json())
+    .then((data) => {
+      setSuppliers(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching suppliers:", error);
+    });
+  };
+
   const loadPorders =()=>{
     fetch("http://localhost:8080/api/porders")
     .then((response) => response.json())
     .then((data) => {
       console.log("Fetched porders:", data);
       setPorders(data);
-    })
+    }
+  )
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
@@ -79,6 +110,7 @@ function Porder() {
 
    useEffect(() => {
       loadPorders();
+      loadSuppliers();
     }, []);
 
   return (
@@ -114,28 +146,38 @@ function Porder() {
                       <form>
                         <div className="row">
                           <div className="col-6">
-                            <label className="form-label">supplier Name</label>
-                            <input type="text" className="form-control" />
+                            <label className="form-label" htmlFor="sltSupplier">
+                              supplier Name
+                            </label>
+                            <select className="form-select" id="sltSupplier">
+                              <option value="" disabled selected>
+                                Select a supplier
+                              </option>
+                              {suppliers.map((supplier) => (
+                                <option key={supplier.id} value={supplier.id}>
+                                  {supplier.name}
+                                </option>
+                              ))}
+                            </select>
                           </div>
                           <div className="col-6">
-                            <label htmlFor="">Porder code</label>
-                            <input type="text" className="form-control" />
+                            <label htmlFor="txtPorderCode">Porder code</label>
+                            <input type="text" className="form-control" id="txtPorderCode" />
                           </div>
 
                           <div className="col-6">
-                            <label htmlFor="">Required Date</label>
-                            <input type="date" className="form-control" />
+                            <label htmlFor="txtRequiredDate">Required Date</label>
+                            <input type="date" className="form-control" id="txtRequiredDate" min={currentDate} max={maxDate} />
                           </div>
 
                           <div className="col-6">
-                            <label>Note</label>
-
-                            <textarea className="form-control"></textarea>
+                            <label htmlFor="txtNote">Note</label>
+                            <textarea className="form-control" id="txtNote"></textarea>
                           </div>
 
                           <div className="col-6">
-                            <label htmlFor="">status</label>
-                            <select className="form-select">
+                            <label htmlFor="sltStatus">status</label>
+                            <select className="form-select" id="sltStatus">
                               <option value="pending">Pending</option>
                               <option value="approved">Approved</option>
                               <option value="rejected">Rejected</option>
