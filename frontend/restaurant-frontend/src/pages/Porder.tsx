@@ -162,12 +162,12 @@ function Porder() {
                           </div>
                           <div className="col-6">
                             <label htmlFor="txtPorderCode">Porder code</label>
-                            <input type="text" className="form-control" id="txtPorderCode" />
+                            <input type="text" className="form-control" id="txtPorderCode" onBlur={} onChange={} />
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="txtRequiredDate">Required Date</label>
-                            <input type="date" className="form-control" id="txtRequiredDate" min={currentDate} max={maxDate} />
+                            <input type="date" className="form-control" id="txtRequiredDate" onChange={} min={currentDate} max={maxDate} />
                           </div>
 
                           <div className="col-6">
