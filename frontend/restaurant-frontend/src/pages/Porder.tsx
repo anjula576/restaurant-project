@@ -2,6 +2,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
+import axios from "axios";
 
 interface AlertState {
   type: "success" | "error" | "warning" | "info";
@@ -17,7 +18,7 @@ interface Item {
   purchaseprice: number;
 }
  interface Porder {
-  id: number;
+  id: number | null;
   suppliername: string;
   pordercode: string;
   requireddate: string;
@@ -41,7 +42,16 @@ function Porder() {
 
   const [porders, setPorders] = useState<Porder[]>([]);
 
-  const [porder,setPorder] =useState<Porder | null>(null);
+  const [porder,setPorder] =useState<Porder | null>({
+
+     id: null,
+  suppliername: "",
+  pordercode: "",
+  requireddate: "",
+  note: "",
+  status: false,
+  total: 0,
+  });
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -102,6 +112,77 @@ function Porder() {
     });
   }
 
+
+  const handleSupplier =(e : any)=>{
+
+    const [name, value] = [e.target.name, e.target.value];
+
+    if (porder) {
+      setPorder({ ...porder, [name]: value });
+    }
+
+  }
+
+  const handlePorderCode=(e : any)=>{
+
+    const [name, value] = [e.target.name, e.target.value];
+
+    if (porder) {
+      setPorder({ ...porder, [name]: value });
+    }
+
+  }
+
+
+  const handleRequiredDate =(e : any)=>{
+
+    const [name, value] = [e.target.name, e.target.value];
+
+    if (porder) {
+      setPorder({ ...porder, [name]: value });
+    }
+
+  }
+
+  const handleNote =(e : any)=>{
+
+    const [name, value] = [e.target.name, e.target.value];
+
+    if (porder) {
+      setPorder({ ...porder, [name]: value });
+    }
+
+  }
+
+  const handleStatus =(e : any)=>{
+
+    const [name, value] = [e.target.name, e.target.value];
+
+    if (porder) {
+      setPorder({ ...porder, [name]: value });
+    }
+
+  }
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
+
+    //to prevent the default form submission behavior, which would cause a page reload
+    e.preventDefault();
+
+
+    const backendResponse = await axios.post("http://localhost:8080/api/porders", porder);
+
+    if (backendResponse.data == "ok") {
+      // Handle success
+       setAlert({ type: "success", message: "Purchase Order submitted successfully!" });
+
+        //  destroy the alert after 3 seconds
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+    }
+  }
+
+
   const handleEdit = (item: Item) => {};
 
   const deleteCustomer = (id: number) => {};
@@ -149,7 +230,7 @@ function Porder() {
                             <label className="form-label" htmlFor="sltSupplier">
                               supplier Name
                             </label>
-                            <select className="form-select" id="sltSupplier">
+                            <select className="form-select" id="sltSupplier" name="suppliername">
                               <option value="" disabled selected>
                                 Select a supplier
                               </option>
@@ -162,22 +243,22 @@ function Porder() {
                           </div>
                           <div className="col-6">
                             <label htmlFor="txtPorderCode">Porder code</label>
-                            <input type="text" className="form-control" id="txtPorderCode" />
+                            <input type="text" className="form-control" id="txtPorderCode" name="pordercode" />
                           </div>
 
                           <div className="col-6">
-                            <label htmlFor="txtRequiredDate">Required Date</label>
-                            <input type="date" className="form-control" id="txtRequiredDate" min={currentDate} max={maxDate} />
+                            <label htmlFor="txtRequiredDate">Required Date</label>  
+                            <input type="date" className="form-control" id="txtRequiredDate" name="requireddate" min={currentDate} max={maxDate} />
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="txtNote">Note</label>
-                            <textarea className="form-control" id="txtNote"></textarea>
+                            <textarea className="form-control" id="txtNote" name="note"></textarea>
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="sltStatus">status</label>
-                            <select className="form-select" id="sltStatus">
+                            <select className="form-select" id="sltStatus" name="status">
                               <option value="pending">Pending</option>
                               <option value="approved">Approved</option>
                               <option value="rejected">Rejected</option>
