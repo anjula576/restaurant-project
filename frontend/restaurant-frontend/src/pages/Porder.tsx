@@ -230,7 +230,7 @@ function Porder() {
                             <label className="form-label" htmlFor="sltSupplier">
                               supplier Name
                             </label>
-                            <select className="form-select" id="sltSupplier" name="suppliername">
+                            <select className="form-select" id="sltSupplier" name="suppliername" onChange={handleSupplier}>
                               <option value="" disabled selected>
                                 Select a supplier
                               </option>
@@ -243,22 +243,22 @@ function Porder() {
                           </div>
                           <div className="col-6">
                             <label htmlFor="txtPorderCode">Porder code</label>
-                            <input type="text" className="form-control" id="txtPorderCode" name="pordercode" />
+                            <input type="text" className="form-control" id="txtPorderCode" onChange={handlePorderCode} name="pordercode" />
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="txtRequiredDate">Required Date</label>  
-                            <input type="date" className="form-control" id="txtRequiredDate" name="requireddate" min={currentDate} max={maxDate} />
+                            <input type="date" className="form-control" id="txtRequiredDate" onChange={handleRequiredDate} name="requireddate" min={currentDate} max={maxDate} />
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="txtNote">Note</label>
-                            <textarea className="form-control" id="txtNote" name="note"></textarea>
+                            <textarea className="form-control" id="txtNote" onChange={handleNote} name="note"></textarea>
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="sltStatus">status</label>
-                            <select className="form-select" id="sltStatus" name="status">
+                            <select className="form-select" id="sltStatus" name="status" onChange={handleStatus}>
                               <option value="pending">Pending</option>
                               <option value="approved">Approved</option>
                               <option value="rejected">Rejected</option>
