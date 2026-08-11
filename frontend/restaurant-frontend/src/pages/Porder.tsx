@@ -19,7 +19,7 @@ interface Item {
 }
  interface Porder {
   id: number | null;
-  suppliername: string;
+  supplierId: number | null;
   pordercode: string;
   requireddate: string;
   note: string;
@@ -45,7 +45,7 @@ function Porder() {
   const [porder,setPorder] =useState<Porder | null>({
 
      id: null,
-  suppliername: "",
+  supplierId: null,
   pordercode: "",
   requireddate: "",
   note: "",
@@ -56,6 +56,8 @@ function Porder() {
   const [isEditing, setIsEditing] = useState(false);
 
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+
+  const [items,setItems]=useState<Item[]>([]);
 
   const [item, setItem] = useState<{
     id: number | null;
@@ -88,6 +90,21 @@ function Porder() {
   const maxDate = maxDateObj.toISOString().split("T")[0]; // Get max date in YYYY-MM-DD format
 
 
+  // Load items based on the selected supplier
+ const loadItemsBySelectedSupplier = async(supplierId: number) => {
+
+ try{
+ const response = await fetch(`http://localhost:8080/api/items?supplierId=${supplierId}`);
+  const data = await response.json();
+  setItems(data);
+ }catch(error){
+  console.error("Error fetching items for supplier:", error);
+  setItems([]); // Clear items if there's an error
+ }
+}
+
+
+
   const loadSuppliers =()=>{
     fetch("http://localhost:8080/api/suppliers")
     .then((response) => response.json())
@@ -113,13 +130,43 @@ function Porder() {
   }
 
 
-  const handleSupplier =(e : any)=>{
+  // const handleSupplier =(e : any)=>{
 
-    const [name, value] = [e.target.name, e.target.value];
+  //   const [name, value] = [e.target.name, e.target.value];
 
-    if (porder) {
+  //   if (porder) {
+  //     setPorder({ ...porder, [name]: value });
+  //   }
+
+  // }
+
+  const handleSupplier =async (e : React.ChangeEvent<HTMLSelectElement>)=>{
+
+    const supplierId = Number(e.target.value);
+
+    const [name, value] = [e.target.name, supplierId];
+
+    if(porder) {
       setPorder({ ...porder, [name]: value });
     }
+
+    setItems([]); // Clear previous items when a new supplier is selected
+
+    // Clear currently selected item
+  setItem({
+    id: null,
+    itemname: "",
+    availableqty: "",
+    totalqty: "",
+    unit: "",
+    purchaseprice: "",
+  });
+
+
+    if (supplierId) {
+      await loadItemsBySelectedSupplier(supplierId);
+    }
+
 
   }
 
@@ -272,8 +319,20 @@ function Porder() {
                       <form>
                         <div className="row">
                           <div className="col-6">
-                            <label htmlFor="">Item Name</label>
-                            <input type="text" className="form-control" />
+                            <label htmlFor="sltItem">Item Name</label>
+                             <select
+    className="form-select"
+    id="sltItem"
+    value={item.id ?? ""}
+  >
+    <option value="">Select an item</option>
+
+    {items.map((item) => (
+      <option key={item.id} value={item.id}>
+        {item.itemname}
+      </option>
+    ))}
+  </select>
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Purchase Price</label>
