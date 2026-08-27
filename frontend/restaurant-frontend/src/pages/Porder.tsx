@@ -130,20 +130,11 @@ function Porder() {
   }
 
 
-  // const handleSupplier =(e : any)=>{
 
-  //   const [name, value] = [e.target.name, e.target.value];
-
-  //   if (porder) {
-  //     setPorder({ ...porder, [name]: value });
-  //   }
-
-  // }
 
   const handleSupplier =async (e : React.ChangeEvent<HTMLSelectElement>)=>{
 
     const supplierId = Number(e.target.value);
-
     const [name, value] = [e.target.name, supplierId];
 
     if(porder) {
@@ -227,6 +218,44 @@ function Porder() {
           setAlert(null);
         }, 3000);
     }
+  }
+
+  // calculate the line price based on the purchase price and quantity
+  const claculateLinePrice = (e: any) => {
+
+    const purchasePrice = parseFloat(e.target.form.querySelector('input[name="purchaseprice"]').value);
+    const quantity = parseFloat(e.target.form.querySelector('input[name="quantity"]').value);
+
+    if (!isNaN(purchasePrice) && !isNaN(quantity)) {
+      const linePrice = purchasePrice * quantity;
+      e.target.form.querySelector('input[name="lineprice"]').value = linePrice.toFixed(2);
+    }
+
+
+  };
+
+
+  const handlePurchasePrice = (e:any)=>{
+
+    const purchasePrice = e.target.form.querySelector('input[name="purchasePrice"]');
+
+    const selectedItem = items.find(item => item.id === parseInt(e.target.value));
+
+    if (selectedItem) {
+      setItem({
+        id: selectedItem.id,
+        itemname: selectedItem.itemname,
+        availableqty: selectedItem.availableqty.toString(),
+        totalqty: selectedItem.totalqty.toString(),
+        unit: selectedItem.unit,
+        purchaseprice: selectedItem.purchaseprice.toString(),
+      });
+
+      if (purchasePrice) {
+        purchasePrice.value = selectedItem.purchaseprice.toString();
+      }
+
+
   }
 
 
@@ -322,13 +351,15 @@ function Porder() {
                             <label htmlFor="sltItem">Item Name</label>
                              <select
     className="form-select"
+    name="slectItem"
     id="sltItem"
     value={item.id ?? ""}
+    onChange={handlePurchasePrice}
   >
     <option value="">Select an item</option>
 
     {items.map((item) => (
-      <option key={item.id} value={item.id}>
+      <option key={item.id} value={item.id}   >
         {item.itemname}
       </option>
     ))}
@@ -336,17 +367,17 @@ function Porder() {
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Purchase Price</label>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" name="purchasePrice" disabled />
                           </div>
 
                           <div className="col-6">
-                            <label htmlFor="">Quantity</label>
-                            <input type="text" className="form-control" />
+                            <label htmlFor=""  onChange={claculateLinePrice}>Quantity</label>
+                            <input type="text" className="form-control" name="quantity" />
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="">Line Price</label>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" name="linePrice" disabled />
                           </div>
                           <div className="row">
                             <div className="col-6">
