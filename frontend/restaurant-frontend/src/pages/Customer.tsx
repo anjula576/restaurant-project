@@ -441,7 +441,7 @@ const columns: Column[] = [
                                         <button className="accordion-button" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
                                                 aria-controls="panelsStayOpen-collapseOne">
-                                            Customer Form
+                                            Customers
                                         </button>
                                     </h2>
                                     <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">

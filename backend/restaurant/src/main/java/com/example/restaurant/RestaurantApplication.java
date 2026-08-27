@@ -1,9 +1,8 @@
 package com.example.restaurant;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@org.springframework.boot.autoconfigure.SpringBootApplication
 public class RestaurantApplication {
 
 	// this is the main function of the appleication
@@ -15,3 +14,4 @@ public class RestaurantApplication {
 	}
 
 }
+
