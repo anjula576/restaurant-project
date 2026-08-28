@@ -36,6 +36,13 @@ interface Supplier {
   address: string;
 }
 
+interface PurchaseItem {
+  itemId: number;
+  itemName: string;
+  purchasePrice: number;
+  quantity: number;
+  linePrice: number;
+}
 
 function Porder() {
   const [alert, setAlert] = useState<AlertState | null>(null);
@@ -74,6 +81,15 @@ function Porder() {
     unit: "",
     purchaseprice: "",
   });
+
+//  this use states create for the second form to add items to the purchase order
+const [selectedItemId, setSelectedItemId] = useState<number | "">("");
+const [purchasePrice, setPurchasePrice] = useState<number>(0);
+const [quantity, setQuantity] = useState<number>(0);
+const [linePrice, setLinePrice] = useState<number>(0);
+
+// Array for all added items
+const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
   const columns =[
     {title:"Porder Code",property:"pordercode"},
@@ -223,11 +239,15 @@ function Porder() {
   // calculate the line price based on the purchase price and quantity
   const claculateLinePrice = (e: any) => {
 
+    console.log("calculate line price");
+    
     const purchasePrice = parseFloat(e.target.form.querySelector('input[name="purchaseprice"]').value);
     const quantity = parseFloat(e.target.form.querySelector('input[name="quantity"]').value);
 
     if (!isNaN(purchasePrice) && !isNaN(quantity)) {
       const linePrice = purchasePrice * quantity;
+      console.log("line price"+linePrice);
+      
       e.target.form.querySelector('input[name="lineprice"]').value = linePrice.toFixed(2);
     }
 
@@ -237,8 +257,9 @@ function Porder() {
 
   const handlePurchasePrice = (e:any)=>{
 
-    const purchasePrice = e.target.form.querySelector('input[name="purchasePrice"]');
+    const purchasePrice = e.target.form.querySelector('input[name="purchaseprice"]');
 
+    // Find the selected item based on the value (in here get item's all property to the selectedItem object)
     const selectedItem = items.find(item => item.id === parseInt(e.target.value));
 
     if (selectedItem) {
@@ -255,6 +276,7 @@ function Porder() {
         purchasePrice.value = selectedItem.purchaseprice.toString();
       }
 
+    }
 
   }
 
@@ -367,17 +389,17 @@ function Porder() {
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Purchase Price</label>
-                            <input type="text" className="form-control" name="purchasePrice" disabled />
+                            <input type="text" className="form-control" name="purchaseprice" disabled />
                           </div>
 
                           <div className="col-6">
-                            <label htmlFor=""  onChange={claculateLinePrice}>Quantity</label>
-                            <input type="text" className="form-control" name="quantity" />
+                            <label htmlFor="" >Quantity</label>
+                            <input type="text" className="form-control" name="quantity" onChange={claculateLinePrice}/>
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="">Line Price</label>
-                            <input type="text" className="form-control" name="linePrice" disabled />
+                            <input type="text" className="form-control" name="lineprice" disabled />
                           </div>
                           <div className="row">
                             <div className="col-6">
