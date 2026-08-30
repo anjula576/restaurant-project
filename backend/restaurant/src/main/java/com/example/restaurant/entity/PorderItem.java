@@ -42,9 +42,9 @@ public class PorderItem {
     @NotNull
     private BigDecimal price;
 
-    @Column(name = "porder_id")
+    @Column(name = "lineprice")
     @NotNull
-    private Integer porder_id;
+    private BigDecimal lineprice;
     
     @ManyToOne
     @JoinColumn(name = "Purchaseorder_id",referencedColumnName = "id")
