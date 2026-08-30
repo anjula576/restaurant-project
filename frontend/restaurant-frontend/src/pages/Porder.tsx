@@ -17,7 +17,7 @@ interface Item {
   unit: string;
   purchaseprice: number;
 }
- interface Porder {
+interface Porder {
   id: number | null;
   supplierId: number | null;
   pordercode: string;
@@ -49,22 +49,22 @@ function Porder() {
 
   const [porders, setPorders] = useState<Porder[]>([]);
 
-  const [porder,setPorder] =useState<Porder | null>({
+  const [porder, setPorder] = useState<Porder | null>({
 
-     id: null,
-  supplierId: null,
-  pordercode: "",
-  requireddate: "",
-  note: "",
-  status: false,
-  total: 0,
+    id: null,
+    supplierId: null,
+    pordercode: "",
+    requireddate: "",
+    note: "",
+    status: false,
+    total: 0,
   });
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
 
-  const [items,setItems]=useState<Item[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
 
   const [item, setItem] = useState<{
     id: number | null;
@@ -82,21 +82,21 @@ function Porder() {
     purchaseprice: "",
   });
 
-//  this use states create for the second form to add items to the purchase order
-const [selectedItemId, setSelectedItemId] = useState<number | "">("");
-const [purchasePrice, setPurchasePrice] = useState<number>(0);
-const [quantity, setQuantity] = useState<number>(0);
-const [linePrice, setLinePrice] = useState<number>(0);
+  //  this use states create for the second form to add items to the purchase order
+  const [selectedItemId, setSelectedItemId] = useState<number | "">("");
+  const [purchasePrice, setPurchasePrice] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(0);
+  const [linePrice, setLinePrice] = useState<number>(0);
 
-// Array for all added items
-const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
+  // Array for all added items
+  const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
-  const columns =[
-    {title:"Porder Code",property:"pordercode"},
-    {title:"Required Date",property:"requireddate"},
-    {title:"Note",property:"note"},
-    {title:"Status",property:"status"},
-    {title:"Total",property:"total"}
+  const columns = [
+    { title: "Porder Code", property: "pordercode" },
+    { title: "Required Date", property: "requireddate" },
+    { title: "Note", property: "note" },
+    { title: "Status", property: "status" },
+    { title: "Total", property: "total" }
   ]
 
   const currentDate = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format  
@@ -107,67 +107,67 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
 
   // Load items based on the selected supplier
- const loadItemsBySelectedSupplier = async(supplierId: number) => {
+  const loadItemsBySelectedSupplier = async (supplierId: number) => {
 
- try{
- const response = await fetch(`http://localhost:8080/api/items?supplierId=${supplierId}`);
-  const data = await response.json();
-  setItems(data);
- }catch(error){
-  console.error("Error fetching items for supplier:", error);
-  setItems([]); // Clear items if there's an error
- }
-}
+    try {
+      const response = await fetch(`http://localhost:8080/api/items?supplierId=${supplierId}`);
+      const data = await response.json();
+      setItems(data);
+    } catch (error) {
+      console.error("Error fetching items for supplier:", error);
+      setItems([]); // Clear items if there's an error
+    }
+  }
 
 
 
-  const loadSuppliers =()=>{
+  const loadSuppliers = () => {
     fetch("http://localhost:8080/api/suppliers")
-    .then((response) => response.json())
-    .then((data) => {
-      setSuppliers(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching suppliers:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        setSuppliers(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching suppliers:", error);
+      });
   };
 
-  const loadPorders =()=>{
+  const loadPorders = () => {
     fetch("http://localhost:8080/api/porders")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Fetched porders:", data);
-      setPorders(data);
-    }
-  )
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched porders:", data);
+        setPorders(data);
+      }
+      )
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }
 
 
 
 
-  const handleSupplier =async (e : React.ChangeEvent<HTMLSelectElement>)=>{
+  const handleSupplier = async (e: React.ChangeEvent<HTMLSelectElement>) => {
 
     const supplierId = Number(e.target.value);
     const [name, value] = [e.target.name, supplierId];
 
-    if(porder) {
+    if (porder) {
       setPorder({ ...porder, [name]: value });
     }
 
     setItems([]); // Clear previous items when a new supplier is selected
 
     // Clear currently selected item
-  setItem({
-    id: null,
-    itemname: "",
-    availableqty: "",
-    totalqty: "",
-    unit: "",
-    purchaseprice: "",
-  });
+    setItem({
+      id: null,
+      itemname: "",
+      availableqty: "",
+      totalqty: "",
+      unit: "",
+      purchaseprice: "",
+    });
 
 
     if (supplierId) {
@@ -177,7 +177,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
   }
 
-  const handlePorderCode=(e : any)=>{
+  const handlePorderCode = (e: any) => {
 
     const [name, value] = [e.target.name, e.target.value];
 
@@ -188,7 +188,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
   }
 
 
-  const handleRequiredDate =(e : any)=>{
+  const handleRequiredDate = (e: any) => {
 
     const [name, value] = [e.target.name, e.target.value];
 
@@ -198,7 +198,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
   }
 
-  const handleNote =(e : any)=>{
+  const handleNote = (e: any) => {
 
     const [name, value] = [e.target.name, e.target.value];
 
@@ -208,7 +208,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
   }
 
-  const handleStatus =(e : any)=>{
+  const handleStatus = (e: any) => {
 
     const [name, value] = [e.target.name, e.target.value];
 
@@ -217,7 +217,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
     }
 
   }
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
     //to prevent the default form submission behavior, which would cause a page reload
     e.preventDefault();
@@ -227,12 +227,12 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
     if (backendResponse.data == "ok") {
       // Handle success
-       setAlert({ type: "success", message: "Purchase Order submitted successfully!" });
+      setAlert({ type: "success", message: "Purchase Order submitted successfully!" });
 
-        //  destroy the alert after 3 seconds
-        setTimeout(() => {
-          setAlert(null);
-        }, 3000);
+      //  destroy the alert after 3 seconds
+      setTimeout(() => {
+        setAlert(null);
+      }, 3000);
     }
   }
 
@@ -240,14 +240,19 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
   const claculateLinePrice = (e: any) => {
 
     console.log("calculate line price");
-    
+
     const purchasePrice = parseFloat(e.target.form.querySelector('input[name="purchaseprice"]').value);
     const quantity = parseFloat(e.target.form.querySelector('input[name="quantity"]').value);
 
     if (!isNaN(purchasePrice) && !isNaN(quantity)) {
       const linePrice = purchasePrice * quantity;
-      console.log("line price"+linePrice);
+      console.log("line price" + linePrice);
+
+      // set the quantity and line price to the state variables.
+      setQuantity(quantity);
+      setLinePrice(linePrice);
       
+
       e.target.form.querySelector('input[name="lineprice"]').value = linePrice.toFixed(2);
     }
 
@@ -255,14 +260,28 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
   };
 
 
-  const handlePurchasePrice = (e:any)=>{
+  const handlePurchasePrice = (e: any) => {
 
     const purchasePrice = e.target.form.querySelector('input[name="purchaseprice"]');
 
     // Find the selected item based on the value (in here get item's all property to the selectedItem object)
     const selectedItem = items.find(item => item.id === parseInt(e.target.value));
 
+
+
+    if (!selectedItem) {
+      setSelectedItemId("");
+      setPurchasePrice(0);
+      return;
+    }
+
+
     if (selectedItem) {
+
+      // set the selected item id and purchase price to the state variables.
+      setSelectedItemId(selectedItem.id);
+      setPurchasePrice(selectedItem.purchaseprice);
+
       setItem({
         id: selectedItem.id,
         itemname: selectedItem.itemname,
@@ -280,17 +299,85 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
   }
 
+  // Handle adding a new purchase item
+  const handleAddItem = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
 
-  const handleEdit = (item: Item) => {};
+    // prevent the default form submission behavior, which would cause a page reload
+    event.preventDefault();
 
-  const deleteCustomer = (id: number) => {};
+    console.log("handle add Item function works");
 
-  const onUpdate = () => {};
 
-   useEffect(() => {
-      loadPorders();
-      loadSuppliers();
-    }, []);
+    if (!selectedItemId) {
+
+      setAlert({ type: "error", message: "Please select an item" });
+
+      //  destroy the alert after 3 seconds
+      setTimeout(() => {
+        setAlert(null);
+      }, 3000);
+      return;
+    }
+
+    if (quantity <= 0) {
+      setAlert({ type: "error", message: "Please enter a valid quantity" });
+
+      //  destroy the alert after 3 seconds
+      setTimeout(() => {
+        setAlert(null);
+      }, 3000);
+      return;
+    }
+
+    // Find the selected item from the items array
+    // this was did to get the selected item from the items array based on the selectedItemId. This is necessary because we 
+    // need to access the item's properties (like itemname) when creating a new PurchaseItem object.
+    const selectedItem = items.find(
+      (item) => item.id === selectedItemId
+    );
+
+    if (!selectedItem) {
+      return;
+    }
+
+    console.log("selected Item Id" + selectedItemId);
+
+
+    // Create a new PurchaseItem object
+    const newPurchaseItem: PurchaseItem = {
+      itemId: selectedItem.id,
+      itemName: selectedItem.itemname,
+      purchasePrice: purchasePrice,
+      quantity: quantity,
+      linePrice: linePrice,
+    };
+
+    console.log("selected Item Id" + newPurchaseItem.itemId);
+    // Add new item to array
+    setPurchaseItems((previousItems) => [
+      ...previousItems,
+      newPurchaseItem,
+    ]);
+
+    // Clear form
+    setSelectedItemId("");
+    setPurchasePrice(0);
+    setQuantity(0);
+    setLinePrice(0);
+
+  };
+  const handleEdit = (item: Item) => { };
+
+  const deleteCustomer = (id: number) => { };
+
+  const onUpdate = () => { };
+
+  useEffect(() => {
+    loadPorders();
+    loadSuppliers();
+  }, []);
 
   return (
     <>
@@ -345,7 +432,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
                           </div>
 
                           <div className="col-6">
-                            <label htmlFor="txtRequiredDate">Required Date</label>  
+                            <label htmlFor="txtRequiredDate">Required Date</label>
                             <input type="date" className="form-control" id="txtRequiredDate" onChange={handleRequiredDate} name="requireddate" min={currentDate} max={maxDate} />
                           </div>
 
@@ -367,25 +454,25 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
                     </div>
                     <div className="col-6 bg-secondary p-3 rounded-2">
                       second form
-                      <form>
+                      <form onSubmit={handleAddItem}>
                         <div className="row">
                           <div className="col-6">
                             <label htmlFor="sltItem">Item Name</label>
-                             <select
-    className="form-select"
-    name="slectItem"
-    id="sltItem"
-    value={item.id ?? ""}
-    onChange={handlePurchasePrice}
-  >
-    <option value="">Select an item</option>
+                            <select
+                              className="form-select"
+                              name="slectItem"
+                              id="sltItem"
+                              value={item.id ?? ""}
+                              onChange={handlePurchasePrice}
+                            >
+                              <option value="">Select an item</option>
 
-    {items.map((item) => (
-      <option key={item.id} value={item.id}   >
-        {item.itemname}
-      </option>
-    ))}
-  </select>
+                              {items.map((item) => (
+                                <option key={item.id} value={item.id}   >
+                                  {item.itemname}
+                                </option>
+                              ))}
+                            </select>
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Purchase Price</label>
@@ -394,7 +481,7 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
 
                           <div className="col-6">
                             <label htmlFor="" >Quantity</label>
-                            <input type="text" className="form-control" name="quantity" onChange={claculateLinePrice}/>
+                            <input type="text" className="form-control" name="quantity" onChange={claculateLinePrice} />
                           </div>
 
                           <div className="col-6">
@@ -403,25 +490,25 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
                           </div>
                           <div className="row">
                             <div className="col-6">
-                              
-                                <button className="btn btn-primary mt-4 me-2">
-                                  Add Item
-                                </button>
-                            
-                              
-                                <button className="btn btn-primary mt-4">
-                                  Clear Item
-                                </button>
-                              
+
+                              <button className="btn btn-primary mt-4 me-2" type="submit">
+                                Add Item
+                              </button>
+
+
+                              <button className="btn btn-primary mt-4">
+                                Clear Item
+                              </button>
+
                             </div>
                           </div>
                         </div>
                       </form>
                     </div>
-                    
+
                   </div>
                   <div className="row bg-body-secondary p-3 rounded-2 mt-4">
-                     <table className="table table-bordered mt-4">
+                    <table className="table table-bordered mt-4">
                       <thead>
                         <tr>
                           <th>Item Name</th>
@@ -431,17 +518,20 @@ const [purchaseItems, setPurchaseItems] = useState<PurchaseItem[]>([]);
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>Item 1</td>
-                          <td>$10.00</td>
-                          <td>5</td>
-                          <td>$50.00</td>
-                        </tr>
+
+                        {purchaseItems.map((purchaseItem, index) => (
+                          <tr key={index}>
+                            <td>{purchaseItem.itemName}</td>
+                            <td>{purchaseItem.purchasePrice}</td>
+                            <td>{purchaseItem.quantity}</td>
+                            <td>{purchaseItem.linePrice}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
-                    </div>
-                    <button className="btn btn-primary mt-4">Submit Order</button>  
-                    <button className="btn btn-secondary mt-4 ms-2">Clear Order</button>
+                  </div>
+                  <button className="btn btn-primary mt-4">Submit Order</button>
+                  <button className="btn btn-secondary mt-4 ms-2">Clear Order</button>
                 </div>
               </div>
             </div>
