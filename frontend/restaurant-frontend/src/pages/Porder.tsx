@@ -19,7 +19,7 @@ interface Item {
 }
 interface Porder {
   id: number | null;
-  supplierId: number | null;
+  supplierId: number | null; 
   pordercode: string;
   requireddate: string;
   note: string;
@@ -48,6 +48,9 @@ function Porder() {
   const [alert, setAlert] = useState<AlertState | null>(null);
 
   const [porders, setPorders] = useState<Porder[]>([]);
+
+  // null means we are adding a new item
+const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const [porder, setPorder] = useState<Porder | null>({
 
@@ -276,6 +279,7 @@ function Porder() {
     }
 
 
+
     if (selectedItem) {
 
       // set the selected item id and purchase price to the state variables.
@@ -367,6 +371,25 @@ function Porder() {
     setQuantity(0);
     setLinePrice(0);
 
+  };
+
+  // handle the edit purchase item function. 
+  // This function is called when the user clicks the edit button on a purchase item in the list. 
+
+  const handleEditItem = (index: number) => {
+
+    const selectedItem = purchaseItems[index];
+
+    setItem({
+      id: selectedItem.itemId,
+      itemname: selectedItem.itemName,
+      availableqty: "",
+      totalqty: "",
+      unit: "",
+      purchaseprice: selectedItem.purchasePrice.toString(),
+    });
+
+    setEditingIndex(index);
   };
   const handleEdit = (item: Item) => { };
 
@@ -476,7 +499,7 @@ function Porder() {
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Purchase Price</label>
-                            <input type="text" className="form-control" name="purchaseprice" disabled />
+                            <input type="text" className="form-control" name="purchaseprice" value={item.purchaseprice} disabled />
                           </div>
 
                           <div className="col-6">
@@ -486,7 +509,7 @@ function Porder() {
 
                           <div className="col-6">
                             <label htmlFor="">Line Price</label>
-                            <input type="text" className="form-control" name="lineprice" disabled />
+                            <input type="text" className="form-control" name="lineprice" value={linePrice} disabled />
                           </div>
                           <div className="row">
                             <div className="col-6">
