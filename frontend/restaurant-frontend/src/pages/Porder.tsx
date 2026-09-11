@@ -251,6 +251,20 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
       const linePrice = purchasePrice * quantity;
       console.log("line price" + linePrice);
 
+
+
+      // in here, check if the quantity exceeds the available quantity.
+      //  If it does, show an error message and do not set the quantity and line price to the state variables.
+      if(quantity > parseFloat(item.availableqty)) {
+        console.log("quantity exceeds ava qty");
+        
+         setQuantity(0);
+        setLinePrice(0);
+        // setAlert({ type: "error", message: "Quantity exceeds available quantity" });
+        window.alert("Quantity exceeds available quantity");
+       
+        return;
+      }
       // set the quantity and line price to the state variables.
       setQuantity(quantity);
       setLinePrice(linePrice);
@@ -317,6 +331,7 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
     if (!selectedItemId) {
 
       setAlert({ type: "error", message: "Please select an item" });
+      window.alert("Please select an item");
 
       //  destroy the alert after 3 seconds
       setTimeout(() => {
@@ -327,7 +342,7 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     if (quantity <= 0) {
       setAlert({ type: "error", message: "Please enter a valid quantity" });
-
+      window.alert("Please enter a valid quantity");
       //  destroy the alert after 3 seconds
       setTimeout(() => {
         setAlert(null);
@@ -365,6 +380,8 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
       newPurchaseItem,
     ]);
 
+    setSupplier
+
     // Clear form
     setSelectedItemId("");
     setPurchasePrice(0);
@@ -390,7 +407,20 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
     });
 
     setEditingIndex(index);
+
+
   };
+
+
+// function for deleting a purchase item table
+  const handleDeleteItem = (index: number) => {
+
+    const updatedItems = [...purchaseItems];
+    updatedItems.splice(index, 1);
+    setPurchaseItems(updatedItems);
+  };
+
+
   const handleEdit = (item: Item) => { };
 
   const deleteCustomer = (id: number) => { };
@@ -499,12 +529,13 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
                           </div>
                           <div className="col-6">
                             <label htmlFor="">Purchase Price</label>
-                            <input type="text" className="form-control" name="purchaseprice" value={item.purchaseprice} disabled />
+                            <input type="text" className="form-control" name="purchaseprice" value={purchasePrice} disabled />
                           </div>
 
                           <div className="col-6">
                             <label htmlFor="" >Quantity</label>
-                            <input type="text" className="form-control" name="quantity" onChange={claculateLinePrice} />
+                            <input type="text" className="form-control" name="quantity" value={quantity} onChange={claculateLinePrice} />
+                            <span style={{color:"red"}}>Ava Qty: {item.availableqty}</span>
                           </div>
 
                           <div className="col-6">
@@ -538,6 +569,7 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
                           <th>Purchase Price</th>
                           <th>Quantity</th>
                           <th>Line Price</th>
+                          <th>Modify</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -548,12 +580,28 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
                             <td>{purchaseItem.purchasePrice}</td>
                             <td>{purchaseItem.quantity}</td>
                             <td>{purchaseItem.linePrice}</td>
+                            <td>
+                              <button className="btn btn-sm btn-warning" onClick={() => handleEditItem(index)}>
+                                Edit
+                              </button>
+                              <button className="btn btn-sm btn-danger" onClick={() => handleDeleteItem(index)}>
+                                Delete
+                              </button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  <button className="btn btn-primary mt-4">Submit Order</button>
+                  {/* <button className="btn btn-primary mt-4">Submit Order</button> */}
+                     {/* {isEditing ? (<button className="btn btn-sm btn-warning" onClick={() => onUpdate()}>
+                                Update
+                              </button>) : (<button className="btn btn-sm btn-warning" >
+                                Edit
+                              </button>)} */}
+                              <button className="btn btn-warning" >
+                                Edit
+                              </button>
                   <button className="btn btn-secondary mt-4 ms-2">Clear Order</button>
                 </div>
               </div>
