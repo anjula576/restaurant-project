@@ -600,9 +600,9 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
                                 Edit
                               </button>)} */}
                               <button className="btn btn-warning" >
-                                Edit
+                                Add Purchase Order
                               </button>
-                  <button className="btn btn-secondary mt-4 ms-2">Clear Order</button>
+                  <button className="btn btn-secondary ms-2">Clear Order</button>
                 </div>
               </div>
             </div>
