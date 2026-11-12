@@ -380,7 +380,7 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
       newPurchaseItem,
     ]);
 
-    setSupplier
+    // setSupplier
 
     // Clear form
     setSelectedItemId("");
@@ -389,6 +389,15 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
     setLinePrice(0);
 
   };
+
+  const submitPurchaseOrder = async () => {
+
+    const backendResponse = await axios.post("http://localhost:8080/api/porders", {
+      ...porder,
+      purchaseItems: purchaseItems,
+    });
+
+  }
 
   // handle the edit purchase item function. 
   // This function is called when the user clicks the edit button on a purchase item in the list. 
@@ -492,6 +501,12 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
                           <div className="col-6">
                             <label htmlFor="txtNote">Note</label>
                             <textarea className="form-control" id="txtNote" onChange={handleNote} name="note"></textarea>
+                          </div>
+
+
+                           <div className="col-6">
+                            <label htmlFor="txtTotal">Total</label>
+                            <input type="text" className="form-control" id="txtTotal" name="total"disabled />
                           </div>
 
                           <div className="col-6">
@@ -599,7 +614,7 @@ const [editingIndex, setEditingIndex] = useState<number | null>(null);
                               </button>) : (<button className="btn btn-sm btn-warning" >
                                 Edit
                               </button>)} */}
-                              <button className="btn btn-warning" >
+                              <button className="btn btn-warning" onClick={()=>submitPurchaseOrder()}>
                                 Add Purchase Order
                               </button>
                   <button className="btn btn-secondary ms-2">Clear Order</button>
